@@ -1,0 +1,17 @@
+[
+	{
+		"name": "Склад",
+		"url": "#/stock",
+		"className": "active"
+	},
+	{
+		"name": "Продажи",
+		"url": "#/orders",
+		"className": ""
+	},
+	{
+		"name": "Закупки",
+		"url": "#/ships",
+		"className": ""
+	}
+]

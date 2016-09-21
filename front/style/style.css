@@ -1,0 +1,45 @@
+@import url(../style/bootstrap.css);
+.clearfix::after {
+  clear: both;
+  content: ".";
+  display: block;
+  font-size: 0;
+  height: 0;
+  visibility: hidden;
+  margin-bottom: 10px;
+  padding-top: 10px; }
+
+* {
+  -webkit-font-smoothing: antialiased;
+  -moz-font-smoothing: antialiased;
+  -o-font-smoothing: antialiased;
+  font-smoothing: antialiased; }
+
+button {
+  outline: none !important; }
+
+a[ng-click] {
+  cursor: pointer; }
+
+.stock_table th:first-child {
+  width: 130px; }
+.stock_table .caret {
+  opacity: 0; }
+  .stock_table .caret.visible {
+    opacity: 1; }
+
+.stock_controls {
+  padding-bottom: 20px;
+  position: relative; }
+  .stock_controls .add_butt {
+    position: absolute;
+    right: 0;
+    top: 5px; }
+
+.options_td {
+  width: 50px; }
+
+.popover-content {
+  min-width: 280px; }
+
+/*# sourceMappingURL=style.css.map */

@@ -1,0 +1,52 @@
+<h2>Склад</h2>
+<div class="stock_controls">
+	<ul class="nav nav-pills stock_filters">
+		<li ng-repeat="categor in categoriesItems" ng-class="{active: filterParam === categor}">
+			<a ng-click="filterBy(categor)">{{categor ? categor : 'Все товары'}}</a>
+		</li>
+	</ul>
+	<button class="btn btn-success add_butt pull-right" ng-click="openCreateModal()">
+		<span class="glyphicon glyphicon-plus" aria-hidden="true"></span> Создать товар
+	</button>
+</div>
+
+<table class="stock_table table table-hover table-bordered">
+	<thead>
+		<tr class="active">
+			<th ng-class="{dropup: reverseSort}" ng-click="sortBy('art')">
+				Артикул<span class="caret" ng-class="{visible: propertyName === 'art'}"></span>
+			</th>
+			<th ng-class="{dropup: reverseSort}" ng-click="sortBy('name')">
+				Наименование<span class="caret" ng-class="{visible: propertyName === 'name'}"></span>
+			</th>
+			<th ng-class="{dropup: reverseSort}" ng-click="sortBy('price')">
+				Цена<span class="caret" ng-class="{visible: propertyName === 'price'}"></span>
+			</th>
+			<th ng-class="{dropup: reverseSort}" ng-click="sortBy('quantity')">
+				Наличие<span class="caret" ng-class="{visible: propertyName === 'quantity'}"></span>
+			</th>
+			<th ng-class="{dropup: reverseSort}" ng-click="sortBy('reserve')">
+				Резерв<span class="caret" ng-class="{visible: propertyName === 'reserve'}"></span>
+			</th>
+			<th ng-class="{dropup: reverseSort}" ng-click="sortBy('ordered')">
+				Заказано<span class="caret" ng-class="{visible: propertyName === 'ordered'}"></span>
+			</th>
+			<th>Ред.</th>
+		</tr>
+	</thead>
+	<tbody>
+		<tr class="tr_item" ng-repeat="item in stock | filter: {category: filterParam} | orderBy:propertyName:reverseSort" ng-click="openDetailModal(item)">
+			<td>{{item.art}}</td>
+			<td>{{item.name}}</td>
+			<td>{{item.price | currency}}</td>
+			<td>{{item.quantity}}</td>
+			<td>{{item.reserve}}</td>
+			<td>{{item.ordered}}</td>
+			<td class="options_td">
+				<button class="options_item_button btn btn-sm btn-default" ng-click="stopPropagation($event)" uib-popover-template="dynamicPopover.templateUrl" popover-trigger="'outsideClick'" popover-title="Операции над товаром">
+					<span class="glyphicon glyphicon-wrench" aria-hidden="true"></span>
+				</button>
+			</td>
+		</tr>
+	</tbody>
+</table>

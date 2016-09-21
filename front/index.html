@@ -1,0 +1,43 @@
+
+<!DOCTYPE html>
+<html ng-app="myApp">
+	<head lang="ru-RU">
+		<meta charset="utf-8">
+		<meta name="description" content="">
+		<title>CRM</title>
+		<meta name="viewport" content="width=device-width">
+		<meta name="keywords" content="">
+		<meta name="author" content="">
+		<link rel="stylesheet" type="text/css" href="style/style.css">
+		
+	</head>
+	<body ng-controller="MainCtrl">
+		
+		<header id="head" ng-controller="HeadCtrl">
+			<nav class="navbar navbar-default navbar-static-top">
+			 	<div class="container">
+				    <ul class="nav navbar-nav" > 
+				    	<li ng-repeat="item in menu.items" ng-class="item.className">
+				    		<a ng-click="menu.setActive(item)" href="{{item.url}}">{{item.name}}</a>
+				    	</li> 
+				    </ul>
+			 	</div>
+			</nav>
+		</header>
+		<div class="container">
+			
+			<div ng-view></div>
+		</div>
+
+
+		<script src="app/lib/angular.js"></script>
+		<script src="app/lib/angular-route.js"></script>
+		<script src="app/lib/angular-animate.js"></script>
+		<script src="app/lib/ui-bootstrap.js"></script>
+
+		
+		<script src="app/app.js"></script>
+		<script src="app/controllers.js"></script>
+		<script src="app/filters.js"></script>
+	</body>
+</html>
