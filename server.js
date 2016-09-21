@@ -39,7 +39,7 @@ app.get('/api/read', function (req, res) {
             return res.send(items);
         } else {
             res.statusCode = 500;
-            return res.send({ error: 'Server error' });
+            return res.send({ error: 'Server error 500' });
         }
     });
 });
