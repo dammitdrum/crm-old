@@ -17,6 +17,7 @@ db.once('open', function callback () {
     console.log("Connected to DB!");
     app.listen(1337);
     console.log('Server is running');
+    bla bla
 });
 
 var Schema = mongoose.Schema;
