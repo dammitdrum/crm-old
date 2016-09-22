@@ -59,9 +59,6 @@ angular.module('myApp.controllers', [])
     $scope.propertyName = 'name';
     $scope.reverseSort = false;
     $scope.filterParam = '';
-    $scope.dynamicPopover = {
-        templateUrl: 'templates/popover_template.html',
-    };
 
     $scope.filterBy = function(name) {
         $scope.filterParam = name;
@@ -90,7 +87,10 @@ angular.module('myApp.controllers', [])
             controller: 'CreateModalCtrl'
         });
     };
-    $scope.openEditModal = function(item) {
+    $scope.openEditModal = function(item,type) {
+        if (type==='create') {
+            item = {};
+        }
         var modalInstance = $uibModal.open({
             animation: true,
             templateUrl: 'templates/edit_modal.html',
@@ -98,16 +98,28 @@ angular.module('myApp.controllers', [])
             resolve: {
                 item: function() {
                     return item;
+                },
+                type: function() {
+                    return type;
                 }
             }
         });
     };
-    $scope.editItem = function(item,$event) {
-        $event.stopPropagation();
-        $scope.openEditModal(item);
+})
+
+.controller('PopoverCtrl', function($rootScope,$scope){
+    $scope.popover = {
+        templateUrl: 'templates/popover_template.html',
+        isOpen: false,
+        open: function open() {
+            $scope.popover.isOpen = $scope.popover.isOpen?false:true;
+        },
+        close: function close(item) {
+            $scope.popover.isOpen = false;
+            $scope.openEditModal(item,'edit');
+        }
     };
-    $scope.deleteItem = function(item,$event) {
-        $event.stopPropagation();
+    $scope.deleteItem = function(item) {
         $rootScope.removeItem(item);
     };
     $scope.stopPropagation = function($event) {
@@ -122,15 +134,15 @@ angular.module('myApp.controllers', [])
     };
 })
 
-.controller('CreateModalCtrl', function($rootScope, $scope, $uibModalInstance){
-    $scope.create = function(item) {
-        $rootScope.createItem(item,$uibModalInstance.dismiss);
+.controller('EditModalCtrl',function($rootScope, $scope, $uibModalInstance, item, type){
+    $scope.newItem = {};
+    $scope.type = type;
+    $scope.newItem = angular.copy(item);
+    $scope.create = function(newItem) {
+        $rootScope.createItem(newItem,$uibModalInstance.dismiss);
     };
-})
-
-.controller('EditModalCtrl', function($rootScope, $scope, $uibModalInstance, item){
-    $scope.item = item;
-    $scope.save = function(item) {
+    $scope.save = function(newItem) {
+        item = angular.copy(newItem);
         $rootScope.saveItem(item,$uibModalInstance.dismiss);
     };
 })
