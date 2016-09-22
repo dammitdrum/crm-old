@@ -1,16 +1,20 @@
+<form novalidate>
 <div class="modal-header">
-    <h3 class="modal-title">{{item.name}}</h3>
+    <h3 class="modal-title" ng-if="type=='edit'">Редактирование товара</h3>
+    <h2 class="modal-title" ng-if="type=='create'">Создание нового товара</h2>
 </div>
 <div class="modal-body" id="modal-body">
    <p>Наименование</p>
-   <input type="text" ng-model="item.name">
+   <input type="text" ng-model="newItem.name" required>
    <p>Артикул</p>
-   <input type="text" ng-model="item.art">
+   <input type="text" ng-model="newItem.art" required>
    <p>Цена</p>
-   <input type="text" ng-model="item.price">
+   <input type="text" ng-model="newItem.price" ng-pattern="/^\d+$/" required>
    <p>Категория</p>
-   <input type="text" ng-model="item.category">
+   <input type="text" ng-model="newItem.category" ng-pattern="/^[a-zA-ZА-Яа-яЁё]+$/" required>
 </div>
 <div class="modal-footer">
-    <button class="btn btn-warning" type="button" ng-click="save(item)">Сохранить товар</button>
+    <button class="btn btn-warning" type="button" ng-if="type=='edit'" ng-click="save(newItem)">Сохранить товар</button>
+    <button class="btn btn-warning" type="submit" ng-if="type=='create'" ng-click="create(newItem)">Создать товар</button>
 </div>
+</form>

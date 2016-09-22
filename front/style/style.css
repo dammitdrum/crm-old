@@ -41,5 +41,13 @@ a[ng-click] {
 
 .popover-content {
   min-width: 280px; }
-
+.ng-submitted .ng-invalid {
+  border-color: red;
+}
+.ng-valid {
+  border-color: limegreen;
+}
+input {
+  border: 1px solid #ccc;
+}
 /*# sourceMappingURL=style.css.map */

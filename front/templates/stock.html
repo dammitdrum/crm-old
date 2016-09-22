@@ -5,7 +5,7 @@
 			<a ng-click="filterBy(categor)">{{categor ? categor : 'Все товары'}}</a>
 		</li>
 	</ul>
-	<button class="btn btn-success add_butt pull-right" ng-click="openCreateModal()">
+	<button class="btn btn-success add_butt pull-right" ng-click="openEditModal({},'create')">
 		<span class="glyphicon glyphicon-plus" aria-hidden="true"></span> Создать товар
 	</button>
 </div>
@@ -42,8 +42,8 @@
 			<td>{{item.quantity}}</td>
 			<td>{{item.reserve}}</td>
 			<td>{{item.ordered}}</td>
-			<td class="options_td">
-				<button class="options_item_button btn btn-sm btn-default" ng-click="stopPropagation($event)" uib-popover-template="dynamicPopover.templateUrl" popover-trigger="'outsideClick'" popover-title="Операции над товаром">
+			<td class="options_td" ng-controller="PopoverCtrl" ng-click="stopPropagation($event)">
+				<button class="options_item_button btn btn-sm btn-default" ng-click="popover.open()" uib-popover-template="popover.templateUrl" popover-trigger="'outsideClick'" popover-title="Операции над товаром" popover-is-open="popover.isOpen">
 					<span class="glyphicon glyphicon-wrench" aria-hidden="true"></span>
 				</button>
 			</td>
