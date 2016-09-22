@@ -80,13 +80,6 @@ angular.module('myApp.controllers', [])
             }
         });
     };
-    $scope.openCreateModal = function() {
-        var modalInstance = $uibModal.open({
-            animation: true,
-            templateUrl: 'templates/create_modal.html',
-            controller: 'CreateModalCtrl'
-        });
-    };
     $scope.openEditModal = function(item,type) {
         if (type==='create') {
             item = {};
