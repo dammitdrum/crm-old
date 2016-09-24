@@ -1,20 +1,36 @@
-<form novalidate>
+<form name="modalForm" class="modal_form" novalidate>
 <div class="modal-header">
     <h3 class="modal-title" ng-if="type=='edit'">Редактирование товара</h3>
     <h2 class="modal-title" ng-if="type=='create'">Создание нового товара</h2>
 </div>
 <div class="modal-body" id="modal-body">
    <p>Наименование</p>
-   <input type="text" ng-model="newItem.name" required>
+   <input type="text" ng-model="newItem.name" name="nameItem" required>
+    <p ng-show="modalForm.nameItem.$invalid && modalForm.nameItem.$touched" class="text-danger">
+        <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span> Необходимо наименование товара
+    </p>
+    <span ng-show="modalForm.nameItem.$valid && modalForm.nameItem.$touched" class="glyphicon text-success glyphicon-ok-sign" aria-hidden="true"></span>
    <p>Артикул</p>
-   <input type="text" ng-model="newItem.art" required>
+   <input type="text" ng-model="newItem.art" name="artItem" required>
+    <p ng-show="modalForm.artItem.$invalid && modalForm.artItem.$touched" class="text-danger" >
+        <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span> Необходим артикул
+    </p>
+    <span ng-show="modalForm.artItem.$valid && modalForm.artItem.$touched" class="glyphicon text-success glyphicon-ok-sign" aria-hidden="true"></span>
    <p>Цена</p>
-   <input type="text" ng-model="newItem.price" ng-pattern="/^\d+$/" required>
+   <input type="text" ng-model="newItem.price" name="priceItem" ng-pattern="/^\d+$/" required>
+   <p ng-show="modalForm.priceItem.$invalid && modalForm.priceItem.$touched" class="text-danger" >
+        <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span> Укажите цену(только цифры)
+    </p>
+    <span ng-show="modalForm.priceItem.$valid && modalForm.priceItem.$touched" class="glyphicon text-success glyphicon-ok-sign" aria-hidden="true"></span>
    <p>Категория</p>
-   <input type="text" ng-model="newItem.category" ng-pattern="/^[a-zA-ZА-Яа-яЁё]+$/" required>
+   <input type="text" ng-model="newItem.category" name="catItem" ng-pattern="/^[a-zA-ZА-Яа-яЁё]+$/" required>
+   <p ng-show="modalForm.catItem.$invalid && modalForm.catItem.$touched" class="text-danger" >
+        <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span> Укажите категорию товара(только буквы)
+    </p>
+   <span ng-show="modalForm.catItem.$valid && modalForm.catItem.$touched" class="glyphicon text-success glyphicon-ok-sign" aria-hidden="true"></span>
 </div>
 <div class="modal-footer">
-    <button class="btn btn-warning" type="button" ng-if="type=='edit'" ng-click="save(newItem)">Сохранить товар</button>
-    <button class="btn btn-warning" type="submit" ng-if="type=='create'" ng-click="create(newItem)">Создать товар</button>
+    <button class="btn btn-warning" type="button" ng-if="type=='edit'" ng-click="save(newItem)" ng-disabled="modalForm.$invalid">Сохранить товар</button>
+    <button class="btn btn-warning" type="submit" ng-if="type=='create'" ng-click="create(newItem)" ng-disabled="modalForm.$invalid">Создать товар</button>
 </div>
 </form>

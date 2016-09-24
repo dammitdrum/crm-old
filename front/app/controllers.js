@@ -29,12 +29,21 @@ angular.module('myApp.controllers', [])
     $rootScope.saveItem = function(item,hideModal) {
         $http.put('/api/update/'+item._id,item).then(function() {
             hideModal('cancel');
-            $scope.fetchItems();
+            $scope.updateCategories($scope.stock);
         });
     };
     $rootScope.removeItem = function(item) {
-        $http.delete('/api/delete/'+item._id,item).then(function() {
-            $scope.fetchItems();
+        var id = item._id;
+        $http.delete('/api/delete/'+id,item).then(function() {
+            angular.forEach($scope.stock, function(item,i) {
+                if (id === item._id) {
+                    $scope.stock.splice(i,1);
+                }
+            });
+            $scope.updateCategories($scope.stock);
+            if ($scope.categoriesItems.indexOf(item.category) == -1) {
+                $rootScope.$broadcast('refreshFilter')
+            }
         });
     };
     $scope.fetchItems();
@@ -56,16 +65,21 @@ angular.module('myApp.controllers', [])
 })
 
 .controller('StockCtrl', function($rootScope, $scope, $uibModal){
-    $scope.propertyName = 'name';
+    $scope.sortPropertyName = 'name';
     $scope.reverseSort = false;
-    $scope.filterParam = '';
+    $scope.switchFilter = false;
+    $scope.filterParamName = '';
 
+    $scope.$on('refreshFilter', function(event, args) {
+        $scope.filterParamName = '';
+    })
     $scope.filterBy = function(name) {
-        $scope.filterParam = name;
+        $scope.switchFilter = name ? true : false;
+        $scope.filterParamName = name;
     };
-    $scope.sortBy = function(propertyName) {
-        $scope.reverseSort = ($scope.propertyName === propertyName) ? !$scope.reverseSort : false;
-        $scope.propertyName = propertyName;
+    $scope.sortBy = function(name) {
+        $scope.reverseSort = ($scope.sortPropertyName === name) ? !$scope.reverseSort : false;
+        $scope.sortPropertyName = name;
     };
     $scope.openDetailModal = function(item) {
         var modalInstance = $uibModal.open({
@@ -135,13 +149,15 @@ angular.module('myApp.controllers', [])
         $rootScope.createItem(newItem,$uibModalInstance.dismiss);
     };
     $scope.save = function(newItem) {
-        item = angular.copy(newItem);
+        for (var key in newItem) {
+            item[key] = newItem[key];
+        }
         $rootScope.saveItem(item,$uibModalInstance.dismiss);
     };
 })
 
 .controller('OrdersCtrl', function($rootScope, $scope){
-       
+    
 })
 
 .controller('ShipsCtrl', function($rootScope, $scope){

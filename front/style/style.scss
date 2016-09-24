@@ -49,12 +49,17 @@ a[ng-click]{
 .popover-content {
     min-width: 280px;
 }
-.ng-submitted .ng-invalid {
-  border-color: red;
-}
-.ng-valid {
+.ng-valid.ng-touched {
   border-color: limegreen;
 }
 input {
   border: 1px solid #ccc;
+}
+.modal_form {
+    p {
+        margin-bottom: 4px;
+    }
+    input {
+        margin-bottom: 10px;
+    }
 }
