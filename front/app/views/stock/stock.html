@@ -1,41 +1,42 @@
 <h2>Склад</h2>
+<ul class="nav nav-pills stock_filters">
+	<li ng-repeat="categor in categoriesItems" ng-class="{active: currCategory === categor}">
+		<a ng-click="filterBy(categor)">{{categor ? categor : 'Все товары'}}</a>
+	</li>
+</ul>
 <div class="stock_controls">
-	<ul class="nav nav-pills stock_filters">
-		<li ng-repeat="categor in categoriesItems" ng-class="{active: filterParamName === categor}">
-			<a ng-click="filterBy(categor)">{{categor ? categor : 'Все товары'}}</a>
-		</li>
-	</ul>
+	<input type="text" placeholder="Искать по названию" class="search_field" ng-model="search.name">
 	<button class="btn btn-success add_butt pull-right" ng-click="openEditModal({},'create')">
 		<span class="glyphicon glyphicon-plus" aria-hidden="true"></span> Создать товар
 	</button>
 </div>
 
-<table class="stock_table table table-hover table-bordered">
+<table class="stock_table table table-hover table-striped table-bordered">
 	<thead>
-		<tr class="active">
+		<tr>
 			<th ng-class="{dropup: reverseSort}" ng-click="sortBy('art')">
-				Артикул<span class="caret" ng-class="{visible: sortPropertyName === 'art'}"></span>
+				Артикул<span class="caret" ng-class="{visible: sortProperty === 'art'}"></span>
 			</th>
 			<th ng-class="{dropup: reverseSort}" ng-click="sortBy('name')">
-				Наименование<span class="caret" ng-class="{visible: sortPropertyName === 'name'}"></span>
+				Наименование<span class="caret" ng-class="{visible: sortProperty === 'name'}"></span>
 			</th>
 			<th ng-class="{dropup: reverseSort}" ng-click="sortBy('price')">
-				Цена<span class="caret" ng-class="{visible: sortPropertyName === 'price'}"></span>
+				Цена<span class="caret" ng-class="{visible: sortProperty === 'price'}"></span>
 			</th>
 			<th ng-class="{dropup: reverseSort}" ng-click="sortBy('quantity')">
-				Наличие<span class="caret" ng-class="{visible: sortPropertyName === 'quantity'}"></span>
+				Наличие<span class="caret" ng-class="{visible: sortProperty === 'quantity'}"></span>
 			</th>
 			<th ng-class="{dropup: reverseSort}" ng-click="sortBy('reserve')">
-				Резерв<span class="caret" ng-class="{visible: sortPropertyName === 'reserve'}"></span>
+				Резерв<span class="caret" ng-class="{visible: sortProperty === 'reserve'}"></span>
 			</th>
 			<th ng-class="{dropup: reverseSort}" ng-click="sortBy('ordered')">
-				Заказано<span class="caret" ng-class="{visible: sortPropertyName === 'ordered'}"></span>
+				Заказано<span class="caret" ng-class="{visible: sortProperty === 'ordered'}"></span>
 			</th>
 			<th>Ред.</th>
 		</tr>
 	</thead>
 	<tbody>
-		<tr class="tr_item" ng-repeat="item in stock | filter: {category: filterParamName} : switchFilter | orderBy:sortPropertyName:reverseSort" ng-click="openDetailModal(item)">
+		<tr class="tr_item" ng-repeat="item in stock | categoryFilter:currCategory | filter:search |orderBy:sortProperty:reverseSort as results" ng-click="openDetailModal(item)">
 			<td>{{item.art}}</td>
 			<td>{{item.name}}</td>
 			<td>{{item.price | currency}}</td>
@@ -48,5 +49,6 @@
 				</button>
 			</td>
 		</tr>
+		<tr ng-if="results.length === 0"><td colspan="7" class="text-center"><strong>Ничего нет</strong></td></tr>
 	</tbody>
 </table>

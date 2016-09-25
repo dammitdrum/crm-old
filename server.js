@@ -19,6 +19,8 @@ db.once('open', function callback () {
     console.log('Server is running');
 });
 
+// Schemas
+
 var Schema = mongoose.Schema;
 
 var Item = new Schema({
@@ -31,9 +33,24 @@ var Item = new Schema({
     category: { type: String, default: ''}
 });
 
+var Order = new Schema({
+    date: { type: Date, default: Date.now },
+    number: { type: String, required: true},
+    customer: { type: Object, required: true},
+    items: [Item],
+    sum: { type: Number, default: 0},
+    manager: { type: Object, required: true},
+    state: { type: String, default: 'new'}
+});
+
 var ItemModel = mongoose.model('Item', Item);
 
-app.get('/api/read', function (req, res) {
+var OrderModel = mongoose.model('Order', Order);
+
+
+// READ
+
+app.get('/stock/read', function (req, res) {
     return ItemModel.find(function (err, items) {
         if (!err) {
             return res.send(items);
@@ -44,9 +61,29 @@ app.get('/api/read', function (req, res) {
     });
 });
 
-app.post('/api/create', function (req, res) {
-    console.log(req.body);
+app.get('/stock/read/:id', function (req, res) {
+    res.send(req.params.id);
+});
 
+app.get('/orders/read', function (req, res) {
+    return OrderModel.find(function (err, orders) {
+        if (!err) {
+            return res.send(orders);
+        } else {
+            res.statusCode = 500;
+            return res.send({ error: 'Server error 500' });
+        }
+    });
+});
+
+app.get('/orders/read/:id', function (req, res) {
+    res.send(req.params.id);
+});
+
+
+// CREATE
+
+app.post('/stock/create', function (req, res) {
     var item = new ItemModel({
         art: req.body.art,
         name: req.body.name,
@@ -64,23 +101,36 @@ app.post('/api/create', function (req, res) {
     });
 });
 
-app.get('/api/read/:id', function (req, res) {
-    res.send(req.params.id);
+app.post('/orders/create', function (req, res) {
+    var order = new ItemModel({
+        number: req.body.number,
+        customer: req.body.customer,
+        items: req.body.items,
+        manager: req.body.manager,
+    });
+
+    order.save(function (err) {
+        if (!err) {
+            console.log("order created");
+            return res.send({ status: 'OK', order:order });
+        } else {
+            console.log(err);
+        }
+    });
 });
 
-app.put('/api/update/:id', function (req, res){
+
+// UPDATE
+
+app.put('/stock/update/:id', function (req, res){
     return ItemModel.findById(req.params.id, function (err, item) {
         if(!item) {
             res.statusCode = 404;
             return res.send({ error: 'Not found' });
         }
-        item.art = req.body.art;
-        item.name = req.body.name;
-        item.price = req.body.price;
-        item.category = req.body.category;
-        item.quantity = req.body.quantity;
-        item.reserve = req.body.reserve;
-        item.ordered = req.body.ordered;
+        for (var key in req.body) {
+            item[key] = req.body[key];
+        }
         return item.save(function (err) {
             if (!err) {
                 console.log("item updated");
@@ -92,7 +142,10 @@ app.put('/api/update/:id', function (req, res){
     });
 });
 
-app.delete('/api/delete/:id', function (req, res){
+
+// DELETE
+
+app.delete('/stock/delete/:id', function (req, res){
     return ItemModel.findById(req.params.id, function (err, item) {
         if(!item) {
             res.statusCode = 404;
@@ -108,3 +161,5 @@ app.delete('/api/delete/:id', function (req, res){
         });
     });
 });
+
+

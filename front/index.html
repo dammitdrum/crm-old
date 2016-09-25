@@ -9,26 +9,13 @@
 		<meta name="keywords" content="">
 		<meta name="author" content="">
 		<link rel="stylesheet" type="text/css" href="style/style.css">
-		
 	</head>
 	<body ng-controller="MainCtrl">
 		
-		<header id="head" ng-controller="HeadCtrl">
-			<nav class="navbar navbar-default navbar-static-top">
-			 	<div class="container">
-				    <ul class="nav navbar-nav" > 
-				    	<li ng-repeat="item in menu.items" ng-class="item.className">
-				    		<a ng-click="menu.setActive(item)" href="{{item.url}}">{{item.name}}</a>
-				    	</li> 
-				    </ul>
-			 	</div>
-			</nav>
-		</header>
+		<header id="head" ng-controller="HeadCtrl" ng-include="viewUrl"></header>
 		<div class="container">
-			
 			<div ng-view></div>
 		</div>
-
 
 		<script src="app/lib/angular.js"></script>
 		<script src="app/lib/angular-route.js"></script>
@@ -37,7 +24,11 @@
 
 		
 		<script src="app/app.js"></script>
-		<script src="app/controllers.js"></script>
+		<script src="app/controllers/main_ctrl.js"></script>
+		<script src="app/controllers/head_ctrl.js"></script>
+		<script src="app/controllers/stock_ctrl.js"></script>
+		<script src="app/controllers/orders_ctrl.js"></script>
+		<script src="app/controllers/ships_ctrl.js"></script>
 		<script src="app/directives.js"></script>
 		<script src="app/filters.js"></script>
 	</body>

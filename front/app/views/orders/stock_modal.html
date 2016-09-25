@@ -1,0 +1,42 @@
+<div class="modal-header">
+    <h3 class="modal-title">Добавление товаров к заказу</h3>
+</div>
+<div class="modal-body">
+    <input type="text" placeholder="Искать по наименованию" class="search_field" ng-model="search.name">
+	<table class="stock_table table table-hover table-striped table-bordered">
+        <thead>
+            <tr>
+                <th ng-class="{dropup: reverseSort}" ng-click="sortBy('art')">
+                    Артикул<span class="caret" ng-class="{visible: sortProperty === 'art'}"></span>
+                </th>
+                <th ng-class="{dropup: reverseSort}" ng-click="sortBy('name')">
+                    Наименование<span class="caret" ng-class="{visible: sortProperty === 'name'}"></span>
+                </th>
+                <th ng-class="{dropup: reverseSort}" ng-click="sortBy('price')">
+                    Цена<span class="caret" ng-class="{visible: sortProperty === 'price'}"></span>
+                </th>
+                <th ng-class="{dropup: reverseSort}" ng-click="sortBy('quantity')">
+                    Наличие<span class="caret" ng-class="{visible: sortProperty === 'quantity'}"></span>
+                </th>
+                <th ng-class="{dropup: reverseSort}" ng-click="sortBy('reserve')">
+                    Резерв<span class="caret" ng-class="{visible: sortProperty === 'reserve'}"></span>
+                </th>
+                <th ng-class="{dropup: reverseSort}" ng-click="sortBy('ordered')">
+                    Заказано<span class="caret" ng-class="{visible: sortProperty === 'ordered'}"></span>
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr class="tr_item" ng-repeat="item in stock | filter:search | orderBy:sortProperty:reverseSort as results" ng-click="addToOrder(item)">
+                <td>{{item.art}}</td>
+                <td>{{item.name}}</td>
+                <td>{{item.price | currency}}</td>
+                <td>{{item.quantity}}</td>
+                <td>{{item.reserve}}</td>
+                <td>{{item.ordered}}</td>
+            </tr>
+            <tr ng-if="results.length === 0"><td colspan="6" class="text-center"><strong>Нет товаров на складе</strong></td></tr>
+        </tbody>
+    </table>
+
+</div>

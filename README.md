@@ -1,2 +1,2 @@
 # crm
-crm system, using AngularJS NodeJS MongoDB
+crm system, I'm use AngularJS NodeJS MongoDB

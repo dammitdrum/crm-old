@@ -23,6 +23,23 @@ button {
 a[ng-click]{
     cursor: pointer;
 }
+input {
+  border: 1px solid #ccc;
+  padding-left: 10px;
+  outline: none !important;
+}
+h2 {
+    margin-bottom: 30px;
+}
+.mgb {
+    margin-bottom: 15px;
+}
+.not_hover:hover {
+    background: none !important;
+}
+.air {
+    height: 40px;
+}
 .stock_table {
     th:first-child {
         width: 130px;
@@ -34,13 +51,12 @@ a[ng-click]{
         }
     }
 }
+.stock_filters {
+    margin-bottom: 20px;
+}
 .stock_controls {
-    padding-bottom: 20px;
     position: relative;
     .add_butt {
-        position: absolute;
-        right: 0;
-        top: 5px;
     }
 }
 .options_td {
@@ -49,12 +65,7 @@ a[ng-click]{
 .popover-content {
     min-width: 280px;
 }
-.ng-valid.ng-touched {
-  border-color: limegreen;
-}
-input {
-  border: 1px solid #ccc;
-}
+
 .modal_form {
     p {
         margin-bottom: 4px;
@@ -62,4 +73,12 @@ input {
     input {
         margin-bottom: 10px;
     }
+    .ng-valid.ng-touched {
+      border-color: limegreen;
+    }
+}
+.search_field {
+    width: 300px;
+    margin-bottom: 20px;
+    height: 30px;
 }

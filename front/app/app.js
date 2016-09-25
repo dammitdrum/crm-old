@@ -2,31 +2,40 @@
 
 var myApp = angular.module('myApp', [
 	'ngRoute',
-    'myApp.controllers',
+    'myApp.main_ctrl',
+    'myApp.head_ctrl',
+    'myApp.stock_ctrl',
+    'myApp.orders_ctrl',
+    'myApp.ships_ctrl',
     'myApp.directives',
     'myApp.filters',
     'ngAnimate',
     'ui.bootstrap'
 ]);
 
-myApp.config(['$routeProvider', function($routeProvider) {
+myApp.config(function($routeProvider) {
+
 	$routeProvider.when('/stock', {
-		templateUrl: 'templates/stock.html', 
+		templateUrl: 'app/views/stock/stock.html', 
 		controller: 'StockCtrl'
 	});
 	$routeProvider.when('/orders', {
-		templateUrl: 'templates/orders.html', 
+		templateUrl: 'app/views/orders/orders.html', 
 		controller: 'OrdersCtrl'
 	});
+	$routeProvider.when('/orders/create', {
+		templateUrl: 'app/views/orders/order_detail.html', 
+		controller: 'OrderDetailCtrl'
+	});
 	$routeProvider.when('/ships', {
-		templateUrl: 'templates/ships.html', 
+		templateUrl: 'app/views/ships/ships.html', 
 		controller: 'ShipsCtrl'
 	});
     $routeProvider.otherwise({
     	redirectTo: '/stock'
     });
-}]);
+});
 
-myApp.run(['$rootScope', function($rootScope) {
+myApp.run(function($rootScope) {
 	
-}]);
+});

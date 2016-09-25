@@ -1,0 +1,20 @@
+<div class="modal-header">
+    <h3 class="modal-title" id="modal-title">{{item.name}}</h3>
+</div>
+<div class="modal-body" id="modal-body">
+	<p>Артикул</p>
+    <p><strong>{{item.art}}</strong></p>
+    <p>Цена</p>
+    <p><strong>{{item.price}}</strong></p>
+    <p>Количество на складе</p>
+    <p><strong>{{item.quantity}}</strong></p>
+    <p>Количество в резерве</p>
+    <p><strong>{{item.reserve}}</strong></p>
+    <p>Заказано на склад</p>
+    <p><strong>{{item.ordered}}</strong></p>
+    <p>Категория товара</p>
+    <p><strong>{{item.category}}</strong></p>
+</div>
+<div class="modal-footer">
+    <button class="btn btn-warning" type="button" ng-click="closeModal()">Закрыть</button>
+</div>

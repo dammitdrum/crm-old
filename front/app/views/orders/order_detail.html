@@ -1,0 +1,53 @@
+<h2>Продажи</h2>
+<hr>
+<h3>Создание нового заказа</h3>
+<div class="air"></div>
+<form name="form" class="modal_form" novalidate>
+	<p>Введите номер</p>
+	<input type="text" ng-model="order.name" name="number" class="search_field" required>
+	<p ng-show="form.number.$invalid && form.number.$touched" class="text-danger">
+	    <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span> Необходим номер заказа
+	</p>
+	<span ng-show="form.number.$valid && form.number.$touched" class="glyphicon text-success glyphicon-ok-sign" aria-hidden="true"></span>
+	<div class="air"></div>
+	<button class="btn btn-primary" ng-click="openCustomersModal(order)">Выбрать покупателя</button>
+	<input type="hidden" name="customer" ng-model="order.customer.number" required>
+	<strong>{{order.customer?order.customer.name:'Не выбран покупатель'}}</strong>
+	<div class="air"></div>
+	<table class="stock_table table table-hover table-striped table-bordered">
+        <thead>
+            <tr>
+               <th>Артикул</th>
+               <th>Наименование</th>
+               <th>Цена</th>
+               <th>Наличие</th>
+               <th>Резерв</th>
+               <th>Заказано</th>
+               <th>Кол-во</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr class="tr_customer" ng-repeat="item in itemsList as results" ng-click="openDetailModal(item)">
+               <td>{{item.art}}</td>
+				<td>{{item.name}}</td>
+				<td>{{item.price | currency}}</td>
+				<td>{{item.quantity}}</td>
+				<td>{{item.reserve}}</td>
+				<td>{{item.ordered}}</td>
+				<td><input type="text" ng-model="item.number" ng-pattern="/^\d+$/" required></td>
+            </tr>
+            <tr ng-if="results.length === 0"><td colspan="7" class="text-center"><strong class="text-danger">Необходимо добавить товар</strong></td></tr>
+            <tr class="not_hover">
+            	<td colspan="7" class="text-center">
+            		<input type="hidden" name="items" ng-model="itemsAddCheck" required>
+            		<button class="btn btn-primary" ng-click="openStockModal(order)">
+						<span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
+						Добавить товар
+					</button>
+	            </td>
+	        </tr>
+        </tbody>
+    </table>
+	<div class="air"></div>
+    <button class="btn btn-lg btn-success pull-right" type="submit" ng-click="createOrder(order)" ng-disabled="form.$invalid">Создать заказ</button>
+</form>

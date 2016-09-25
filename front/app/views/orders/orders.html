@@ -1,0 +1,43 @@
+<h2>Продажи</h2>
+<ul class="nav nav-pills stock_filters">
+	<li ng-repeat="state in statesOrders" ng-class="{active: currState === state}">
+		<a ng-click="filterBy(state)">{{state ? state : 'Все заказы'}}</a>
+	</li>
+</ul>
+<div class="stock_controls">
+	<input type="text" placeholder="Искать по номеру" class="search_field" ng-model="search.number">
+	<a href="#orders/create" class="btn btn-success add_butt pull-right" >
+		<span class="glyphicon glyphicon-plus" aria-hidden="true"></span> Создать заказ
+	</a>
+</div>
+<table class="stock_table table table-hover table-striped table-bordered">
+	<thead>
+		<tr>
+			<th ng-class="{dropup: reverseSort}" ng-click="sortBy('date')">
+				Дата <span class="caret" ng-class="{visible: sortProperty === 'date'}"></span>
+			</th>
+			<th ng-class="{dropup: reverseSort}" ng-click="sortBy('number')">
+				Номер<span class="caret" ng-class="{visible: sortProperty === 'number'}"></span>
+			</th>
+			<th ng-class="{dropup: reverseSort}" ng-click="sortBy('customer')">
+				Покупатель<span class="caret" ng-class="{visible: sortProperty === 'customer'}"></span>
+			</th>
+			<th ng-class="{dropup: reverseSort}" ng-click="sortBy('sum')">
+				Сумма<span class="caret" ng-class="{visible: sortProperty === 'sum'}"></span>
+			</th>
+			<th ng-class="{dropup: reverseSort}" ng-click="sortBy('manager')">
+				Менеджер<span class="caret" ng-class="{visible: sortProperty === 'manager'}"></span>
+			</th>
+		</tr>
+	</thead>
+	<tbody>
+		<tr class="tr_order" ng-repeat="order in orders | filter:search as results">
+			<td>{{order.date | date : 'dd.MM.yy'}}</td>
+			<td>{{order.number}}</td>
+			<td>{{order.customer}}</td>
+			<td>{{order.sum}}</td>
+			<td>{{order.manager}}</td>
+		</tr>
+		<tr ng-if="results.length === 0"><td colspan="5" class="text-center"><strong>Нет заказов</strong></td></tr>
+	</tbody>
+</table>
