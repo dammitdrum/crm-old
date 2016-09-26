@@ -4,7 +4,7 @@
 <div class="air"></div>
 <form name="form" class="modal_form" novalidate>
 	<p>Введите номер</p>
-	<input type="text" ng-model="order.name" name="number" class="search_field" required>
+	<input type="text" ng-model="order.number" name="number" class="search_field" required>
 	<p ng-show="form.number.$invalid && form.number.$touched" class="text-danger">
 	    <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span> Необходим номер заказа
 	</p>
@@ -14,9 +14,23 @@
 	<input type="hidden" name="customer" ng-model="order.customer.number" required>
 	<strong>{{order.customer?order.customer.name:'Не выбран покупатель'}}</strong>
 	<div class="air"></div>
+	<input type="hidden" name="customer" ng-model="order.manager" required>
+	<div class="btn-group" uib-dropdown>
+      <button id="single-button" type="button" class="btn btn-default" uib-dropdown-toggle>
+        Выберите менеджера <span class="caret"></span>
+      </button>
+      <ul class="dropdown-menu" uib-dropdown-menu role="menu" aria-labelledby="single-button">
+        <li role="menuitem" ng-repeat="manager in managers" ng-click="selectManager($event,manager.name)">
+        	<a href="#">{{manager.name}}</a>
+        </li>
+      </ul>
+    </div>
+    <strong> {{order.manager?order.manager:'Не выбран менеджер'}}</strong>
+    <div class="air"></div>
 	<table class="stock_table table table-hover table-striped table-bordered">
         <thead>
             <tr>
+            	<th>#</th>
                <th>Артикул</th>
                <th>Наименование</th>
                <th>Цена</th>
@@ -27,18 +41,22 @@
             </tr>
         </thead>
         <tbody>
-            <tr class="tr_customer" ng-repeat="item in itemsList as results" ng-click="openDetailModal(item)">
-               <td>{{item.art}}</td>
-				<td>{{item.name}}</td>
-				<td>{{item.price | currency}}</td>
-				<td>{{item.quantity}}</td>
-				<td>{{item.reserve}}</td>
-				<td>{{item.ordered}}</td>
-				<td><input type="text" ng-model="item.number" ng-pattern="/^\d+$/" required></td>
+            <tr class="tr_customer" ng-repeat="item in itemsList as results">
+            	<td ng-click="openDetailItemModal(item)"><strong>{{$index+1}}</strong></td>
+               <td ng-click="openDetailItemModal(item)">{{item.art}}</td>
+				<td ng-click="openDetailItemModal(item)">{{item.name}}</td>
+				<td ng-click="openDetailItemModal(item)">{{item.price | currency}}</td>
+				<td ng-click="openDetailItemModal(item)">{{item.quantity}}</td>
+				<td ng-click="openDetailItemModal(item)">{{item.reserve}}</td>
+				<td ng-click="openDetailItemModal(item)">{{item.ordered}}</td>
+				<td>
+					<input class="quant_input" type="text" ng-model="item.number" ng-pattern="/^[1-9]\d*$/" required>
+					<span class="btn btn-danger btn-sm pull-right remove_butt" ng-click="removeItem(item)"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span></span>
+				</td>
             </tr>
-            <tr ng-if="results.length === 0"><td colspan="7" class="text-center"><strong class="text-danger">Необходимо добавить товар</strong></td></tr>
+            <tr ng-if="results.length === 0"><td colspan="8" class="text-center"><strong class="text-danger">Необходимо добавить товар</strong></td></tr>
             <tr class="not_hover">
-            	<td colspan="7" class="text-center">
+            	<td colspan="8" class="text-center">
             		<input type="hidden" name="items" ng-model="itemsAddCheck" required>
             		<button class="btn btn-primary" ng-click="openStockModal(order)">
 						<span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
@@ -48,6 +66,7 @@
 	        </tr>
         </tbody>
     </table>
+	
 	<div class="air"></div>
     <button class="btn btn-lg btn-success pull-right" type="submit" ng-click="createOrder(order)" ng-disabled="form.$invalid">Создать заказ</button>
 </form>

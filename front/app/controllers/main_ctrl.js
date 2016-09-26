@@ -1,8 +1,10 @@
 'use strict';
 
 angular.module('myApp.main_ctrl', [])
+.constant('PATH_STOCK','app/views/stock/')
+.constant('PATH_ORDERS','app/views/orders/')
 
-.controller('MainCtrl', function($rootScope, $scope, $http){
+.controller('MainCtrl', function($rootScope, $scope, $http, $uibModal, PATH_STOCK){
 
     // Fetch API
     $rootScope.fetchItems = function() {
@@ -52,5 +54,26 @@ angular.module('myApp.main_ctrl', [])
             });
             $rootScope.$broadcast('updateCategories',$rootScope.stock);
         });
+    };
+
+    // common methods
+    $scope.openDetailItemModal = function(item) {
+        var modalInstance = $uibModal.open({
+            templateUrl: PATH_STOCK+'detail_modal.html',
+            controller: 'DetailModalCtrl',
+            size: 'lg',
+            resolve: {
+                item: function() {
+                    return item;
+                }
+            }
+        });
+    };
+})
+
+.controller('DetailModalCtrl', function($scope, $uibModalInstance, item){
+    $scope.item = item;
+    $scope.closeModal = function() {
+        $uibModalInstance.dismiss('cancel');
     };
 })

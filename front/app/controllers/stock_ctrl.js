@@ -1,16 +1,13 @@
 'use strict';
 
 angular.module('myApp.stock_ctrl', [])
-.constant('PATH_STOCK','app/views/stock/')
 
 .controller('StockCtrl', function($rootScope, $scope, $uibModal, PATH_STOCK){
     $scope.sortProperty = 'name';
     $scope.reverseSort = false;
     $scope.currCategory = '';
 
-    $rootScope.fetchItems();
-
-    $scope.$on('updateCategories',function(event,stock) {
+    $scope.updateCategories = function(stock) {
         $scope.categoriesItems = [''];
         angular.forEach(stock, function(item) {
             var find = false;
@@ -19,35 +16,30 @@ angular.module('myApp.stock_ctrl', [])
             }
             if (!find) $scope.categoriesItems.push(item.category);
         });
+    };
+
+    if (!$rootScope.stock) {
+        $rootScope.fetchItems();
+    } else {
+        $scope.updateCategories($rootScope.stock);
+    }
+
+    $scope.$on('updateCategories',function(event,stock) {
+        $scope.updateCategories(stock);
     })
 
     $scope.filterBy = function(name) {
-        $scope.switchFilter = name ? true : false;
         $scope.currCategory = name;
     };
     $scope.sortBy = function(name) {
         $scope.reverseSort = ($scope.sortProperty === name) ? !$scope.reverseSort : false;
         $scope.sortProperty = name;
     };
-    $scope.openDetailModal = function(item) {
-        var modalInstance = $uibModal.open({
-            animation: true,
-            templateUrl: PATH_STOCK+'detail_modal.html',
-            controller: 'DetailModalCtrl',
-            size: 'lg',
-            resolve: {
-                item: function() {
-                    return item;
-                }
-            }
-        });
-    };
     $scope.openEditModal = function(item,type) {
         if (type==='create') {
             item = {};
         }
         var modalInstance = $uibModal.open({
-            animation: true,
             templateUrl: PATH_STOCK+'edit_modal.html',
             controller: 'EditModalCtrl',
             resolve: {
@@ -79,13 +71,6 @@ angular.module('myApp.stock_ctrl', [])
     };
     $scope.stopPropagation = function($event) {
         $event.stopPropagation();
-    };
-})
-
-.controller('DetailModalCtrl', function($scope, $uibModalInstance, item){
-	$scope.item = item;
-    $scope.closeModal = function() {
-    	$uibModalInstance.dismiss('cancel');
     };
 })
 

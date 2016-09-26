@@ -1,16 +1,13 @@
 'use strict';
 
 angular.module('myApp.orders_ctrl', [])
-.constant('PATH_ORDERS','app/views/orders/')
 
 .controller('OrdersCtrl', function($rootScope, $scope){
 	$scope.sortProperty = 'date';
     $scope.reverseSort = false;
-	$scope.currState = ''
+	$scope.currState = '';
 
-    $rootScope.fetchOrders();
-
-    $scope.$on('updateStates',function(event,orders) {
+    $scope.updateStates = function(orders) {
         $scope.statesOrders = [''];
         angular.forEach(orders, function(order) {
             var find = false;
@@ -19,11 +16,20 @@ angular.module('myApp.orders_ctrl', [])
             }
             if (!find) $scope.statesOrders.push(order.state);
         });
+    };
+
+    if (!$rootScope.orders) {
+        $rootScope.fetchOrders();
+    } else {
+        $scope.updateStates($rootScope.orders);
+    }
+
+    $scope.$on('updateStates',function(event,orders) {
+        $scope.updateStates(orders);
     })
 
     $scope.filterBy = function(name) {
-        $scope.switchFilter = name ? true : false;
-        $scope.currCategory = name;
+        $scope.currState = name;
     };
     $scope.sortBy = function(name) {
         $scope.reverseSort = ($scope.sortProperty === name) ? !$scope.reverseSort : false;
@@ -34,10 +40,22 @@ angular.module('myApp.orders_ctrl', [])
 .controller('OrderDetailCtrl', function($rootScope, $scope, $uibModal, PATH_ORDERS){
     $scope.order = {};
     $scope.itemsList = [];
+    $scope.managers = [
+    	{
+    		"name":"Алексей Пучков"
+    	},
+    	{
+    		"name":"Валентина Кольцова"
+    	},
+    	{
+    		"name":"Гриша Матюшкин"
+    	}
+    ];
+
+    if (!$rootScope.orders) $rootScope.fetchOrders();
 
     $scope.$on('addItemToOrder',function(event,item) {
-    	item.number = 1;
-
+    	
     	angular.forEach($scope.itemsList, function(added) {
     		if (item._id === added._id) {
     			added.number++;
@@ -46,6 +64,9 @@ angular.module('myApp.orders_ctrl', [])
     		}
     	})
     	if (item) $scope.itemsList.push(item);
+    	angular.forEach($scope.itemsList, function(added) {
+    		if (!added.number) added.number = 1;
+    	})
     	$scope.itemsAddCheck = $scope.itemsList.length ? true : '';
     });
     $scope.$on('addCustomerToOrder',function(event,customer) {
@@ -54,7 +75,6 @@ angular.module('myApp.orders_ctrl', [])
 
     $scope.openCustomersModal = function() {
         var modalInstance = $uibModal.open({
-            animation: true,
             templateUrl: PATH_ORDERS+'customer_modal.html',
             controller: 'CustomerModalCtrl',
             size: 'lg'
@@ -64,7 +84,6 @@ angular.module('myApp.orders_ctrl', [])
     	if (!$rootScope.stock) $rootScope.fetchItems();
 
         var modalInstance = $uibModal.open({
-            animation: true,
             templateUrl: PATH_ORDERS+'stock_modal.html',
             controller: 'StockModalCtrl',
             size: 'lg',
@@ -75,16 +94,27 @@ angular.module('myApp.orders_ctrl', [])
             }
         });
     };
+    $scope.removeItem = function(item) {
+    	angular.forEach($scope.itemsList, function(added,i) {
+    		if (added._id === item._id) $scope.itemsList.splice(i,1);
+    	});
+    	$scope.itemsAddCheck = $scope.itemsList.length ? true : '';
+    };
+    $scope.selectManager = function($event,name) {
+    	$event.preventDefault();
+    	$scope.order.manager = name;
+    };
     $scope.createOrder = function(order) {
-    	$scope.order.itemsList = [];
+    	$scope.order.items = [];
     	angular.forEach($scope.itemsList, function(item) {
     		var i = {
 	    		"id": item._id,
 	    		"number": item.number
 	    	};
-	    	$scope.order.itemsList.push(i);
+	    	$scope.order.items.push(i);
     	});
     	console.log(order);
+    	$rootScope.createOrder(order);
     };
 })
 
@@ -105,19 +135,19 @@ angular.module('myApp.orders_ctrl', [])
 .controller('CustomerModalCtrl', function($rootScope, $scope, $uibModalInstance){
    	$scope.customers = [
    		{
-   			"number":"111",
+   			"number":111,
    			"name":"ООО \"Альбатрос\"",
    			"contact":"albatros@mail.ru, +375 (29) 664-77-84",
    			"person":"Лидия Петровна" 
    		},
    		{
-   			"number":"112",
+   			"number":112,
    			"name":"ИП \"Паравоз\"",
    			"contact":"+375 (33) 874-11-84",
    			"person":"Тимур Родригез" 
    		},
    		{
-   			"number":"113",
+   			"number":113,
    			"name":"ОАО \"Газпром\"",
    			"contact":"gasprom@mail.ru, +7 (495) 666-66-66",
    			"person":"Вова Путин" 

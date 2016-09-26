@@ -33,15 +33,24 @@ var Item = new Schema({
     category: { type: String, default: ''}
 });
 
+var Customer = new Schema({
+    number: Number,
+    name: String,
+    contact: String,
+    person: String,
+})
+
 var Order = new Schema({
     date: { type: Date, default: Date.now },
     number: { type: String, required: true},
-    customer: { type: Object, required: true},
-    items: [Item],
+    customer: Customer,
+    items: [{id: String, number: Number}],
     sum: { type: Number, default: 0},
     manager: { type: Object, required: true},
     state: { type: String, default: 'new'}
 });
+
+
 
 var ItemModel = mongoose.model('Item', Item);
 
@@ -102,7 +111,7 @@ app.post('/stock/create', function (req, res) {
 });
 
 app.post('/orders/create', function (req, res) {
-    var order = new ItemModel({
+    var order = new OrderModel({
         number: req.body.number,
         customer: req.body.customer,
         items: req.body.items,

@@ -40,8 +40,21 @@ h2 {
 .air {
     height: 40px;
 }
+.quant_input {
+    width: 60px;
+    margin-top: 2px;
+    margin-bottom: 0 !important;
+    padding: 0;
+    text-align: center;
+}
 .stock_table {
     th:first-child {
+        text-align: center;
+    }
+    td:first-child {
+        text-align: center;
+    }
+    th.long {
         width: 130px;
     }
     .caret {
@@ -65,7 +78,9 @@ h2 {
 .popover-content {
     min-width: 280px;
 }
-
+.remove_butt {
+    padding: 4px 6px 2px 7px;
+}
 .modal_form {
     p {
         margin-bottom: 4px;
