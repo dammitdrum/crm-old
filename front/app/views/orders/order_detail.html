@@ -50,9 +50,13 @@
 				<td ng-click="openDetailItemModal(item)">{{item.reserve}}</td>
 				<td ng-click="openDetailItemModal(item)">{{item.ordered}}</td>
 				<td>
-					<input class="quant_input" type="text" ng-model="item.number" ng-pattern="/^[1-9]\d*$/" required>
+					<input class="quant_input" type="text" ng-model="item.number" ng-pattern="/^[1-9]\d*$/" ng-blur="$emit('changeQuant')" required>
 					<span class="btn btn-danger btn-sm pull-right remove_butt" ng-click="removeItem(item)"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span></span>
 				</td>
+            </tr>
+            <tr ng-if="results.length > 0">
+              <td colspan="7"></td>
+              <td><strong>{{order.sum | currency}}</strong></td>
             </tr>
             <tr ng-if="results.length === 0"><td colspan="8" class="text-center"><strong class="text-danger">Необходимо добавить товар</strong></td></tr>
             <tr class="not_hover">

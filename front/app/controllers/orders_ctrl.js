@@ -56,8 +56,10 @@ angular.module('myApp.orders_ctrl', [])
 
     $scope.$on('addItemToOrder',function(event,item) {
     	var clone = angular.copy(item),
-    		add = false;
-    		
+    		add = false,
+            sum = clone.price;
+
+        clone.number = 1;
     	angular.forEach($scope.itemsList, function(added) {
     		if (clone._id === added._id) {
     			added.number++;
@@ -66,14 +68,18 @@ angular.module('myApp.orders_ctrl', [])
     		}
     	})
     	if (!add) $scope.itemsList.push(clone);
-    	angular.forEach($scope.itemsList, function(added) {
-    		if (!added.number) added.number = 1;
-    	})
     	$scope.itemsAddCheck = $scope.itemsList.length ? true : '';
+        $scope.$emit('changeQuant');
     });
     $scope.$on('addCustomerToOrder',function(event,customer) {
-    	$scope.order.customer = customer;
+        $scope.order.customer = customer;
     });
+    $scope.$on('changeQuant',function(event) {
+    	angular.forEach($scope.itemsList, function(item) {
+            $scope.order.sum =+ item.price*item.number;
+        })
+    });
+
 
     $scope.openCustomersModal = function() {
         var modalInstance = $uibModal.open({
