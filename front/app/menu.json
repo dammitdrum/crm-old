@@ -6,12 +6,12 @@
 	},
 	{
 		"name": "Продажи",
-		"url": "/orders",
+		"url": "/sales",
 		"className": ""
 	},
 	{
 		"name": "Закупки",
-		"url": "/ships",
+		"url": "/orders",
 		"className": ""
 	}
 ]

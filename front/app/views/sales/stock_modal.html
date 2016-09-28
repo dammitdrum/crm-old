@@ -27,7 +27,7 @@
             </tr>
         </thead>
         <tbody>
-            <tr class="tr_item" ng-repeat="item in stock | filter:search | orderBy:sortProperty:reverseSort as results" ng-click="addToOrder(item)">
+            <tr class="tr_item" ng-repeat="item in stock | filter:search | orderBy:sortProperty:reverseSort as results" ng-click="addToSale(item)">
                 <td>{{item.art}}</td>
                 <td>{{item.name}}</td>
                 <td>{{item.price | currency}}</td>

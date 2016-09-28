@@ -1,31 +1,35 @@
-<h2>Продажи</h2>
+
+<h3>Создание новой продажи</h3>
 <hr>
-<h3>Создание нового заказа</h3>
-<div class="air"></div>
-<form name="form" class="modal_form" novalidate>
+<form name="form" class="modal_form clearfix" novalidate>
 	<p>Введите номер</p>
-	<input type="text" ng-model="order.number" name="number" class="search_field" required>
+	<input type="text" ng-model="sale.number" ng-pattern="/^\d+$/" name="number" class="search_field" required>
 	<p ng-show="form.number.$invalid && form.number.$touched" class="text-danger">
-	    <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span> Необходим номер заказа
+	    <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span> Необходим номер продажи(только цифры)
 	</p>
 	<span ng-show="form.number.$valid && form.number.$touched" class="glyphicon text-success glyphicon-ok-sign" aria-hidden="true"></span>
 	<div class="air"></div>
-	<button class="btn btn-primary" ng-click="openCustomersModal(order)">Выбрать покупателя</button>
-	<input type="hidden" name="customer" ng-model="order.customer.number" required>
-	<strong>{{order.customer?order.customer.name:'Не выбран покупатель'}}</strong>
-	<div class="air"></div>
-	<input type="hidden" name="customer" ng-model="order.manager" required>
-	<div class="btn-group" uib-dropdown>
+  <div class="pull-left">
+    <button class="btn btn-primary" ng-click="openCustomersModal(sale)">Выбрать покупателя</button>
+    <input type="hidden" name="customer" ng-model="sale.customer.number" required>
+    <strong>&nbsp;&nbsp; {{sale.customer?sale.customer.name:'Не выбран покупатель'}}</strong>
+  </div>
+	<div class="pull-right clearfix">
+   <input type="hidden" name="customer" ng-model="sale.manager" required>
+  
+    <strong>{{sale.manager?sale.manager:'Не выбран менеджер'}} &nbsp;&nbsp;</strong> 
+    <div class="btn-group" uib-dropdown>
       <button id="single-button" type="button" class="btn btn-default" uib-dropdown-toggle>
         Выберите менеджера <span class="caret"></span>
       </button>
       <ul class="dropdown-menu" uib-dropdown-menu role="menu" aria-labelledby="single-button">
         <li role="menuitem" ng-repeat="manager in managers" ng-click="selectManager($event,manager.name)">
-        	<a href="#">{{manager.name}}</a>
+          <a href="#">{{manager.name}}</a>
         </li>
       </ul>
     </div>
-    <strong> {{order.manager?order.manager:'Не выбран менеджер'}}</strong>
+  </div>
+	
     <div class="air"></div>
 	<table class="stock_table table table-hover table-striped table-bordered">
         <thead>
@@ -54,15 +58,15 @@
 					<span class="btn btn-danger btn-sm pull-right remove_butt" ng-click="removeItem(item)"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span></span>
 				</td>
             </tr>
-            <tr ng-if="results.length > 0">
-              <td colspan="7"></td>
-              <td><strong>{{order.sum | currency}}</strong></td>
+            <tr ng-if="results.length > 0" class="bg_w">
+              <td colspan="7" class="tar"><strong>Общая сумма:</strong></td>
+              <td><strong>{{sale.sum | currency}}</strong></td>
             </tr>
-            <tr ng-if="results.length === 0"><td colspan="8" class="text-center"><strong class="text-danger">Необходимо добавить товар</strong></td></tr>
+            <tr ng-if="results.length === 0" class="not_hover"><td colspan="8" class="text-center"><strong class="text-danger">Необходимо добавить товар</strong></td></tr>
             <tr class="not_hover">
             	<td colspan="8" class="text-center">
             		<input type="hidden" name="items" ng-model="itemsAddCheck" required>
-            		<button class="btn btn-primary" ng-click="openStockModal(order)">
+            		<button class="btn btn-primary" ng-click="openStockModal(sale)">
 						<span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
 						Добавить товар
 					</button>
@@ -72,5 +76,6 @@
     </table>
 	
 	<div class="air"></div>
-    <button class="btn btn-lg btn-success pull-right" type="submit" ng-click="createOrder(order)" ng-disabled="form.$invalid">Создать заказ</button>
+    <button class="btn btn-lg btn-success pull-right" type="submit" ng-click="createSale(sale)" ng-disabled="form.$invalid">Создать продажу</button>
 </form>
+<div class="air"></div>

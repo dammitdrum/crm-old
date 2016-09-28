@@ -40,9 +40,9 @@ var Customer = new Schema({
     person: String,
 })
 
-var Order = new Schema({
+var Sale = new Schema({
     date: { type: Date, default: Date.now },
-    number: { type: String, required: true},
+    number: { type: Number, unique: true, required: true},
     customer: Customer,
     items: [{id: String, number: Number}],
     sum: { type: Number, default: 0},
@@ -54,7 +54,7 @@ var Order = new Schema({
 
 var ItemModel = mongoose.model('Item', Item);
 
-var OrderModel = mongoose.model('Order', Order);
+var SaleModel = mongoose.model('Sale', Sale);
 
 
 // READ
@@ -74,10 +74,10 @@ app.get('/stock/read/:id', function (req, res) {
     res.send(req.params.id);
 });
 
-app.get('/orders/read', function (req, res) {
-    return OrderModel.find(function (err, orders) {
+app.get('/sales/read', function (req, res) {
+    return SaleModel.find(function (err, sales) {
         if (!err) {
-            return res.send(orders);
+            return res.send(sales);
         } else {
             res.statusCode = 500;
             return res.send({ error: 'Server error 500' });
@@ -85,7 +85,7 @@ app.get('/orders/read', function (req, res) {
     });
 });
 
-app.get('/orders/read/:id', function (req, res) {
+app.get('/sales/read/:id', function (req, res) {
     res.send(req.params.id);
 });
 
@@ -110,18 +110,19 @@ app.post('/stock/create', function (req, res) {
     });
 });
 
-app.post('/orders/create', function (req, res) {
-    var order = new OrderModel({
+app.post('/sales/create', function (req, res) {
+    var sale = new SaleModel({
         number: req.body.number,
         customer: req.body.customer,
         items: req.body.items,
+        sum: req.body.sum,
         manager: req.body.manager,
     });
 
-    order.save(function (err) {
+    sale.save(function (err) {
         if (!err) {
-            console.log("order created");
-            return res.send({ status: 'OK', order:order });
+            console.log("sale created");
+            return res.send({ status: 'OK', sale:sale });
         } else {
             console.log(err);
         }

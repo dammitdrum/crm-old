@@ -2,7 +2,7 @@
 
 angular.module('myApp.main_ctrl', [])
 .constant('PATH_STOCK','app/views/stock/')
-.constant('PATH_ORDERS','app/views/orders/')
+.constant('PATH_SALES','app/views/sales/')
 
 .controller('MainCtrl', function($rootScope, $scope, $http, $uibModal, PATH_STOCK){
 
@@ -13,10 +13,11 @@ angular.module('myApp.main_ctrl', [])
             $rootScope.$broadcast('updateCategories',$rootScope.stock);
         });
     };
-    $rootScope.fetchOrders = function() {
-        $http.get('/orders/read').then(function(res) {
-            $rootScope.orders = res.data;
-            $rootScope.$broadcast('updateStates',$rootScope.orders);
+    $rootScope.fetchSales = function(callback) {
+        $http.get('/sales/read').then(function(res) {
+            $rootScope.sales = res.data;
+            $rootScope.$broadcast('updateStates',$rootScope.sales);
+            if (typeof callback !== 'undefined') callback();
         });
     };
 
@@ -28,10 +29,10 @@ angular.module('myApp.main_ctrl', [])
             $rootScope.$broadcast('updateCategories',$rootScope.stock);
         });
     };
-    $rootScope.createOrder = function(order) {
-        $http.post('/orders/create',order).then(function(res) {
-            $rootScope.orders.push(res.data.order);
-            $rootScope.$broadcast('updateStatuses',$rootScope.orders);
+    $rootScope.createSale = function(sale) {
+        $http.post('/sales/create',sale).then(function(res) {
+            $rootScope.sales.push(res.data.sale);
+            $rootScope.$broadcast('updateStatuses',$rootScope.sales);
         });
     };
 

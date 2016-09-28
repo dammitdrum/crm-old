@@ -31,11 +31,21 @@ input {
 h2 {
     margin-bottom: 30px;
 }
+.tar {
+    text-align: right !important;
+}
 .mgb {
     margin-bottom: 15px;
 }
-.not_hover:hover {
-    background: none !important;
+.not_hover {
+    background: #fff !important;
+    td {
+        border-top: none !important;
+        border-bottom: none !important;
+    }
+}
+.bg_w {
+    background: #fff !important;
 }
 .air {
     height: 40px;
