@@ -55,15 +55,17 @@ angular.module('myApp.orders_ctrl', [])
     if (!$rootScope.orders) $rootScope.fetchOrders();
 
     $scope.$on('addItemToOrder',function(event,item) {
-    	
+    	var clone = angular.copy(item),
+    		add = false;
+    		
     	angular.forEach($scope.itemsList, function(added) {
-    		if (item._id === added._id) {
+    		if (clone._id === added._id) {
     			added.number++;
-    			item = null;
+    			add = true;
     			return;
     		}
     	})
-    	if (item) $scope.itemsList.push(item);
+    	if (!add) $scope.itemsList.push(clone);
     	angular.forEach($scope.itemsList, function(added) {
     		if (!added.number) added.number = 1;
     	})
