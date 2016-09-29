@@ -2,7 +2,11 @@
 
 angular.module('myApp.sales_ctrl', [])
 
-.controller('SalesCtrl', function($rootScope, $scope, $location){
+.controller('SalesCtrl', function($rootScope, $scope, $location, Sales){
+    if (Sales) {
+        $rootScope.sales = Sales.data;
+    }
+
     $scope.sortProperty = 'date';
     $scope.reverseSort = false;
     $scope.currState = 'all';
@@ -17,12 +21,8 @@ angular.module('myApp.sales_ctrl', [])
             if (!find) $scope.statesSales.push(sale.state);
         });
     };
-
-    if (!$rootScope.sales) {
-        $rootScope.fetchSales();
-    } else {
-        $scope.updateStates($rootScope.sales);
-    }
+    
+    $scope.updateStates($scope.sales);
 
     $scope.$on('updateStates',function(event,sales) {
         $scope.updateStates(sales);
@@ -40,36 +40,7 @@ angular.module('myApp.sales_ctrl', [])
     };
 })
 
-.controller('SaleDetailCtrl', function($rootScope, $scope, $uibModal, $location, $routeParams, PATH_SALES){
-    $scope.sale = {};
-    $scope.itemsList = [];
-
-    if (!$rootScope.sales) $rootScope.fetchSales();
-    if (!$rootScope.stock) {
-        $rootScope.fetchItems(parseSale);
-    } else {
-        parseSale();
-    }
-
-    function parseSale() {
-        if ($routeParams.number) {
-            angular.forEach($rootScope.sales, function(sale) {
-                if (sale.number == $routeParams.number) $scope.sale = sale;
-            });
-
-            angular.forEach($scope.sale.items, function(saleItem) {
-                angular.forEach($rootScope.stock, function(item) {
-                    if (item._id === saleItem.id) {
-                        var clone = angular.copy(item);
-                        clone.number = saleItem.number;
-                        $scope.itemsList.push(clone);
-                    }
-                });
-            });
-        }
-    };
-    
-    
+.controller('SaleDetailCtrl', function($rootScope, $scope, $uibModal, $location, $routeParams, Sales, Items,PATH_SALES){
     $scope.managers = [
         {
             "name":"Алексей Пучков"
@@ -82,7 +53,31 @@ angular.module('myApp.sales_ctrl', [])
         }
     ];
 
-    
+    if (Items) {
+        $rootScope.stock = Items.data;
+    }
+    if (Sales) {
+        $rootScope.sales = Sales.data;
+    }
+
+    $scope.sale = {};
+    $scope.itemsList = [];
+
+    if ($routeParams.number) {
+        angular.forEach($rootScope.sales, function(sale) {
+            if (sale.number == $routeParams.number) $scope.sale = sale;
+        });
+
+        angular.forEach($scope.sale.items, function(saleItem) {
+            angular.forEach($rootScope.stock, function(item) {
+                if (item._id === saleItem.id) {
+                    var clone = angular.copy(item);
+                    clone.number = saleItem.number;
+                    $scope.itemsList.push(clone);
+                }
+            });
+        });
+    }
 
     $scope.$on('addItemToSale',function(event,item) {
         var clone = angular.copy(item),

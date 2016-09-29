@@ -50,12 +50,9 @@ var Sale = new Schema({
     state: { type: String, default: 'new'}
 });
 
-
-
 var ItemModel = mongoose.model('Item', Item);
 
 var SaleModel = mongoose.model('Sale', Sale);
-
 
 // READ
 

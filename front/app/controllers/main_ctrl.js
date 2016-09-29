@@ -4,22 +4,8 @@ angular.module('myApp.main_ctrl', [])
 .constant('PATH_STOCK','app/views/stock/')
 .constant('PATH_SALES','app/views/sales/')
 
-.controller('MainCtrl', function($rootScope, $scope, $http, $uibModal, PATH_STOCK){
-
-    // Fetch API
-    $rootScope.fetchItems = function() {
-        $http.get('/stock/read').then(function(res) {
-            $rootScope.stock = res.data;
-            $rootScope.$broadcast('updateCategories',$rootScope.stock);
-        });
-    };
-    $rootScope.fetchSales = function(callback) {
-        $http.get('/sales/read').then(function(res) {
-            $rootScope.sales = res.data;
-            $rootScope.$broadcast('updateStates',$rootScope.sales);
-            if (typeof callback !== 'undefined') callback();
-        });
-    };
+.controller('MainCtrl', function($rootScope, $scope, $http, $uibModal, $q, PATH_STOCK){
+    
 
     // Create API
     $rootScope.createItem = function(item,hideModal) {
@@ -32,7 +18,7 @@ angular.module('myApp.main_ctrl', [])
     $rootScope.createSale = function(sale) {
         $http.post('/sales/create',sale).then(function(res) {
             $rootScope.sales.push(res.data.sale);
-            $rootScope.$broadcast('updateStatuses',$rootScope.sales);
+            $rootScope.$broadcast('updateStates',$rootScope.sales);
         });
     };
 

@@ -2,7 +2,11 @@
 
 angular.module('myApp.stock_ctrl', [])
 
-.controller('StockCtrl', function($rootScope, $scope, $uibModal, PATH_STOCK){
+.controller('StockCtrl', function($rootScope, $scope, $uibModal, Items, PATH_STOCK){
+
+    if (Items) {
+        $rootScope.stock = Items.data;
+    }
     $scope.sortProperty = 'name';
     $scope.reverseSort = false;
     $scope.currCategory = '';
@@ -18,16 +22,8 @@ angular.module('myApp.stock_ctrl', [])
         });
     };
 
-    if (!$rootScope.stock) {
-        $rootScope.fetchItems();
-    } else {
-        $scope.updateCategories($rootScope.stock);
-    }
-
-    $scope.$on('updateCategories',function(event,stock) {
-        $scope.updateCategories(stock);
-    })
-
+    $scope.updateCategories($rootScope.stock);
+    
     $scope.filterBy = function(name) {
         $scope.currCategory = name;
     };
