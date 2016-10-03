@@ -9,10 +9,10 @@ angular.module('myApp.sales_ctrl', [])
 
     $scope.sortProperty = 'date';
     $scope.reverseSort = false;
-    $scope.currState = 'all';
+    $scope.currState = '';
 
     $scope.updateStates = function(sales) {
-        $scope.statesSales = ['all'];
+        $scope.statesSales = [''];
         angular.forEach(sales, function(sale) {
             var find = false;
             for (var i = 0; i < $scope.statesSales.length; i++) {
@@ -62,8 +62,10 @@ angular.module('myApp.sales_ctrl', [])
 
     $scope.sale = {};
     $scope.itemsList = [];
+    $scope.editMode = false;
 
     if ($routeParams.number) {
+        $scope.editMode = true;
         angular.forEach($rootScope.sales, function(sale) {
             if (sale.number == $routeParams.number) $scope.sale = sale;
         });

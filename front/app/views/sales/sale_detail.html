@@ -1,8 +1,19 @@
 
-<h3>Создание новой продажи</h3>
+<h3 ng-if="!editMode">Создание новой продажи</h3>
+<h3 ng-if="editMode">Редактирование продажи №{{sale.number}}</h3>
 <hr>
 <form name="form" class="modal_form clearfix" novalidate>
-	<p>Введите номер</p>
+  <div ng-if="editMode">
+    <p><strong>Статус продажи</strong></p>
+    <div class="btn-group" role="group">
+      <button type="button" class="btn btn-sm btn-default btn-info" ng-class="{active: sale.state === 'new',}">Новая</button>
+      <button type="button" class="btn btn-sm btn-default btn-success" ng-class="{active: sale.state === 'approved'}">Подтвержденная</button>
+      <button type="button" class="btn btn-sm btn-default btn-warning" ng-class="{active: sale.state === 'closed'}">Завершенная</button>
+      <button type="button" class="btn btn-sm btn-default btn-danger" ng-class="{active: sale.state === 'canceled'}">Анулированная</button>
+    </div>
+  </div>
+  <div class="air"></div>
+	<p>Номер продажи</p>
 	<input type="text" ng-model="sale.number" ng-pattern="/^\d+$/" name="number" class="search_field" required>
 	<p ng-show="form.number.$invalid && form.number.$touched" class="text-danger">
 	    <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span> Необходим номер продажи(только цифры)
