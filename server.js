@@ -48,7 +48,7 @@ var Sale = new Schema({
     sum: { type: Number, default: 0},
     manager: { type: Object, required: true},
     state: { type: String, default: 'new'}
-});
+},{ versionKey: '_version' });
 
 var ItemModel = mongoose.model('Item', Item);
 
@@ -142,6 +142,25 @@ app.put('/stock/update/:id', function (req, res){
             if (!err) {
                 console.log("item updated");
                 return res.send({ status: 'OK', item:item });
+            } else {
+                console.log(err);
+            }
+        });
+    });
+});
+app.put('/sales/update/:id', function (req, res){
+    return SaleModel.findById(req.params.id, function (err, sale) {
+        if(!sale) {
+            res.statusCode = 404;
+            return res.send({ error: 'Not found' });
+        }
+        for (var key in req.body) {
+            sale[key] = req.body[key];
+        }
+        return sale.save(function (err) {
+            if (!err) {
+                console.log("sale updated");
+                return res.send({ status: 'OK', sale:sale });
             } else {
                 console.log(err);
             }

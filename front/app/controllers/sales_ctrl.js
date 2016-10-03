@@ -67,15 +67,18 @@ angular.module('myApp.sales_ctrl', [])
     if ($routeParams.number) {
         $scope.editMode = true;
         angular.forEach($rootScope.sales, function(sale) {
-            if (sale.number == $routeParams.number) $scope.sale = sale;
+            if (sale.number == $routeParams.number) {
+                $scope.sale = angular.copy(sale);
+                return;
+            }
         });
-
         angular.forEach($scope.sale.items, function(saleItem) {
             angular.forEach($rootScope.stock, function(item) {
                 if (item._id === saleItem.id) {
                     var clone = angular.copy(item);
                     clone.number = saleItem.number;
                     $scope.itemsList.push(clone);
+                    return;
                 }
             });
         });
@@ -94,7 +97,6 @@ angular.module('myApp.sales_ctrl', [])
             }
         })
         if (!add) $scope.itemsList.push(clone);
-        $scope.itemsAddCheck = $scope.itemsList.length ? true : '';
         $scope.$emit('changeQuant');
     });
     $scope.$on('addCustomerToSale',function(event,customer) {
@@ -102,6 +104,14 @@ angular.module('myApp.sales_ctrl', [])
     });
     $scope.$on('changeQuant',function(event) {
         $scope.sale.sum = 0;
+        $scope.sale.items = [];
+        angular.forEach($scope.itemsList, function(item) {
+            var i = {
+                "id": item._id,
+                "number": item.number
+            };
+            $scope.sale.items.push(i);
+        });
         angular.forEach($scope.itemsList, function(item) {
             $scope.sale.sum += item.price*item.number;
         })
@@ -128,11 +138,13 @@ angular.module('myApp.sales_ctrl', [])
             }
         });
     };
+    $scope.setState = function(state) {
+        $scope.sale.state = state;
+    };
     $scope.removeItem = function(item) {
         angular.forEach($scope.itemsList, function(added,i) {
             if (added._id === item._id) $scope.itemsList.splice(i,1);
         });
-        $scope.itemsAddCheck = $scope.itemsList.length ? true : '';
         $scope.$emit('changeQuant');
     };
     $scope.selectManager = function($event,name) {
@@ -140,15 +152,21 @@ angular.module('myApp.sales_ctrl', [])
         $scope.sale.manager = name;
     };
     $scope.createSale = function(sale) {
-        $scope.sale.items = [];
-        angular.forEach($scope.itemsList, function(item) {
-            var i = {
-                "id": item._id,
-                "number": item.number
-            };
-            $scope.sale.items.push(i);
-        });
         $rootScope.createSale(sale);
+        $location.path('/sales');
+    };
+    $scope.saveSale = function(newSale) {
+        var oldSale = {};
+        angular.forEach($rootScope.sales, function(sale) {
+            if (sale.number == $routeParams.number) {
+                oldSale = sale;
+                return;
+            }
+        });
+        for (var key in newSale) {
+            oldSale[key] = newSale[key];
+        }
+        $rootScope.saveSale(oldSale);
         $location.path('/sales');
     };
 })

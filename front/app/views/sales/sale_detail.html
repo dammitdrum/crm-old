@@ -6,10 +6,10 @@
   <div ng-if="editMode">
     <p><strong>Статус продажи</strong></p>
     <div class="btn-group" role="group">
-      <button type="button" class="btn btn-sm btn-default btn-info" ng-class="{active: sale.state === 'new',}">Новая</button>
-      <button type="button" class="btn btn-sm btn-default btn-success" ng-class="{active: sale.state === 'approved'}">Подтвержденная</button>
-      <button type="button" class="btn btn-sm btn-default btn-warning" ng-class="{active: sale.state === 'closed'}">Завершенная</button>
-      <button type="button" class="btn btn-sm btn-default btn-danger" ng-class="{active: sale.state === 'canceled'}">Анулированная</button>
+      <button type="button" class="btn btn-sm btn-default" ng-click="setState('new')" ng-class="{active: sale.state === 'new',}">Новая</button>
+      <button type="button" class="btn btn-sm btn-default" ng-click="setState('approved')" ng-class="{active: sale.state === 'approved'}">Подтвержденная</button>
+      <button type="button" class="btn btn-sm btn-default" ng-click="setState('closed')" ng-class="{active: sale.state === 'closed'}">Завершенная</button>
+      <button type="button" class="btn btn-sm btn-default" ng-click="setState('canceled')" ng-class="{active: sale.state === 'canceled'}">Анулированная</button>
     </div>
   </div>
   <div class="air"></div>
@@ -73,20 +73,19 @@
               <td colspan="7" class="tar"><strong>Общая сумма:</strong></td>
               <td><strong>{{sale.sum | currency}}</strong></td>
             </tr>
-            <tr ng-if="results.length === 0" class="not_hover"><td colspan="8" class="text-center"><strong class="text-danger">Необходимо добавить товар</strong></td></tr>
             <tr class="not_hover">
             	<td colspan="8" class="text-center">
-            		<input type="hidden" name="items" ng-model="itemsAddCheck" required>
-            		<button class="btn btn-primary" ng-click="openStockModal(sale)">
-						<span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
-						Добавить товар
-					</button>
+            	<button class="btn btn-primary" ng-click="openStockModal(sale)">
+    						<span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
+    						Добавить товар
+    					</button>
 	            </td>
 	        </tr>
         </tbody>
     </table>
 	
 	<div class="air"></div>
-    <button class="btn btn-lg btn-success pull-right" type="submit" ng-click="createSale(sale)" ng-disabled="form.$invalid">Создать продажу</button>
+    <button class="btn btn-lg btn-success pull-right" type="submit" ng-click="createSale(sale)" ng-if="!editMode" ng-disabled="form.$invalid">Создать продажу</button>
+    <button class="btn btn-lg btn-warning pull-right" type="submit" ng-click="saveSale(sale)" ng-if="editMode" ng-disabled="form.$invalid">Сохранить</button>
 </form>
 <div class="air"></div>

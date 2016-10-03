@@ -28,7 +28,7 @@
 				Покупатель<span class="caret" ng-class="{visible: sortProperty === 'customer'}"></span>
 			</th>
 			<th ng-class="{dropup: reverseSort}" ng-click="sortBy('items')">
-				Кол-во<span class="caret" ng-class="{visible: sortProperty === 'items'}"></span>
+				Кол-во товаров<span class="caret" ng-class="{visible: sortProperty === 'items'}"></span>
 			</th>
 			<th ng-class="{dropup: reverseSort}" ng-click="sortBy('sum')">
 				Сумма<span class="caret" ng-class="{visible: sortProperty === 'sum'}"></span>
@@ -41,14 +41,13 @@
 	<tbody>
 		<tr class="tr_order"
 			ng-repeat="sale in sales | stateFilter:currState | filter:search | orderBy:sortProperty:reverseSort as results" 
-			ng-click="editSale(sale.number)" 
-			ng-class="{
+			ng-click="editSale(sale.number)">
+			<td ng-class="{
 				info: sale.state === 'new',
 				success: sale.state === 'approved',
 				warning: sale.state === 'closed',
 				danger: sale.state === 'canceled'
-			}">
-			<td>{{$index+1}}</td>
+			}">{{$index+1}}</td>
 			<td>{{sale.date | date : 'dd.MM.yy HH:mm'}}</td>
 			<td>{{sale.number}}</td>
 			<td>{{sale.customer.name}}</td>

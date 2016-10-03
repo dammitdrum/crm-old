@@ -29,6 +29,11 @@ angular.module('myApp.main_ctrl', [])
             $rootScope.$broadcast('updateCategories',$rootScope.stock);
         });
     };
+    $rootScope.saveSale = function(sale) {
+        $http.put('/sales/update/'+sale._id,sale).then(function() {
+            $rootScope.$broadcast('updateStates',$rootScope.sales);
+        });
+    };
 
     // Delete API
     $rootScope.removeItem = function(item) {
