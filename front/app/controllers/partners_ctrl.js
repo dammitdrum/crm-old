@@ -27,7 +27,7 @@ angular.module('myApp.partners_ctrl', [])
     $scope.openDetailModal = function(partner) {
         var modalInstance = $uibModal.open({
             templateUrl: PATH_PARTNERS+'detail_modal.html',
-            controller: 'DetailModalCtrl',
+            controller: 'DetailPartnerModalCtrl',
             size: 'lg',
             resolve: {
                 partner: function() {
@@ -42,7 +42,7 @@ angular.module('myApp.partners_ctrl', [])
         }
         var modalInstance = $uibModal.open({
             templateUrl: PATH_PARTNERS+'edit_modal.html',
-            controller: 'EditModalCtrl',
+            controller: 'EditPartnerModalCtrl',
             resolve: {
                 partner: function() {
                     return partner;
@@ -72,10 +72,10 @@ angular.module('myApp.partners_ctrl', [])
     };
 })
 
-.controller('EditModalCtrl',function($rootScope, $scope, $uibModalInstance, partner, mode){
-    $scope.newPartner = {};
+.controller('EditPartnerModalCtrl',function($rootScope, $scope, $uibModalInstance, partner, mode){
     $scope.mode = mode;
     $scope.newPartner = angular.copy(partner);
+    $scope.newPartner.type = 'customer';
     $scope.create = function(newPartner) {
         $rootScope.createPartner(newPartner,$uibModalInstance.dismiss);
     };
@@ -84,5 +84,12 @@ angular.module('myApp.partners_ctrl', [])
             partner[key] = newPartner[key];
         }
         $rootScope.savePartner(partner,$uibModalInstance.dismiss);
+    };
+})
+
+.controller('DetailPartnerModalCtrl', function($scope, $uibModalInstance, partner){
+    $scope.partner = partner;
+    $scope.closeModal = function() {
+        $uibModalInstance.dismiss('cancel');
     };
 })

@@ -236,4 +236,21 @@ app.delete('/stock/delete/:id', function (req, res){
     });
 });
 
+app.delete('/partners/delete/:id', function (req, res){
+    return PartnerModel.findById(req.params.id, function (err, partner) {
+        if(!partner) {
+            res.statusCode = 404;
+            return res.send({ error: 'Not found' });
+        }
+        return partner.remove(function (err) {
+            if (!err) {
+                console.log("partner removed");
+                return res.send({ status: 'OK' });
+            } else {
+                console.log(err);
+            }
+        });
+    });
+});
+
 
