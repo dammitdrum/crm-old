@@ -2,10 +2,9 @@
 
 angular.module('myApp.filters', [])
 
-.filter('categoryFilter', function() {
-    return function(items,query) {
-    	var res = [],
-    		prop = 'category';
+.filter('myFilter', function() {
+    return function(items,prop,query) {
+    	var res = [];
 
     	if (!query) return items;
     	angular.forEach(items, function(item) {
@@ -13,20 +12,6 @@ angular.module('myApp.filters', [])
     			res.push(item);
     		}
     	});
-        return res;
-    };
-})
-.filter('stateFilter', function() {
-    return function(items,query) {
-        var res = [],
-            prop = 'state';
-
-        if (!query) return items;
-        angular.forEach(items, function(item) {
-            if (item[prop] === query) {
-                res.push(item);
-            }
-        });
         return res;
     };
 });

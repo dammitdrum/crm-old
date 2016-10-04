@@ -1,6 +1,6 @@
 <h2>Продажи</h2>
 <ul class="nav nav-pills stock_filters">
-	<li ng-repeat="state in statesSales" ng-class="{active: currState === state}">
+	<li ng-repeat="state in filterArr" ng-class="{active: currState === state}">
 		<a ng-click="filterBy(state)" ng-if="state===''">Все продажи</a>
 		<a ng-click="filterBy(state)" ng-if="state==='new'">Новые</a>
 		<a ng-click="filterBy(state)" ng-if="state==='approved'">Подтвержденные</a>
@@ -40,7 +40,7 @@
 	</thead>
 	<tbody>
 		<tr class="tr_order"
-			ng-repeat="sale in sales | stateFilter:currState | filter:search | orderBy:sortProperty:reverseSort as results" 
+			ng-repeat="sale in sales | myFilter:'state':currState | filter:search | orderBy:sortProperty:reverseSort as results" 
 			ng-click="editSale(sale.number)">
 			<td ng-class="{
 				info: sale.state === 'new',

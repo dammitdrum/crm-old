@@ -11,18 +11,11 @@ angular.module('myApp.stock_ctrl', [])
     $scope.reverseSort = false;
     $scope.currCategory = '';
 
-    $scope.updateCategories = function(stock) {
-        $scope.categoriesItems = [''];
-        angular.forEach(stock, function(item) {
-            var find = false;
-            for (var i = 0; i < $scope.categoriesItems.length; i++) {
-                if ($scope.categoriesItems[i] === item.category) find = true;
-            }
-            if (!find) $scope.categoriesItems.push(item.category);
-        });
-    };
+    $scope.updateFilter($rootScope.stock,'category');
 
-    $scope.updateCategories($rootScope.stock);
+    $scope.$on('updateCategories',function(event,data) {
+        $scope.updateFilter(data,'category');
+    })
     
     $scope.filterBy = function(name) {
         $scope.currCategory = name;
@@ -64,9 +57,6 @@ angular.module('myApp.stock_ctrl', [])
     };
     $scope.deleteItem = function(item) {
         $rootScope.removeItem(item);
-    };
-    $scope.stopPropagation = function($event) {
-        $event.stopPropagation();
     };
 })
 

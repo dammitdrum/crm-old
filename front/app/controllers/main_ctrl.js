@@ -3,10 +3,10 @@
 angular.module('myApp.main_ctrl', [])
 .constant('PATH_STOCK','app/views/stock/')
 .constant('PATH_SALES','app/views/sales/')
+.constant('PATH_PARTNERS','app/views/partners/')
 
 .controller('MainCtrl', function($rootScope, $scope, $http, $uibModal, $q, PATH_STOCK){
     
-
     // Create API
     $rootScope.createItem = function(item,hideModal) {
         $http.post('/stock/create',item).then(function(res) {
@@ -19,6 +19,13 @@ angular.module('myApp.main_ctrl', [])
         $http.post('/sales/create',sale).then(function(res) {
             $rootScope.sales.push(res.data.sale);
             $rootScope.$broadcast('updateStates',$rootScope.sales);
+        });
+    };
+    $rootScope.createPartner = function(partner,hideModal) {
+        $http.post('/partners/create',partner).then(function(res) {
+            hideModal('cancel');
+            $rootScope.partners.push(res.data.partner);
+            $rootScope.$broadcast('updateTypes',$rootScope.partners);
         });
     };
 
@@ -34,6 +41,12 @@ angular.module('myApp.main_ctrl', [])
             $rootScope.$broadcast('updateStates',$rootScope.sales);
         });
     };
+    $rootScope.savePartner = function(partner,hideModal) {
+        $http.put('/partners/update/'+partner._id,partner).then(function() {
+            hideModal('cancel');
+            $rootScope.$broadcast('updateTypes',$rootScope.partners);
+        });
+    };
 
     // Delete API
     $rootScope.removeItem = function(item) {
@@ -45,6 +58,17 @@ angular.module('myApp.main_ctrl', [])
                 }
             });
             $rootScope.$broadcast('updateCategories',$rootScope.stock);
+        });
+    };
+    $rootScope.removePartner = function(partner) {
+        var id = partner._id;
+        $http.delete('/partners/delete/'+id,partner).then(function() {
+            angular.forEach($rootScope.stock, function(partner,i) {
+                if (id === partner._id) {
+                    $rootScope.partners.splice(i,1);
+                }
+            });
+            $rootScope.$broadcast('updateTypes',$rootScope.partners);
         });
     };
 
@@ -59,6 +83,16 @@ angular.module('myApp.main_ctrl', [])
                     return item;
                 }
             }
+        });
+    };
+    $scope.updateFilter = function(data,prop) {
+        $scope.filterArr = [''];
+        angular.forEach(data, function(el) {
+            var find = false;
+            for (var i = 0; i < $scope.filterArr.length; i++) {
+                if ($scope.filterArr[i] === el[prop]) find = true;
+            }
+            if (!find) $scope.filterArr.push(el[prop]);
         });
     };
 })

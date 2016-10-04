@@ -24,6 +24,17 @@ angular.module('myApp.services', [])
                 return data;
             });
             return promise;
+        },
+        getPartners: function() {
+            if ($rootScope.partners) return;
+            var promise = $http({
+                method: 'GET',
+                url: '/partners/read'
+            });
+            promise.success(function(data) {
+                return data;
+            });
+            return promise;
         }
     }
     return db;

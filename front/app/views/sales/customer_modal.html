@@ -2,20 +2,22 @@
     <h3 class="modal-title">Выберите покупателя</h3>
 </div>
 <div class="modal-body">
-    <input type="text" placeholder="Искать по номеру" class="search_field" ng-model="search.number">
+    <input type="text" placeholder="Искать по названию" class="search_field" ng-model="search.name">
 	<table class="stock_table table table-hover table-striped table-bordered">
         <thead>
             <tr>
                <th>№</th>
                <th>Наименование</th>
+               <th>Полное наименование</th>
                <th>Контакты</th>
                <th>Контактное лицо</th>
             </tr>
         </thead>
         <tbody>
             <tr class="tr_customer" ng-repeat="customer in customers | filter:search as results" ng-click="setCustomer(customer)">
-                <td>{{customer.number}}</td>
+                <td>{{$index + 1}}</td>
                 <td>{{customer.name}}</td>
+                <td>{{customer.fullname}}</td>
                 <td>{{customer.contact}}</td>
                 <td>{{customer.person}}</td>
             </tr>

@@ -33,17 +33,18 @@ var Item = new Schema({
     category: { type: String, default: ''}
 });
 
-var Customer = new Schema({
-    number: Number,
+var Partner = new Schema({
     name: String,
+    fullname: String,
     contact: String,
     person: String,
+    type: String
 })
 
 var Sale = new Schema({
     date: { type: Date, default: Date.now },
     number: { type: Number, unique: true, required: true},
-    customer: Customer,
+    customer: Partner,
     items: [{id: String, number: Number}],
     sum: { type: Number, default: 0},
     manager: { type: Object, required: true},
@@ -53,6 +54,8 @@ var Sale = new Schema({
 var ItemModel = mongoose.model('Item', Item);
 
 var SaleModel = mongoose.model('Sale', Sale);
+
+var PartnerModel = mongoose.model('Partner', Partner);
 
 // READ
 
@@ -71,6 +74,17 @@ app.get('/stock/read/:id', function (req, res) {
     res.send(req.params.id);
 });
 
+app.get('/partners/read', function (req, res) {
+    return PartnerModel.find(function (err, partners) {
+        if (!err) {
+            return res.send(partners);
+        } else {
+            res.statusCode = 500;
+            return res.send({ error: 'Server error 500' });
+        }
+    });
+});
+
 app.get('/sales/read', function (req, res) {
     return SaleModel.find(function (err, sales) {
         if (!err) {
@@ -80,10 +94,6 @@ app.get('/sales/read', function (req, res) {
             return res.send({ error: 'Server error 500' });
         }
     });
-});
-
-app.get('/sales/read/:id', function (req, res) {
-    res.send(req.params.id);
 });
 
 
@@ -126,6 +136,24 @@ app.post('/sales/create', function (req, res) {
     });
 });
 
+app.post('/partners/create', function (req, res) {
+    var partner = new PartnerModel({
+        name: req.body.name,
+        fullname: req.body.fullname,
+        contact: req.body.contact,
+        person: req.body.person,
+    });
+
+    partner.save(function (err) {
+        if (!err) {
+            console.log("partner created");
+            return res.send({ status: 'OK', partner:partner });
+        } else {
+            console.log(err);
+        }
+    });
+});
+
 
 // UPDATE
 
@@ -161,6 +189,26 @@ app.put('/sales/update/:id', function (req, res){
             if (!err) {
                 console.log("sale updated");
                 return res.send({ status: 'OK', sale:sale });
+            } else {
+                console.log(err);
+            }
+        });
+    });
+});
+
+app.put('/partners/update/:id', function (req, res){
+    return PartnerModel.findById(req.params.id, function (err, partner) {
+        if(!partner) {
+            res.statusCode = 404;
+            return res.send({ error: 'Not found' });
+        }
+        for (var key in req.body) {
+            partner[key] = req.body[key];
+        }
+        return partner.save(function (err) {
+            if (!err) {
+                console.log("partner updated");
+                return res.send({ status: 'OK', partner:partner });
             } else {
                 console.log(err);
             }

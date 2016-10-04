@@ -10,22 +10,11 @@ angular.module('myApp.sales_ctrl', [])
     $scope.sortProperty = 'date';
     $scope.reverseSort = false;
     $scope.currState = '';
-
-    $scope.updateStates = function(sales) {
-        $scope.statesSales = [''];
-        angular.forEach(sales, function(sale) {
-            var find = false;
-            for (var i = 0; i < $scope.statesSales.length; i++) {
-                if ($scope.statesSales[i] === sale.state) find = true;
-            }
-            if (!find) $scope.statesSales.push(sale.state);
-        });
-    };
     
-    $scope.updateStates($scope.sales);
+    $scope.updateFilter($rootScope.sales,'state');
 
-    $scope.$on('updateStates',function(event,sales) {
-        $scope.updateStates(sales);
+    $scope.$on('updateStates',function(event,data) {
+        $scope.updateFilter(data,'state');
     })
 
     $scope.filterBy = function(name) {

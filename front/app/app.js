@@ -8,6 +8,7 @@ var myApp = angular.module('myApp', [
     'myApp.stock_ctrl',
     'myApp.sales_ctrl',
     'myApp.orders_ctrl',
+    'myApp.partners_ctrl',
     'myApp.directives',
     'myApp.filters',
     'ngAnimate',
@@ -43,6 +44,9 @@ myApp.config(function($routeProvider) {
 			},
 			Sales: function(loadData) {
 				return loadData.getSales();
+			},
+			Partners: function(loadData) {
+				return loadData.getPartners();
 			}
 		}
 	});
@@ -55,6 +59,18 @@ myApp.config(function($routeProvider) {
 			},
 			Sales: function(loadData) {
 				return loadData.getSales();
+			},
+			Partners: function(loadData) {
+				return loadData.getPartners();
+			}
+		}
+	});
+	$routeProvider.when('/partners', {
+		templateUrl: 'app/views/partners/partners.html', 
+		controller: 'PartnersCtrl',
+		resolve: {
+			Partners: function(loadData) {
+				return loadData.getPartners();
 			}
 		}
 	});

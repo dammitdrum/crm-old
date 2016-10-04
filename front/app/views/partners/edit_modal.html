@@ -1,0 +1,46 @@
+<form name="modalForm" class="modal_form" novalidate>
+<div class="modal-header">
+    <h3 class="modal-title" ng-if="mode=='edit'">Редактирование контрагента</h3>
+    <h2 class="modal-title" ng-if="mode=='create'">Создание нового контрагента</h2>
+</div>
+<div class="modal-body" id="modal-body">
+   <p>Краткое название</p>
+   <input type="text" ng-model="newPartner.name" name="name" required>
+    <p ng-show="modalForm.name.$invalid && modalForm.name.$touched" class="text-danger">
+        <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span> Необходимо краткое название
+    </p>
+    <span ng-show="modalForm.name.$valid && modalForm.name.$touched" class="glyphicon text-success glyphicon-ok-sign" aria-hidden="true"></span>
+
+    <p>Полное название</p>
+   <input type="text" ng-model="newPartner.fullname" name="fullname" required>
+    <p ng-show="modalForm.fullname.$invalid && modalForm.fullname.$touched" class="text-danger">
+        <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span> Необходимо полное наименование
+    </p>
+    <span ng-show="modalForm.fullname.$valid && modalForm.fullname.$touched" class="glyphicon text-success glyphicon-ok-sign" aria-hidden="true"></span>
+    
+    <p>Контакты</p>
+   <input type="text" ng-model="newPartner.contact" name="contact" required>
+    <p ng-show="modalForm.contact.$invalid && modalForm.contact.$touched" class="text-danger">
+        <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span> Необходимы контакты
+    </p>
+    <span ng-show="modalForm.contact.$valid && modalForm.contact.$touched" class="glyphicon text-success glyphicon-ok-sign" aria-hidden="true"></span>
+
+    <p>Контактное лицо</p>
+   <input type="text" ng-model="newPartner.person" name="person">
+
+    <p>Тип контрагента</p>
+    <label>
+      <input type="radio" name="types" ng-model="newPartner.type" value="Покупатель">
+      Покупатель
+    </label>
+    <label>
+      <input type="radio" name="types" ng-model="newPartner.type" value="Поставщик">
+      Поставщик
+    </label>
+   
+</div>
+<div class="modal-footer">
+    <button class="btn btn-warning" type="button" ng-if="mode=='edit'" ng-click="save(newPartner)" ng-disabled="modalForm.$invalid">Сохранить контрагента</button>
+    <button class="btn btn-warning" type="submit" ng-if="mode=='create'" ng-click="create(newPartner)" ng-disabled="modalForm.$invalid">Создать контрагента</button>
+</div>
+</form>

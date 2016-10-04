@@ -1,17 +1,18 @@
 [
 	{
 		"name": "Склад",
-		"url": "/stock",
-		"className": "active"
+		"url": "/stock"
 	},
 	{
 		"name": "Продажи",
-		"url": "/sales",
-		"className": ""
+		"url": "/sales"
 	},
 	{
 		"name": "Закупки",
-		"url": "/orders",
-		"className": ""
+		"url": "/orders"
+	},
+	{
+		"name": "Контрагенты",
+		"url": "/partners"
 	}
 ]
