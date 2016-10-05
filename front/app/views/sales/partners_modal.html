@@ -14,12 +14,12 @@
             </tr>
         </thead>
         <tbody>
-            <tr class="tr_customer" ng-repeat="customer in customers | filter:search as results" ng-click="setCustomer(customer)">
+            <tr class="tr_customer" ng-repeat="partner in partners | filter:search as results" ng-click="setCustomer(partner)">
                 <td>{{$index + 1}}</td>
-                <td>{{customer.name}}</td>
-                <td>{{customer.fullname}}</td>
-                <td>{{customer.contact}}</td>
-                <td>{{customer.person}}</td>
+                <td>{{partner.name}}</td>
+                <td>{{partner.fullname}}</td>
+                <td>{{partner.contact}}</td>
+                <td>{{partner.person}}</td>
             </tr>
             <tr ng-if="results.length === 0"><td colspan="4" class="text-center"><strong>Ничего не найдено</strong></td></tr>
         </tbody>

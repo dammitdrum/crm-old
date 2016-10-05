@@ -24,8 +24,8 @@
 			<th ng-class="{dropup: reverseSort}" ng-click="sortBy('number')">
 				Номер<span class="caret" ng-class="{visible: sortProperty === 'number'}"></span>
 			</th>
-			<th ng-class="{dropup: reverseSort}" ng-click="sortBy('customer')">
-				Покупатель<span class="caret" ng-class="{visible: sortProperty === 'customer'}"></span>
+			<th ng-class="{dropup: reverseSort}" ng-click="sortBy('customer.name')">
+				Покупатель<span class="caret" ng-class="{visible: sortProperty === 'customer.name'}"></span>
 			</th>
 			<th ng-class="{dropup: reverseSort}" ng-click="sortBy('items')">
 				Кол-во товаров<span class="caret" ng-class="{visible: sortProperty === 'items'}"></span>

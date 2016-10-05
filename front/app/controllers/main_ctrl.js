@@ -63,7 +63,7 @@ angular.module('myApp.main_ctrl', [])
     $rootScope.removePartner = function(partner) {
         var id = partner._id;
         $http.delete('/partners/delete/'+id,partner).then(function() {
-            angular.forEach($rootScope.stock, function(partner,i) {
+            angular.forEach($rootScope.partners, function(partner,i) {
                 if (id === partner._id) {
                     $rootScope.partners.splice(i,1);
                 }

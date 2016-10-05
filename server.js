@@ -45,7 +45,7 @@ var Sale = new Schema({
     date: { type: Date, default: Date.now },
     number: { type: Number, unique: true, required: true},
     customer: Partner,
-    items: [{id: String, number: Number}],
+    items: [{id: String, number: Number, price: Number}],
     sum: { type: Number, default: 0},
     manager: { type: Object, required: true},
     state: { type: String, default: 'new'}
@@ -142,6 +142,7 @@ app.post('/partners/create', function (req, res) {
         fullname: req.body.fullname,
         contact: req.body.contact,
         person: req.body.person,
+        type: req.body.type,
     });
 
     partner.save(function (err) {

@@ -22,8 +22,8 @@
 	<div class="air"></div>
   <div class="pull-left">
     <button class="btn btn-primary" ng-click="openCustomersModal(sale)">Выбрать покупателя</button>
-    <input type="hidden" name="customer" ng-model="sale.customer.number" required>
-    <strong>&nbsp;&nbsp; {{sale.customer?sale.customer.name:'Не выбран покупатель'}}</strong>
+    <input type="hidden" name="customer" ng-model="sale.customer.fullname" required>
+    <strong>&nbsp;&nbsp; {{sale.customer?sale.customer.fullname:'Не выбран покупатель'}}</strong>
   </div>
 	<div class="pull-right clearfix">
    <input type="hidden" name="customer" ng-model="sale.manager" required>
@@ -60,17 +60,19 @@
             	<td ng-click="openDetailItemModal(item)"><strong>{{$index+1}}</strong></td>
                <td ng-click="openDetailItemModal(item)">{{item.art}}</td>
 				<td ng-click="openDetailItemModal(item)">{{item.name}}</td>
-				<td ng-click="openDetailItemModal(item)">{{item.price | currency}}</td>
+				<td><input class="quant_input" type="text" ng-model="item.price" ng-pattern="/^[1-9]\d*$/" ng-blur="$emit('calculate')" required></td>
 				<td ng-click="openDetailItemModal(item)">{{item.quantity}}</td>
 				<td ng-click="openDetailItemModal(item)">{{item.reserve}}</td>
 				<td ng-click="openDetailItemModal(item)">{{item.ordered}}</td>
 				<td>
-					<input class="quant_input" type="text" ng-model="item.number" ng-pattern="/^[1-9]\d*$/" ng-blur="$emit('changeQuant')" required>
+					<input class="quant_input" type="text" ng-model="item.number" ng-pattern="/^[1-9]\d*$/" ng-blur="$emit('calculate')" required>
 					<span class="btn btn-danger btn-sm pull-right remove_butt" ng-click="removeItem(item)"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span></span>
 				</td>
             </tr>
             <tr ng-if="results.length > 0" class="bg_w">
-              <td colspan="7" class="tar"><strong>Общая сумма:</strong></td>
+              <td colspan="3" ng-if="oldPrices"></td>
+              <td ng-if="oldPrices"><span class="btn btn-sm btn-success" ng-click="refreshPrices()"> <span class="glyphicon glyphicon-refresh" aria-hidden="true"></span></span></td>
+              <td colspan="{{oldPrices ? 3 : 7}}" class="tar"><strong>Общая сумма:</strong></td>
               <td><strong>{{sale.sum | currency}}</strong></td>
             </tr>
             <tr class="not_hover">

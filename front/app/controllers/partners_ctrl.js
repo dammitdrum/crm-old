@@ -18,7 +18,7 @@ angular.module('myApp.partners_ctrl', [])
     })
     
     $scope.filterBy = function(name) {
-        $scope.currCategory = name;
+        $scope.currType = name;
     };
     $scope.sortBy = function(name) {
         $scope.reverseSort = ($scope.sortProperty === name) ? !$scope.reverseSort : false;
@@ -28,7 +28,6 @@ angular.module('myApp.partners_ctrl', [])
         var modalInstance = $uibModal.open({
             templateUrl: PATH_PARTNERS+'detail_modal.html',
             controller: 'DetailPartnerModalCtrl',
-            size: 'lg',
             resolve: {
                 partner: function() {
                     return partner;
@@ -75,7 +74,7 @@ angular.module('myApp.partners_ctrl', [])
 .controller('EditPartnerModalCtrl',function($rootScope, $scope, $uibModalInstance, partner, mode){
     $scope.mode = mode;
     $scope.newPartner = angular.copy(partner);
-    $scope.newPartner.type = 'customer';
+    $scope.mode === 'create' ? $scope.newPartner.type = 'customer' : '';
     $scope.create = function(newPartner) {
         $rootScope.createPartner(newPartner,$uibModalInstance.dismiss);
     };

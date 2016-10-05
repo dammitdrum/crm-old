@@ -29,7 +29,7 @@ angular.module('myApp.sales_ctrl', [])
     };
 })
 
-.controller('SaleDetailCtrl', function($rootScope, $scope, $uibModal, $location, $routeParams, Sales, Items,PATH_SALES){
+.controller('SaleDetailCtrl', function($rootScope, $scope, $uibModal, $location, $routeParams, Sales, Items, Partners, PATH_SALES){
     $scope.managers = [
         {
             "name":"Алексей Пучков"
@@ -48,10 +48,14 @@ angular.module('myApp.sales_ctrl', [])
     if (Sales) {
         $rootScope.sales = Sales.data;
     }
+    if (Partners) {
+        $rootScope.partners = Partners.data;
+    }
 
     $scope.sale = {};
     $scope.itemsList = [];
     $scope.editMode = false;
+    $scope.oldPrices = false;
 
     if ($routeParams.number) {
         $scope.editMode = true;
@@ -66,7 +70,9 @@ angular.module('myApp.sales_ctrl', [])
                 if (item._id === saleItem.id) {
                     var clone = angular.copy(item);
                     clone.number = saleItem.number;
+                    clone.price = saleItem.price;
                     $scope.itemsList.push(clone);
+                    if (saleItem.price !== item.price) $scope.oldPrices = true;
                     return;
                 }
             });
@@ -86,18 +92,19 @@ angular.module('myApp.sales_ctrl', [])
             }
         })
         if (!add) $scope.itemsList.push(clone);
-        $scope.$emit('changeQuant');
+        $scope.$emit('calculate');
     });
     $scope.$on('addCustomerToSale',function(event,customer) {
         $scope.sale.customer = customer;
     });
-    $scope.$on('changeQuant',function(event) {
+    $scope.$on('calculate',function(event) {
         $scope.sale.sum = 0;
         $scope.sale.items = [];
         angular.forEach($scope.itemsList, function(item) {
             var i = {
                 "id": item._id,
-                "number": item.number
+                "number": item.number,
+                "price": item.price
             };
             $scope.sale.items.push(i);
         });
@@ -108,8 +115,8 @@ angular.module('myApp.sales_ctrl', [])
 
     $scope.openCustomersModal = function() {
         var modalInstance = $uibModal.open({
-            templateUrl: PATH_SALES+'customer_modal.html',
-            controller: 'CustomerModalCtrl',
+            templateUrl: PATH_SALES+'partners_modal.html',
+            controller: 'PartnerModalCtrl',
             size: 'lg'
         });
     };
@@ -134,11 +141,25 @@ angular.module('myApp.sales_ctrl', [])
         angular.forEach($scope.itemsList, function(added,i) {
             if (added._id === item._id) $scope.itemsList.splice(i,1);
         });
-        $scope.$emit('changeQuant');
+        $scope.$emit('calculate');
     };
     $scope.selectManager = function($event,name) {
         $event.preventDefault();
         $scope.sale.manager = name;
+    };
+    $scope.refreshPrices = function() {
+        angular.forEach($scope.itemsList, function(saleItem) {
+            angular.forEach($rootScope.stock, function(item) {
+                if (item._id === saleItem._id) {
+                    if (saleItem.price !== item.price) {
+                        saleItem.price = item.price;
+                    }
+                    return;
+                }
+            });
+        });
+        $scope.$emit('calculate');
+        $scope.oldPrices = false;
     };
     $scope.createSale = function(sale) {
         $rootScope.createSale(sale);
@@ -174,28 +195,7 @@ angular.module('myApp.sales_ctrl', [])
     };
 })
 
-.controller('CustomerModalCtrl', function($rootScope, $scope, $uibModalInstance){
-    $scope.customers = [
-        {
-            "number":111,
-            "name":"ООО \"Альбатрос\"",
-            "contact":"albatros@mail.ru, +375 (29) 664-77-84",
-            "person":"Лидия Петровна" 
-        },
-        {
-            "number":112,
-            "name":"ИП \"Паравоз\"",
-            "contact":"+375 (33) 874-11-84",
-            "person":"Тимур Родригез" 
-        },
-        {
-            "number":113,
-            "name":"ОАО \"Газпром\"",
-            "contact":"gasprom@mail.ru, +7 (495) 666-66-66",
-            "person":"Вова Путин" 
-        }
-    ];
-
+.controller('PartnerModalCtrl', function($rootScope, $scope, $uibModalInstance){
     $scope.setCustomer = function(customer) {
         $rootScope.$broadcast('addCustomerToSale', customer);
         $uibModalInstance.dismiss('cancel');
