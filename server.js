@@ -7,6 +7,13 @@ var express = require('express'),
 app.use(bodyParser.json());
 app.use(express.static(__dirname + '/front'));
 
+var server_port = process.env.OPENSHIFT_NODEJS_PORT || 8080
+var server_ip_address = process.env.OPENSHIFT_NODEJS_IP || '127.0.0.1'
+ 
+app.listen(server_port, server_ip_address, function () {
+  console.log( "Listening on " + server_ip_address + ", port " + server_port )
+});
+
 mongoose.Promise = global.Promise;
 mongoose.connect('mongodb://dbuser:password@ds035766.mlab.com:35766/crmdb');
 var db = mongoose.connection;
