@@ -54,7 +54,7 @@ angular.module('myApp.partners_ctrl', [])
     };
 })
 
-.controller('PopoverCtrl', function($rootScope, $scope, PATH_STOCK){
+.controller('PopoverPartnerCtrl', function($rootScope, $scope, PATH_STOCK){
     $scope.popover = {
         templateUrl: PATH_STOCK+'popover_template.html',
         isOpen: false,
