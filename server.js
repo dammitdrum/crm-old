@@ -5,20 +5,14 @@ var express = require('express'),
     mongoose = require('mongoose');
 
 app.use(bodyParser.json());
-//app.use(express.static(__dirname + '/front'));
+app.use(express.static(__dirname + '/front'));
 
-var server_port = process.env.OPENSHIFT_NODEJS_PORT || 8080;
-var server_ip_address = process.env.OPENSHIFT_NODEJS_IP || '127.0.0.1';
+var server_port = process.env.OPENSHIFT_NODEJS_PORT || 8080
+var server_ip_address = process.env.OPENSHIFT_NODEJS_IP || '127.0.0.1'
  
-app.listen(server_port, server_ip_address, function () {
-  console.log( "Listening on " + server_ip_address + ", port " + server_port )
-});
 
-app.get('/', function (req, res) {
-  res.send('Hello World!');
-});
 
-/*mongoose.Promise = global.Promise;
+mongoose.Promise = global.Promise;
 mongoose.connect('mongodb://dbuser:password@ds035766.mlab.com:35766/crmdb');
 var db = mongoose.connection;
 db.on('error', function (err) {
@@ -27,7 +21,9 @@ db.on('error', function (err) {
 db.once('open', function callback () {
     console.log("Connected to DB!");
     //app.listen(1337);
-
+    app.listen(server_port, server_ip_address, function () {
+      console.log( "Listening on " + server_ip_address + ", port " + server_port )
+    });
     console.log('Server is running');
 });
 
@@ -264,6 +260,6 @@ app.delete('/partners/delete/:id', function (req, res){
             }
         });
     });
-});*/
+});
 
 
