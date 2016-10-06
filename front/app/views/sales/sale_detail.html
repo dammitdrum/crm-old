@@ -87,7 +87,9 @@
     </table>
 	
 	<div class="air"></div>
+    <button class="btn btn-danger btn-lg" ng-click="removeSale(sale)" ng-if="editMode">Удалить продажу <span class="glyphicon glyphicon-trash" aria-hidden="true"></span></button>
+
     <button class="btn btn-lg btn-success pull-right" type="submit" ng-click="createSale(sale)" ng-if="!editMode" ng-disabled="form.$invalid">Создать продажу</button>
-    <button class="btn btn-lg btn-warning pull-right" type="submit" ng-click="saveSale(sale)" ng-if="editMode" ng-disabled="form.$invalid">Сохранить</button>
+    <button class="btn btn-lg btn-warning pull-right" type="submit" ng-click="saveSale(sale)" ng-if="editMode" ng-disabled="form.$invalid">Сохранить <span class="glyphicon glyphicon-save" aria-hidden="true"></span></button>
 </form>
 <div class="air"></div>

@@ -73,4 +73,7 @@ angular.module('myApp.stock_ctrl', [])
         }
         $rootScope.saveItem(item,$uibModalInstance.dismiss);
     };
+    $scope.closeModal = function() {
+        $uibModalInstance.dismiss('cancel');
+    };
 })

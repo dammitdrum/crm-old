@@ -84,6 +84,9 @@ angular.module('myApp.partners_ctrl', [])
         }
         $rootScope.savePartner(partner,$uibModalInstance.dismiss);
     };
+    $scope.closeModal = function() {
+        $uibModalInstance.dismiss('cancel');
+    };
 })
 
 .controller('DetailPartnerModalCtrl', function($scope, $uibModalInstance, partner){

@@ -107,3 +107,9 @@ h2 {
     margin-bottom: 20px;
     height: 30px;
 }
+td[ng-click],th[ng-click] {
+  cursor: pointer;
+}
+tr[ng-click] td {
+  cursor: pointer;
+}

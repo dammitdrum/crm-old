@@ -17,32 +17,41 @@ angular.module('myApp.main_ctrl', [])
     };
     $rootScope.createSale = function(sale) {
         $http.post('/sales/create',sale).then(function(res) {
-            $rootScope.sales.push(res.data.sale);
+            $rootScope.sales.push(res.data.item);
             $rootScope.$broadcast('updateStates',$rootScope.sales);
         });
     };
     $rootScope.createPartner = function(partner,hideModal) {
         $http.post('/partners/create',partner).then(function(res) {
             hideModal('cancel');
-            $rootScope.partners.push(res.data.partner);
+            $rootScope.partners.push(res.data.item);
             $rootScope.$broadcast('updateTypes',$rootScope.partners);
         });
     };
 
     // Save API
     $rootScope.saveItem = function(item,hideModal) {
-        $http.put('/stock/update/'+item._id,item).then(function() {
+        $http.put('/stock/update/'+item._id,item).then(function(res) {
+            for (var key in res.data.item) {
+                item[key] = res.data.item[key];
+            }
             hideModal('cancel');
             $rootScope.$broadcast('updateCategories',$rootScope.stock);
         });
     };
     $rootScope.saveSale = function(sale) {
-        $http.put('/sales/update/'+sale._id,sale).then(function() {
+        $http.put('/sales/update/'+sale._id,sale).then(function(res) {
+            for (var key in res.data.item) {
+                sale[key] = res.data.item[key];
+            }
             $rootScope.$broadcast('updateStates',$rootScope.sales);
         });
     };
     $rootScope.savePartner = function(partner,hideModal) {
         $http.put('/partners/update/'+partner._id,partner).then(function() {
+            for (var key in res.data.item) {
+                partner[key] = res.data.item[key];
+            }
             hideModal('cancel');
             $rootScope.$broadcast('updateTypes',$rootScope.partners);
         });
@@ -58,6 +67,17 @@ angular.module('myApp.main_ctrl', [])
                 }
             });
             $rootScope.$broadcast('updateCategories',$rootScope.stock);
+        });
+    };
+    $rootScope.removeSale = function(sale) {
+        var id = sale._id;
+        $http.delete('/sales/delete/'+id,sale).then(function() {
+            angular.forEach($rootScope.sales, function(sale,i) {
+                if (id === sale._id) {
+                    $rootScope.sales.splice(i,1);
+                }
+            });
+            $rootScope.$broadcast('updateState',$rootScope.sales);
         });
     };
     $rootScope.removePartner = function(partner) {

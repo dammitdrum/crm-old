@@ -1,5 +1,6 @@
 <form name="modalForm" class="modal_form" novalidate>
 <div class="modal-header">
+  <button class="close" ng-click="closeModal()" aria-label="Close"><span aria-hidden="true">×</span></button>
     <h3 class="modal-title" ng-if="mode=='edit'">Редактирование контрагента</h3>
     <h2 class="modal-title" ng-if="mode=='create'">Создание нового контрагента</h2>
 </div>

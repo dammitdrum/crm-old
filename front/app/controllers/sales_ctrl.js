@@ -5,13 +5,12 @@ angular.module('myApp.sales_ctrl', [])
 .controller('SalesCtrl', function($rootScope, $scope, $location, Sales){
     if (Sales) {
         $rootScope.sales = Sales.data;
+        $scope.updateFilter($rootScope.sales,'state');
     }
 
     $scope.sortProperty = 'date';
     $scope.reverseSort = false;
     $scope.currState = '';
-    
-    $scope.updateFilter($rootScope.sales,'state');
 
     $scope.$on('updateStates',function(event,data) {
         $scope.updateFilter(data,'state');
@@ -179,6 +178,10 @@ angular.module('myApp.sales_ctrl', [])
         $rootScope.saveSale(oldSale);
         $location.path('/sales');
     };
+    $scope.removeSale = function(sale) {
+        $rootScope.removeSale(sale);
+        $location.path('/sales');
+    };
 })
 
 .controller('StockModalCtrl', function($rootScope, $scope, $uibModalInstance, stock){
@@ -193,11 +196,17 @@ angular.module('myApp.sales_ctrl', [])
         $rootScope.$broadcast('addItemToSale', item);
         $uibModalInstance.dismiss('cancel');
     };
+    $scope.closeModal = function() {
+        $uibModalInstance.dismiss('cancel');
+    };
 })
 
 .controller('PartnerModalCtrl', function($rootScope, $scope, $uibModalInstance){
     $scope.setCustomer = function(customer) {
         $rootScope.$broadcast('addCustomerToSale', customer);
+        $uibModalInstance.dismiss('cancel');
+    };
+    $scope.closeModal = function() {
         $uibModalInstance.dismiss('cancel');
     };
 })
