@@ -7,8 +7,8 @@ var express = require('express'),
 app.use(bodyParser.json());
 app.use(express.static(__dirname + '/front'));
 
-var server_port = process.env.OPENSHIFT_NODEJS_PORT || 8080
-var server_ip_address = process.env.OPENSHIFT_NODEJS_IP || '127.0.0.1'
+var port = process.env.PORT || process.env.OPENSHIFT_NODEJS_PORT || 8080,
+    ip   = process.env.IP   || process.env.OPENSHIFT_NODEJS_IP || '0.0.0.0';
  
 
 
@@ -21,8 +21,8 @@ db.on('error', function (err) {
 db.once('open', function callback () {
     console.log("Connected to DB!");
     //app.listen(1337);
-    app.listen(server_port, server_ip_address, function () {
-      console.log( "Listening on " + server_ip_address + ", port " + server_port )
+    app.listen(port, ip, function () {
+      console.log( "Listening on " + ip + ", port " + port )
     });
     console.log('Server is running');
 });
