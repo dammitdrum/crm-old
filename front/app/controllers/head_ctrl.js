@@ -2,7 +2,7 @@
 
 angular.module('myApp.head_ctrl', [])
 
-.controller('HeadCtrl', function($rootScope, $scope, $http, $location){
+.controller('HeadCtrl', function ($rootScope, $scope, $http, $location){
     $scope.viewUrl = 'app/views/header.html';
     $scope.menu = {};
     

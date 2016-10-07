@@ -31,7 +31,7 @@
    <span ng-show="modalForm.catItem.$valid && modalForm.catItem.$touched" class="glyphicon text-success glyphicon-ok-sign" aria-hidden="true"></span>
 </div>
 <div class="modal-footer">
-    <button class="btn btn-warning" type="button" ng-if="type=='edit'" ng-click="save(newItem)" ng-disabled="modalForm.$invalid">Сохранить товар</button>
-    <button class="btn btn-warning" type="submit" ng-if="type=='create'" ng-click="create(newItem)" ng-disabled="modalForm.$invalid">Создать товар</button>
+    <button class="btn btn-warning" type="button" ng-if="type=='edit'" ng-click="save(newItem)" ng-disabled="modalForm.$invalid">Сохранить товар <span class="glyphicon glyphicon-cloud-upload" aria-hidden="true"></span></button>
+    <button class="btn btn-success" type="submit" ng-if="type=='create'" ng-click="create(newItem)" ng-disabled="modalForm.$invalid">Создать товар <span class="glyphicon glyphicon-cloud-upload" aria-hidden="true"></span></button>
 </div>
 </form>

@@ -36,7 +36,7 @@ var Item = new Schema({
     name: { type: String, required: true},
     price: { type: Number, required: true},
     quantity: { type: Number, default: 0},
-    reserve: { type: Number, default: 0},
+    debt: { type: Number, default: 0},
     ordered: { type: Number, default: 0},
     category: { type: String, default: ''}
 });

@@ -2,7 +2,7 @@
 
 angular.module('myApp.partners_ctrl', [])
 
-.controller('PartnersCtrl', function($rootScope, $scope, $uibModal, Partners, PATH_PARTNERS){
+.controller('PartnersCtrl', function ($rootScope, $scope, $uibModal, Partners, PATH_PARTNERS){
 
     if (Partners) {
         $rootScope.partners = Partners.data;
@@ -54,7 +54,7 @@ angular.module('myApp.partners_ctrl', [])
     };
 })
 
-.controller('PopoverPartnerCtrl', function($rootScope, $scope, PATH_STOCK){
+.controller('PopoverPartnerCtrl', function ($rootScope, $scope, PATH_STOCK){
     $scope.popover = {
         templateUrl: PATH_STOCK+'popover_template.html',
         isOpen: false,
@@ -71,7 +71,7 @@ angular.module('myApp.partners_ctrl', [])
     };
 })
 
-.controller('EditPartnerModalCtrl',function($rootScope, $scope, $uibModalInstance, partner, mode){
+.controller('EditPartnerModalCtrl',function ($rootScope, $scope, $uibModalInstance, partner, mode){
     $scope.mode = mode;
     $scope.newPartner = angular.copy(partner);
     $scope.mode === 'create' ? $scope.newPartner.type = 'customer' : '';
@@ -89,7 +89,7 @@ angular.module('myApp.partners_ctrl', [])
     };
 })
 
-.controller('DetailPartnerModalCtrl', function($scope, $uibModalInstance, partner){
+.controller('DetailPartnerModalCtrl', function ($scope, $uibModalInstance, partner){
     $scope.partner = partner;
     $scope.closeModal = function() {
         $uibModalInstance.dismiss('cancel');

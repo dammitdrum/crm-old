@@ -5,7 +5,7 @@ angular.module('myApp.main_ctrl', [])
 .constant('PATH_SALES','app/views/sales/')
 .constant('PATH_PARTNERS','app/views/partners/')
 
-.controller('MainCtrl', function($rootScope, $scope, $http, $uibModal, $q, PATH_STOCK){
+.controller('MainCtrl', function ($rootScope, $scope, $http, $uibModal, $q, PATH_STOCK){
     
     // Create API
     $rootScope.createItem = function(item,hideModal) {
@@ -35,7 +35,7 @@ angular.module('myApp.main_ctrl', [])
             for (var key in res.data.item) {
                 item[key] = res.data.item[key];
             }
-            hideModal('cancel');
+            if (hideModal) hideModal('cancel');
             $rootScope.$broadcast('updateCategories',$rootScope.stock);
         });
     };
@@ -117,7 +117,7 @@ angular.module('myApp.main_ctrl', [])
     };
 })
 
-.controller('DetailModalCtrl', function($scope, $uibModalInstance, item){
+.controller('DetailModalCtrl', function ($scope, $uibModalInstance, item){
     $scope.item = item;
     $scope.closeModal = function() {
         $uibModalInstance.dismiss('cancel');

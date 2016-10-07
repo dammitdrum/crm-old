@@ -2,7 +2,7 @@
 
 angular.module('myApp.stock_ctrl', [])
 
-.controller('StockCtrl', function($rootScope, $scope, $uibModal, Items, PATH_STOCK){
+.controller('StockCtrl', function ($rootScope, $scope, $uibModal, Items, PATH_STOCK){
 
     if (Items) {
         $rootScope.stock = Items.data;
@@ -43,7 +43,7 @@ angular.module('myApp.stock_ctrl', [])
     };
 })
 
-.controller('PopoverCtrl', function($rootScope, $scope, PATH_STOCK){
+.controller('PopoverCtrl', function ($rootScope, $scope, PATH_STOCK){
     $scope.popover = {
         templateUrl: PATH_STOCK+'popover_template.html',
         isOpen: false,
@@ -60,7 +60,7 @@ angular.module('myApp.stock_ctrl', [])
     };
 })
 
-.controller('EditModalCtrl',function($rootScope, $scope, $uibModalInstance, item, type){
+.controller('EditModalCtrl',function ($rootScope, $scope, $uibModalInstance, item, type){
     $scope.newItem = {};
     $scope.type = type;
     $scope.newItem = angular.copy(item);

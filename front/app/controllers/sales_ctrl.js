@@ -2,15 +2,16 @@
 
 angular.module('myApp.sales_ctrl', [])
 
-.controller('SalesCtrl', function($rootScope, $scope, $location, Sales){
+.controller('SalesCtrl', function ($rootScope, $scope, $location, Sales){
     if (Sales) {
         $rootScope.sales = Sales.data;
-        $scope.updateFilter($rootScope.sales,'state');
     }
 
     $scope.sortProperty = 'date';
     $scope.reverseSort = false;
     $scope.currState = '';
+
+    $scope.updateFilter($rootScope.sales,'state');
 
     $scope.$on('updateStates',function(event,data) {
         $scope.updateFilter(data,'state');
@@ -28,7 +29,7 @@ angular.module('myApp.sales_ctrl', [])
     };
 })
 
-.controller('SaleDetailCtrl', function($rootScope, $scope, $uibModal, $location, $routeParams, Sales, Items, Partners, PATH_SALES){
+.controller('SaleDetailCtrl', function ($rootScope, $scope, $uibModal, $location, $routeParams, Sales, Items, Partners, stockCore, PATH_SALES){
     $scope.managers = [
         {
             "name":"Алексей Пучков"
@@ -61,6 +62,7 @@ angular.module('myApp.sales_ctrl', [])
         angular.forEach($rootScope.sales, function(sale) {
             if (sale.number == $routeParams.number) {
                 $scope.sale = angular.copy(sale);
+                $scope.state = $scope.sale.state;
                 return;
             }
         });
@@ -120,8 +122,6 @@ angular.module('myApp.sales_ctrl', [])
         });
     };
     $scope.openStockModal = function() {
-        if (!$rootScope.stock) $rootScope.fetchItems();
-
         var modalInstance = $uibModal.open({
             templateUrl: PATH_SALES+'stock_modal.html',
             controller: 'StockModalCtrl',
@@ -134,7 +134,7 @@ angular.module('myApp.sales_ctrl', [])
         });
     };
     $scope.setState = function(state) {
-        $scope.sale.state = state;
+        $scope.state = state;
     };
     $scope.removeItem = function(item) {
         angular.forEach($scope.itemsList, function(added,i) {
@@ -172,6 +172,11 @@ angular.module('myApp.sales_ctrl', [])
                 return;
             }
         });
+        if ( !(oldSale.state === 'new' && 
+                ($scope.state === 'canceled'||$scope.state === 'new')) ) {
+            stockCore($scope.itemsList,'sale',$scope.state);
+        }
+        newSale.state = $scope.state;
         for (var key in newSale) {
             oldSale[key] = newSale[key];
         }
@@ -184,7 +189,7 @@ angular.module('myApp.sales_ctrl', [])
     };
 })
 
-.controller('StockModalCtrl', function($rootScope, $scope, $uibModalInstance, stock){
+.controller('StockModalCtrl', function ($rootScope, $scope, $uibModalInstance, stock){
     $scope.sortProperty = 'name';
     $scope.reverseSort = false;
 
@@ -201,7 +206,7 @@ angular.module('myApp.sales_ctrl', [])
     };
 })
 
-.controller('PartnerModalCtrl', function($rootScope, $scope, $uibModalInstance){
+.controller('PartnerModalCtrl', function ($rootScope, $scope, $uibModalInstance){
     $scope.setCustomer = function(customer) {
         $rootScope.$broadcast('addCustomerToSale', customer);
         $uibModalInstance.dismiss('cancel');
