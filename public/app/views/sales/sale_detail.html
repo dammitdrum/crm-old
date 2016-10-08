@@ -32,7 +32,7 @@
     class="search_field" 
     required 
     ng-if="!editMode||sale.state==='new'">
-  <h4 ng-if="editMode&&sale.state!=='new'"><strong >№ {{sale.number}}</strong></h4>
+  <h4 ng-if="editMode&&sale.state!=='new'"><strong >№{{sale.number}}</strong></h4>
 	<p ng-show="form.number.$invalid && form.number.$touched" class="text-danger">
 	    <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span> Необходим номер продажи(только цифры)
 	</p>

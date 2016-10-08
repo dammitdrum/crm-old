@@ -54,9 +54,9 @@
 				<span ng-if="sale.state==='canceled'" class="glyphicon glyphicon-remove" aria-hidden="true"></span>
 			</td>
 			<td>{{sale.date | date : 'dd.MM.yy HH:mm'}}</td>
-			<td>{{sale.number}}</td>
+			<td>№{{sale.number}}</td>
 			<td>{{sale.customer.name}}</td>
-			<td>{{sale.items.length}}</td>
+			<td>{{sale.items.length}} позиции</td>
 			<td>{{sale.sum | currency}}</td>
 			<td>{{sale.manager}}</td>
 		</tr>
