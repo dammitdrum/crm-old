@@ -7,8 +7,8 @@ var express = require('express'),
 app.use(bodyParser.json());
 app.use(express.static(__dirname + '/public'));
 
-var port = process.env.PORT || process.env.OPENSHIFT_NODEJS_PORT,
-    ip   = process.env.IP   || process.env.OPENSHIFT_NODEJS_IP;
+var port = process.env.PORT || process.env.OPENSHIFT_NODEJS_PORT || 8080,
+    ip   = process.env.IP   || process.env.OPENSHIFT_NODEJS_IP || '172.30.154.252';
 
 mongoose.Promise = global.Promise;
 mongoose.connect('mongodb://dbuser:password@ds035766.mlab.com:35766/crmdb');
@@ -18,7 +18,7 @@ db.on('error', function (err) {
 });
 db.once('open', function callback () {
     console.log("Connected to DB!");
-    app.listen(process.env.CRM_PORT, function () {
+    app.listen(port,ip, function () {
       console.log(process.env);
       console.log( "Listening on " + ip + ", port " + port )
     });
