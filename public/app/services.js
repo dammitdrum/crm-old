@@ -40,19 +40,16 @@ angular.module('myApp.services', [])
     return db;
 })
 .factory('stockCore',function ($rootScope) {
-    return function (oldData,data,type,oldState,state) {
-        if (state === 'remove') return;
-
-        angular.forEach(data,function(j,num) {
+    return function (data,type,oldState,state) {
+        angular.forEach(data,function(j) {
             angular.forEach($rootScope.stock,function(i) {
                 if (j.id === i._id) {
-                    if (worker(i,j,oldData[num],type,oldState,state)) $rootScope.saveItem(i);
+                    if (worker(i,j,type,oldState,state)) $rootScope.saveItem(i);
                 }
             })
         })
-        function worker(i,j,k,type,oldState,state) {
-            var q = +j.number,
-                old_q = k.number ? +k.number : 0;
+        function worker(i,j,type,oldState,state) {
+            var q = +j.number;
             if (type === 'sale') {
                 switch(state) {
                     case 'new':
@@ -63,11 +60,6 @@ angular.module('myApp.services', [])
                         break;
                     case 'approved':
                         if (oldState === 'new') {
-                            i.debt += q;
-                            return true;
-                        }
-                        if (oldState === 'approved'&&old_q!==q) {
-                            i.debt -= old_q;
                             i.debt += q;
                             return true;
                         }
@@ -103,11 +95,6 @@ angular.module('myApp.services', [])
                         break;
                     case 'approved':
                         if (oldState === 'new') {
-                            i.ordered += q;
-                            return true;
-                        }
-                        if (oldState === 'approved'&&old_q!==q) {
-                            i.ordered -= old_q;
                             i.ordered += q;
                             return true;
                         }

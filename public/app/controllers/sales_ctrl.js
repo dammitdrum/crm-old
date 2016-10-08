@@ -185,7 +185,7 @@ angular.module('myApp.sales_ctrl', [])
         if (!$scope.stockCoreError) {
             newSale.state = $scope.state;
             if ( !(oldSale.state === 'new' && $scope.state === 'new') ) {
-                stockCore(oldSale.items,newSale.items,'sale',oldSale.state,newSale.state);
+                stockCore(newSale.items,'sale',oldSale.state,newSale.state);
             }
             for (var key in newSale) {
                 oldSale[key] = newSale[key];

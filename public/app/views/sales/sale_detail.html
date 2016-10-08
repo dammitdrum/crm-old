@@ -24,14 +24,28 @@
   </div>
   <div class="air"></div>
 	<p>Номер продажи</p>
-	<input type="text" ng-model="sale.number" ng-pattern="/^\d+$/" name="number" class="search_field" required ng-disabled="sale.state==='closed'||sale.state==='canceled'">
+	<input 
+    type="text" 
+    ng-model="sale.number" 
+    ng-pattern="/^\d+$/" 
+    name="number" 
+    class="search_field" 
+    required 
+    ng-if="!editMode||sale.state==='new'">
+  <h4 ng-if="editMode&&sale.state!=='new'"><strong >№ {{sale.number}}</strong></h4>
 	<p ng-show="form.number.$invalid && form.number.$touched" class="text-danger">
 	    <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span> Необходим номер продажи(только цифры)
 	</p>
 	<span ng-show="form.number.$valid && form.number.$touched" class="glyphicon text-success glyphicon-ok-sign" aria-hidden="true"></span>
 	<div class="air"></div>
   <div class="pull-left">
-    <button class="btn btn-info" ng-click="openCustomersModal(sale)" ng-disabled="sale.state==='closed'||sale.state==='canceled'">Выбрать покупателя <span class="glyphicon glyphicon-menu-hamburger" aria-hidden="true"></span></button>
+    <button 
+      class="btn btn-info" 
+      ng-click="openCustomersModal(sale)" 
+      ng-disabled="editMode&&sale.state!=='new'">
+        Выбрать покупателя 
+        <span class="glyphicon glyphicon-menu-hamburger" aria-hidden="true"></span>
+      </button>
     <input type="hidden" name="customer" ng-model="sale.customer.fullname" required>
     <strong>&nbsp;&nbsp; {{sale.customer?sale.customer.fullname:'Не выбран покупатель'}}</strong>
   </div>
@@ -40,8 +54,12 @@
   
     <strong>{{sale.manager?sale.manager:'Не выбран менеджер'}} &nbsp;&nbsp;</strong> 
     <div class="btn-group" uib-dropdown>
-      <button id="single-button" type="button" class="btn btn-default" uib-dropdown-toggle ng-disabled="sale.state==='closed'||sale.state==='canceled'">
-        Выберите менеджера <span class="caret"></span>
+      <button 
+        id="single-button" 
+        type="button" class="btn btn-default" 
+        uib-dropdown-toggle 
+        ng-disabled="editMode&&sale.state!=='new'">
+          Выберите менеджера <span class="caret"></span>
       </button>
       <ul class="dropdown-menu" uib-dropdown-menu role="menu" aria-labelledby="single-button">
         <li role="menuitem" ng-repeat="manager in managers" ng-click="selectManager($event,manager.name)">
@@ -70,12 +88,30 @@
             	<td ng-click="openDetailItemModal(item)"><strong>{{$index+1}}</strong></td>
                <td ng-click="openDetailItemModal(item)">{{item.art}}</td>
 				<td ng-click="openDetailItemModal(item)">{{item.name}}</td>
-				<td><input class="quant_input" type="text" ng-model="item.price" ng-pattern="/^[1-9]\d*$/" ng-blur="$emit('calculate')" required ng-disabled="sale.state==='closed'||sale.state==='canceled'"></td>
+				<td>
+          <input 
+            class="quant_input" 
+            type="text" 
+            ng-model="item.price" 
+            ng-pattern="/^[1-9]\d*$/" 
+            ng-blur="$emit('calculate')" 
+            required 
+            ng-if="!editMode||sale.state==='new'">
+            <strong ng-if="editMode&&sale.state!=='new'">{{item.price | currency}}</strong>
+        </td>
 				<td ng-click="openDetailItemModal(item)">{{item.quantity}}</td>
 				<td ng-click="openDetailItemModal(item)">{{item.debt}}</td>
         <td ng-click="openDetailItemModal(item)">{{item.ordered}}</td>
 				<td>
-					<input class="quant_input" type="text" ng-model="item.number" ng-pattern="/^[1-9]\d*$/" ng-blur="$emit('calculate')" required ng-disabled="sale.state==='closed'||sale.state==='canceled'">
+					<input 
+            class="quant_input" 
+            type="text" 
+            ng-model="item.number" 
+            ng-pattern="/^[1-9]\d*$/" 
+            ng-blur="$emit('calculate')" 
+            required 
+            ng-if="!editMode||sale.state==='new'">
+          <strong ng-if="editMode&&sale.state!=='new'">{{item.number}}</strong>
 					<span 
             class="btn btn-danger btn-sm pull-right remove_butt" 
             ng-click="removeItem(item)" 
@@ -103,6 +139,10 @@
   <div class="alert alert-danger" ng-if="stockCoreError" role="alert"> 
       <strong>Недостаточно товара в наличии!</strong><br>
       По некоторым товарам нехватает кол-ва в наличии, уменьшите требуемое кол-во или удалите данные товары из продажи, переведя продажу в статус новой.
+  </div>
+  <div class="alert alert-info" ng-if="sale.state==='approved'" role="alert"> 
+      <strong>Информация! </strong>
+      Если необходимо внести изменения в продажу, то переведите ее в статус "Новой", сохраните и затем редактируйте.
   </div>
     <button 
       class="btn btn-danger " 
