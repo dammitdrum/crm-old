@@ -7,8 +7,8 @@ var express = require('express'),
 app.use(bodyParser.json());
 app.use(express.static(__dirname + '/public'));
 
-var port = process.env.PORT || process.env.OPENSHIFT_NODEJS_PORT || 8080,
-    ip   = process.env.IP   || process.env.OPENSHIFT_NODEJS_IP || '127.0.0.1';
+var port = process.env.PORT || process.env.OPENSHIFT_NODEJS_PORT,
+    ip   = process.env.IP   || process.env.OPENSHIFT_NODEJS_IP';
  
 
 
