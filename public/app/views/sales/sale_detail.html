@@ -1,15 +1,25 @@
 
 <h3 ng-if="!editMode">Создание новой продажи</h3>
-<h3 ng-if="editMode">Редактирование продажи №{{sale.number}}</h3>
+<h3 ng-if="editMode&&sale.state!=='closed'&&sale.state!=='canceled'">
+  Редактирование продажи №{{sale.number}} 
+</h3>
+<h3 ng-if="sale.state==='closed'">
+  <span class="glyphicon glyphicon-lock" aria-hidden="true"></span>
+  продажа №{{sale.number}} завершена 
+</h3>
+<h3 ng-if="sale.state==='canceled'">
+  <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
+  продажа №{{sale.number}} отменена 
+</h3>
 <hr>
 <form name="form" class="modal_form clearfix" novalidate>
-  <div ng-if="editMode&&sale.state!=='closed'">
-    <p><strong>Статус продажи</strong></p>
+  <div ng-if="editMode&&sale.state!=='closed'&&sale.state!=='canceled'">
+    <p><strong>Изменить статус продажи</strong></p>
     <div class="btn-group" role="group">
-      <button type="button" class="btn btn-sm btn-default" ng-click="setState('new')" ng-class="{active: state === 'new',}">Новая</button>
-      <button type="button" class="btn btn-sm btn-default" ng-click="setState('approved')" ng-class="{active: state === 'approved'}">Подтвержденная</button>
-      <button type="button" class="btn btn-sm btn-default" ng-click="setState('closed')" ng-class="{active: state === 'closed'}">Завершенная</button>
-      <button type="button" class="btn btn-sm btn-default" ng-click="setState('canceled')" ng-class="{active: state === 'canceled'}">Анулированная</button>
+      <button type="button" class="btn btn-sm btn-default" ng-click="setState('new')" ng-class="{active: state === 'new',}">Новая <span class="glyphicon glyphicon-leaf" aria-hidden="true"></span></button>
+      <button type="button" class="btn btn-sm btn-default" ng-click="setState('approved')" ng-class="{active: state === 'approved'}">Подтвержденная <span class="glyphicon glyphicon-ok" aria-hidden="true"></span></button>
+      <button type="button" class="btn btn-sm btn-default" ng-click="setState('closed')" ng-class="{active: state === 'closed'}">Завершенная <span class="glyphicon glyphicon-lock" aria-hidden="true"></span></button>
+      <button type="button" class="btn btn-sm btn-default" ng-click="setState('canceled')" ng-class="{active: state === 'canceled'}">Анулированная <span class="glyphicon glyphicon-remove" aria-hidden="true"></span></button>
     </div>
   </div>
   <div class="air"></div>
@@ -66,7 +76,12 @@
         <td ng-click="openDetailItemModal(item)">{{item.ordered}}</td>
 				<td>
 					<input class="quant_input" type="text" ng-model="item.number" ng-pattern="/^[1-9]\d*$/" ng-blur="$emit('calculate')" required ng-disabled="sale.state==='closed'||sale.state==='canceled'">
-					<span class="btn btn-danger btn-sm pull-right remove_butt" ng-click="removeItem(item)" ng-if="sale.state!=='closed'&&sale.state!=='canceled'"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span></span>
+					<span 
+            class="btn btn-danger btn-sm pull-right remove_butt" 
+            ng-click="removeItem(item)" 
+            ng-if="sale.state==='new'">
+            <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
+          </span>
 				</td>
             </tr>
             <tr ng-if="results.length > 0" class="bg_w">
@@ -75,7 +90,7 @@
               <td colspan="{{oldPrices&&sale.state!=='closed'&&sale.state!=='canceled' ? 3 : 7}}" class="tar"><strong>Общая сумма:</strong></td>
               <td><strong>{{sale.sum | currency}}</strong></td>
             </tr>
-            <tr class="not_hover" ng-if="sale.state!=='closed'&&sale.state!=='canceled'">
+            <tr class="not_hover" ng-if="!editMode||sale.state==='new'">
             	<td colspan="8" class="text-center">
             	<button class="btn btn-default" ng-click="openStockModal(sale)">
     						Добавить товар <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
@@ -88,7 +103,19 @@
 	<div class="air"></div>
     <button class="btn btn-danger " ng-click="removeSale(sale)" ng-if="editMode&&sale.state==='canceled'">Удалить <span class="glyphicon glyphicon-trash" aria-hidden="true"></span></button>
 
-    <button class="btn btn-lg btn-success pull-right" type="submit" ng-click="createSale(sale)" ng-if="!editMode" ng-disabled="form.$invalid">Создать продажу <span class="glyphicon glyphicon-cloud-upload" aria-hidden="true"></span></button>
-    <button class="btn btn-lg btn-warning pull-right" type="submit" ng-click="saveSale(sale)" ng-if="editMode" ng-disabled="form.$invalid">Сохранить <span class="glyphicon glyphicon-cloud-upload" aria-hidden="true"></span></button>
+    <button 
+      class="btn btn-lg btn-success pull-right" 
+      type="submit" ng-click="createSale(sale)" 
+      ng-if="!editMode" ng-disabled="form.$invalid">
+        Создать продажу <span class="glyphicon glyphicon-cloud-upload" aria-hidden="true"></span>
+    </button>
+    <button 
+      class="btn btn-lg btn-warning pull-right" 
+      type="submit" 
+      ng-click="saveSale(sale)" 
+      ng-if="editMode&&sale.state!=='closed'&&sale.state!=='canceled'" 
+      ng-disabled="form.$invalid">
+        Сохранить <span class="glyphicon glyphicon-cloud-upload" aria-hidden="true"></span>
+    </button>
 </form>
 <div class="air"></div>

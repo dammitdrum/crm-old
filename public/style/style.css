@@ -57,7 +57,8 @@ h2 {
 .stock_table th:first-child {
   text-align: center; }
 .stock_table td:first-child {
-  text-align: center; }
+  text-align: center;
+  width: 50px; }
 .stock_table th.long {
   width: 130px; }
 .stock_table .caret {
@@ -91,10 +92,11 @@ h2 {
   width: 300px;
   margin-bottom: 20px;
   height: 30px; }
-td[ng-click],th[ng-click] {
-  cursor: pointer;
-}
+
+td[ng-click], th[ng-click] {
+  cursor: pointer; }
+
 tr[ng-click] td {
-  cursor: pointer;
-}
+  cursor: pointer; }
+
 /*# sourceMappingURL=style.css.map */

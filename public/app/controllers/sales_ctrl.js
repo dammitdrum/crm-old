@@ -172,10 +172,11 @@ angular.module('myApp.sales_ctrl', [])
                 return;
             }
         });
-        if ( !(oldSale.state === 'new' && 
-                ($scope.state === 'canceled'||$scope.state === 'new')) ) {
-            stockCore($scope.itemsList,'sale',$scope.state);
+
+        if ( !(oldSale.state === 'new' && $scope.state === 'new') ) {
+            stockCore(oldSale.items,newSale.items,'sale',oldSale.state,$scope.state);
         }
+
         newSale.state = $scope.state;
         for (var key in newSale) {
             oldSale[key] = newSale[key];
