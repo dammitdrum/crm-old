@@ -19,8 +19,7 @@ db.on('error', function (err) {
 db.once('open', function callback () {
     console.log("Connected to DB!");
     app.listen(port, function () {
-      console.log(process.env);
-      console.log( "Listening on " + ip + ", port " + port )
+      console.log( "Listening on port " + port )
     });
     console.log('Server is running');
 });
