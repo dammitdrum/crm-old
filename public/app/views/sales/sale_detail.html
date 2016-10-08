@@ -99,9 +99,17 @@
 	        </tr>
         </tbody>
     </table>
-	
 	<div class="air"></div>
-    <button class="btn btn-danger " ng-click="removeSale(sale)" ng-if="editMode&&sale.state==='canceled'">Удалить <span class="glyphicon glyphicon-trash" aria-hidden="true"></span></button>
+  <div class="alert alert-danger" ng-if="stockCoreError" role="alert"> 
+      <strong>Недостаточно товара в наличии!</strong><br>
+      По некоторым товарам нехватает кол-ва в наличии, уменьшите требуемое кол-во или удалите данные товары из продажи, переведя продажу в статус новой.
+  </div>
+    <button 
+      class="btn btn-danger " 
+      ng-click="removeSale(sale)" 
+      ng-if="editMode&&sale.state==='canceled'">
+        Удалить <span class="glyphicon glyphicon-trash" aria-hidden="true"></span>
+      </button>
 
     <button 
       class="btn btn-lg btn-success pull-right" 

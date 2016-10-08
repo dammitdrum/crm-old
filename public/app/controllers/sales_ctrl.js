@@ -172,17 +172,27 @@ angular.module('myApp.sales_ctrl', [])
                 return;
             }
         });
-
-        if ( !(oldSale.state === 'new' && $scope.state === 'new') ) {
-            stockCore(oldSale.items,newSale.items,'sale',oldSale.state,$scope.state);
+        if ($scope.state === 'closed') {
+            angular.forEach($scope.itemsList,function(item) {
+                if (item.quantity < item.number) {
+                    $scope.stockCoreError = true;
+                    return;
+                }
+            })
+        } else {
+            $scope.stockCoreError = false;
         }
-
-        newSale.state = $scope.state;
-        for (var key in newSale) {
-            oldSale[key] = newSale[key];
+        if (!$scope.stockCoreError) {
+            newSale.state = $scope.state;
+            if ( !(oldSale.state === 'new' && $scope.state === 'new') ) {
+                stockCore(oldSale.items,newSale.items,'sale',oldSale.state,newSale.state);
+            }
+            for (var key in newSale) {
+                oldSale[key] = newSale[key];
+            }
+            $rootScope.saveSale(oldSale);
+            $location.path('/sales');
         }
-        $rootScope.saveSale(oldSale);
-        $location.path('/sales');
     };
     $scope.removeSale = function(sale) {
         $rootScope.removeSale(sale);
