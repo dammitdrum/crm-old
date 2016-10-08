@@ -9,8 +9,6 @@ app.use(express.static(__dirname + '/public'));
 
 var port = process.env.PORT || process.env.OPENSHIFT_NODEJS_PORT,
     ip   = process.env.IP   || process.env.OPENSHIFT_NODEJS_IP';
- 
-
 
 mongoose.Promise = global.Promise;
 mongoose.connect('mongodb://dbuser:password@ds035766.mlab.com:35766/crmdb');
