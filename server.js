@@ -85,13 +85,9 @@ var Order = new Schema({
 });
 
 var UserModel = mongoose.model('User', User);
-
 var ItemModel = mongoose.model('Item', Item);
-
 var SaleModel = mongoose.model('Sale', Sale);
-
 var OrderModel = mongoose.model('Order', Order);
-
 var PartnerModel = mongoose.model('Partner', Partner);
 
 function hash(text) {
@@ -99,16 +95,11 @@ function hash(text) {
     .update(text).digest('base64')
 }
 
-app.post('/auth', function(req, res, next) {
+app.post('/login', function(req, res, next) {
     if (req.session.user) {
         console.log(req.session)
         return res.send(req.session.user);
-    } else {
-        return res.send('noAuth');
     }
-})
-
-app.post('/login', function(req, res, next) {
     UserModel.findOne({login:req.body.login}).then(function(user) {
          if (user.password === hash(req.body.password)) {
             console.log("User password is ok");
@@ -121,7 +112,7 @@ app.post('/login', function(req, res, next) {
             return res.send({ status: 'OK', session:req.session.user });
         } else {
             console.log("Error auth");
-            res.send("Error auth");
+            res.send("noAuth");
         }
     })
  

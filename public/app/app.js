@@ -25,7 +25,7 @@ myApp.config(function($routeProvider) {
 		resolve: {
 			Items: function(loadData) {
 				return loadData.getItems();
-			}
+			},
 		}
 	});
 	$routeProvider.when('/sales', {
@@ -117,24 +117,21 @@ myApp.config(function($routeProvider) {
 	});
 	$routeProvider.when('/user', {
 		templateUrl: 'app/views/user/login.html', 
-		controller: 'LoginCtrl'
+		controller: 'LoginCtrl',
 	});
     $routeProvider.otherwise({
-    	redirectTo: '/user'
+    	redirectTo: '/stock'
     });
 });
 
 myApp.run(function($rootScope,$location,$http) {
-	$rootScope.auth = false;
 	$rootScope.$on('$routeChangeStart', function(e, curr, prev) {
 		if (!$rootScope.auth) {
-			$location.path('/user');
-			$http.post('/auth').then(function(res) {
-		    	if (res.data !== 'noAuth') {
-		    		$rootScope.auth = true;
-		    	} 
-		    });
-			
+			e.preventDefault();
+			$http.post('/login').then(function(res) {
+	        	$rootScope.auth = res.data === 'noAuth' ? false : true;
+	        	if ($rootScope.auth) $location.path('/');
+	        });
 		}
 	    if (curr.$$route && curr.$$route.resolve) {
 			// Show a loading message until promises aren't resolved
@@ -142,6 +139,7 @@ myApp.run(function($rootScope,$location,$http) {
 		}
 	});
 	$rootScope.$on('$routeChangeSuccess', function(e, curr, prev) {
+		
 		// Hide loading message
 		$rootScope.loadingView = false;
 	});

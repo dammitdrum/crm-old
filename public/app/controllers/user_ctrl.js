@@ -8,8 +8,8 @@ angular.module('myApp.user_ctrl', [])
 
 	$scope.enterUser = function(user) {
         $http.post('/login',user).then(function(res) {
-        	console.log(res.data);
-        	$location.path('/stock');
+        	$rootScope.auth = res.data === 'noAuth' ? false : true;
+        	if ($rootScope.auth) $location.path('/');
         });
     };
 
