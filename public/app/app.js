@@ -9,6 +9,7 @@ var myApp = angular.module('myApp', [
     'myApp.sales_ctrl',
     'myApp.orders_ctrl',
     'myApp.partners_ctrl',
+    'myApp.user_ctrl',
     'myApp.directives',
     'myApp.filters',
     'ngAnimate',
@@ -76,7 +77,46 @@ myApp.config(function($routeProvider) {
 	});
 	$routeProvider.when('/orders', {
 		templateUrl: 'app/views/orders/orders.html', 
-		controller: 'OrdersCtrl'
+		controller: 'OrdersCtrl',
+		resolve: {
+			Orders: function(loadData) {
+				return loadData.getOrders();
+			}
+		}
+	});
+	$routeProvider.when('/orders/create', {
+		templateUrl: 'app/views/orders/order_detail.html', 
+		controller: 'OrderDetailCtrl',
+		resolve: {
+			Items: function(loadData) {
+				return loadData.getItems();
+			},
+			Orders: function(loadData) {
+				return loadData.getOrders();
+			},
+			Partners: function(loadData) {
+				return loadData.getPartners();
+			}
+		}
+	});
+	$routeProvider.when('/orders/edit/:number', {
+		templateUrl: 'app/views/orders/order_detail.html', 
+		controller: 'OrderDetailCtrl',
+		resolve: {
+			Items: function(loadData) {
+				return loadData.getItems();
+			},
+			Orders: function(loadData) {
+				return loadData.getOrders();
+			},
+			Partners: function(loadData) {
+				return loadData.getPartners();
+			}
+		}
+	});
+	$routeProvider.when('/user', {
+		templateUrl: 'app/views/user/login.html', 
+		controller: 'LoginCtrl'
 	});
     $routeProvider.otherwise({
     	redirectTo: '/stock'

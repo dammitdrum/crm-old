@@ -29,7 +29,7 @@ angular.module('myApp.sales_ctrl', [])
     };
 })
 
-.controller('SaleDetailCtrl', function ($rootScope, $scope, $uibModal, $location, $routeParams, Sales, Items, Partners, stockCore, PATH_SALES){
+.controller('SaleDetailCtrl', function ($rootScope, $scope, $uibModal, $location, $routeParams, Sales, Items, Partners, stockCore, PATH_STOCK){
     $scope.managers = [
         {
             "name":"Алексей Пучков"
@@ -41,6 +41,10 @@ angular.module('myApp.sales_ctrl', [])
             "name":"Гриша Матюшкин"
         }
     ];
+    $scope.sale = {};
+    $scope.itemsList = [];
+    $scope.editMode = false;
+    $scope.oldPrices = false;
 
     if (Items) {
         $rootScope.stock = Items.data;
@@ -51,12 +55,6 @@ angular.module('myApp.sales_ctrl', [])
     if (Partners) {
         $rootScope.partners = Partners.data;
     }
-
-    $scope.sale = {};
-    $scope.itemsList = [];
-    $scope.editMode = false;
-    $scope.oldPrices = false;
-
     if ($routeParams.number) {
         $scope.editMode = true;
         angular.forEach($rootScope.sales, function(sale) {
@@ -80,7 +78,7 @@ angular.module('myApp.sales_ctrl', [])
         });
     }
 
-    $scope.$on('addItemToSale',function(event,item) {
+    $scope.$on('addItemToList',function(event,item) {
         var clone = angular.copy(item),
             add = false;
 
@@ -95,7 +93,7 @@ angular.module('myApp.sales_ctrl', [])
         if (!add) $scope.itemsList.push(clone);
         $scope.$emit('calculate');
     });
-    $scope.$on('addCustomerToSale',function(event,customer) {
+    $scope.$on('addPartner',function(event,customer) {
         $scope.sale.customer = customer;
     });
     $scope.$on('calculate',function(event) {
@@ -114,25 +112,6 @@ angular.module('myApp.sales_ctrl', [])
         })
     });
 
-    $scope.openCustomersModal = function() {
-        var modalInstance = $uibModal.open({
-            templateUrl: PATH_SALES+'partners_modal.html',
-            controller: 'PartnerModalCtrl',
-            size: 'lg'
-        });
-    };
-    $scope.openStockModal = function() {
-        var modalInstance = $uibModal.open({
-            templateUrl: PATH_SALES+'stock_modal.html',
-            controller: 'StockModalCtrl',
-            size: 'lg',
-            resolve: {
-                stock: function() {
-                    return $rootScope.stock;
-                }
-            }
-        });
-    };
     $scope.setState = function(state) {
         $scope.state = state;
     };
@@ -196,33 +175,5 @@ angular.module('myApp.sales_ctrl', [])
     };
     $scope.removeSale = function(sale) {
         $rootScope.removeSale(sale);
-        $location.path('/sales');
-    };
-})
-
-.controller('StockModalCtrl', function ($rootScope, $scope, $uibModalInstance, stock){
-    $scope.sortProperty = 'name';
-    $scope.reverseSort = false;
-
-    $scope.sortBy = function(name) {
-        $scope.reverseSort = ($scope.sortProperty === name) ? !$scope.reverseSort : false;
-        $scope.sortProperty = name;
-    };
-    $scope.addToSale = function(item) {
-        $rootScope.$broadcast('addItemToSale', item);
-        $uibModalInstance.dismiss('cancel');
-    };
-    $scope.closeModal = function() {
-        $uibModalInstance.dismiss('cancel');
-    };
-})
-
-.controller('PartnerModalCtrl', function ($rootScope, $scope, $uibModalInstance){
-    $scope.setCustomer = function(customer) {
-        $rootScope.$broadcast('addCustomerToSale', customer);
-        $uibModalInstance.dismiss('cancel');
-    };
-    $scope.closeModal = function() {
-        $uibModalInstance.dismiss('cancel');
     };
 })

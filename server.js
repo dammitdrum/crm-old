@@ -2,10 +2,22 @@
 var express = require('express'),
     bodyParser= require('body-parser'),
     app = express(),
-    mongoose = require('mongoose');
+    mongoose = require('mongoose'),
+    crypto = require('crypto'),
+    session = require('express-session'),
+    MongoStore = require('connect-mongo')(session);
 
 app.use(bodyParser.json());
 app.use(express.static(__dirname + '/public'));
+
+app.use(session({
+    secret: 'i need more beers',
+    resave: false,
+    saveUninitialized: false,
+    store: new MongoStore({ 
+        url: 'mongodb://dbuser:password@ds053156.mlab.com:53156/crmusers',
+    })
+}))
 
 var port = process.env.PORT || process.env.OPENSHIFT_NODEJS_PORT || 8080,
     ip   = process.env.IP   || process.env.OPENSHIFT_NODEJS_IP || '127.0.0.1';
@@ -22,7 +34,98 @@ db.once('open', function callback () {
       console.log( "Listening on port " + port )
     });
     console.log('Server is running');
+    console.log(hash('matrix'));
 });
+
+function hash(text) {
+    return crypto.createHash('sha1')
+    .update(text).digest('base64')
+}
+var User = new mongoose.Schema({
+    username: { type: String, unique: true, required: true},
+    password: { type: String, required: true},
+    access: { type: String, required: true}
+})
+var UserModel = mongoose.model('User', User);
+//---------------------------
+
+function createUser(userData){
+    var user = {
+        name: userData.name,
+        password: hash(userData.password)
+    }
+    return new UserModel(user).save()
+}
+ 
+function getUser(id) {
+    return UserModel.findOne(id)
+}
+ 
+function checkUser(userData) {
+    return UserModel.findOne({username: userData.name})
+        .then(function(user){
+            if ( user.password === hash(userData.password) ){
+                console.log("User password is ok");
+                return Promise.resolve(user)
+            } else {
+                return Promise.reject("Error wrong")
+            }
+        })
+}
+
+app.post('/login', function(req, res, next) {
+    //if (req.session.user) return res.redirect('/')
+ 
+    checkUser(req.body)
+        .then(function(user){
+            if(user){
+                req.session.user = {id: user._id, name: user.name}
+                res.send(req.session.user);
+            } else {
+                return next(error)
+            }
+        })
+        .catch(function(error){
+            return next(error)
+        })
+ 
+});
+ 
+app.post('/user/create', function(req, res, next) {
+    createUser(req.body)
+        .then(function(result){
+            console.log("User created");
+            res.send({ status: 'OK', user:result });
+        })
+        .catch(function(err){
+            if (err.toJSON().code == 11000){
+                res.status(500).send("This user already exist")
+            }
+        })
+});
+ 
+app.post('/logout', function(req, res, next) {
+    if (req.session.user) {
+        delete req.session.user;
+    }
+});
+
+/*app.get('/', function(req, res, next) {
+    if(req.session.user){
+        var data = {
+            title: 'Express',
+            user : req.session.user
+        }
+        res.render('index', data);
+    } else {
+        var data = {
+            title: 'Express',
+        }
+        res.render('index', data);
+    }
+});*/
+
+//---------------------------
 
 // Schemas
 
@@ -56,9 +159,20 @@ var Sale = new Schema({
     state: { type: String, default: 'new'}
 });
 
+var Order = new Schema({
+    date: { type: Date, default: Date.now },
+    number: { type: Number, unique: true, required: true},
+    supplier: Partner,
+    items: [{id: String, number: Number, price: Number}],
+    sum: { type: Number, default: 0},
+    state: { type: String, default: 'new'}
+});
+
 var ItemModel = mongoose.model('Item', Item);
 
 var SaleModel = mongoose.model('Sale', Sale);
+
+var OrderModel = mongoose.model('Order', Order);
 
 var PartnerModel = mongoose.model('Partner', Partner);
 
@@ -67,13 +181,14 @@ var PartnerModel = mongoose.model('Partner', Partner);
 app.get('/stock/read', function (req, res) {
     readHandler(ItemModel,req,res);
 });
-
 app.get('/partners/read', function (req, res) {
     readHandler(PartnerModel,req,res);
 });
-
 app.get('/sales/read', function (req, res) {
     readHandler(SaleModel,req,res);
+});
+app.get('/orders/read', function (req, res) {
+    readHandler(OrderModel,req,res);
 });
 
 function readHandler(Model,req,res) {
@@ -100,7 +215,6 @@ app.post('/stock/create', function (req, res) {
 
     createHandler(item,res,'item');
 });
-
 app.post('/sales/create', function (req, res) {
     var sale = new SaleModel({
         number: req.body.number,
@@ -112,7 +226,16 @@ app.post('/sales/create', function (req, res) {
 
    createHandler(sale,res,'sale');
 });
+app.post('/orders/create', function (req, res) {
+    var order = new OrderModel({
+        number: req.body.number,
+        supplier: req.body.supplier,
+        items: req.body.items,
+        sum: req.body.sum
+    });
 
+   createHandler(order,res,'order');
+});
 app.post('/partners/create', function (req, res) {
     var partner = new PartnerModel({
         name: req.body.name,
@@ -145,7 +268,9 @@ app.put('/stock/update/:id', function (req, res){
 app.put('/sales/update/:id', function (req, res){
     updateHandler(SaleModel,req,res,'sale');
 });
-
+app.put('/orders/update/:id', function (req, res){
+    updateHandler(OrderModel,req,res,'order');
+});
 app.put('/partners/update/:id', function (req, res){
     updateHandler(PartnerModel,req,res,'partner');
 });
@@ -176,11 +301,12 @@ function updateHandler(Model,req,res,str) {
 app.delete('/stock/delete/:id', function (req, res){
     deleteHandler(ItemModel,req,res,'item');
 });
-
 app.delete('/sales/delete/:id', function (req, res){
     deleteHandler(SaleModel,req,res,'sale');
 });
-
+app.delete('/orders/delete/:id', function (req, res){
+    deleteHandler(OrderModel,req,res,'order');
+});
 app.delete('/partners/delete/:id', function (req, res){
     deleteHandler(PartnerModel,req,res,'partner');
 });

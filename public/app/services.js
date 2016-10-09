@@ -25,6 +25,17 @@ angular.module('myApp.services', [])
             });
             return promise;
         },
+        getOrders: function() {
+            if ($rootScope.orders) return;
+            var promise = $http({
+                method: 'GET',
+                url: '/orders/read'
+            });
+            promise.success(function(data) {
+                return data;
+            });
+            return promise;
+        },
         getPartners: function() {
             if ($rootScope.partners) return;
             var promise = $http({
@@ -81,8 +92,6 @@ angular.module('myApp.services', [])
                             return true;
                         }
                         break;
-                    default: 
-                        return false;
                 }
             }
             if (type === 'order') {
@@ -116,8 +125,6 @@ angular.module('myApp.services', [])
                             return true;
                         }
                         break;
-                    default: 
-                        return false;
                 }
             }
         };

@@ -1,6 +1,6 @@
 <div class="modal-header">
     <button class="close" ng-click="closeModal()" aria-label="Close"><span aria-hidden="true">×</span></button>
-    <h3 class="modal-title">Добавление товаров к заказу</h3>
+    <h3 class="modal-title">Выберите товар</h3>
 </div>
 <div class="modal-body">
     <input type="text" placeholder="Искать по наименованию" class="search_field" ng-model="search.name">
@@ -29,7 +29,7 @@
             </tr>
         </thead>
         <tbody>
-            <tr class="tr_item" ng-repeat="item in stock | filter:search | orderBy:sortProperty:reverseSort as results" ng-click="addToSale(item)">
+            <tr class="tr_item" ng-repeat="item in stock | filter:search | orderBy:sortProperty:reverseSort as results" ng-click="selectItem(item)">
                 <td>{{$index + 1}}</td>
                 <td>{{item.art}}</td>
                 <td>{{item.name}}</td>

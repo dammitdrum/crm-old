@@ -1,6 +1,6 @@
 <div class="modal-header">
   <button class="close" ng-click="closeModal()" aria-label="Close"><span aria-hidden="true">×</span></button>
-    <h3 class="modal-title">Выберите покупателя</h3>
+    <h3 class="modal-title">Выберите контрагента</h3>
 </div>
 <div class="modal-body">
     <input type="text" placeholder="Искать по названию" class="search_field" ng-model="search.name">
@@ -15,7 +15,7 @@
             </tr>
         </thead>
         <tbody>
-            <tr class="tr_customer" ng-repeat="partner in partners | filter:search as results" ng-click="setCustomer(partner)">
+            <tr class="tr_customer" ng-repeat="partner in partners | filter:search as results" ng-click="setPartner(partner)">
                 <td>{{$index + 1}}</td>
                 <td>{{partner.name}}</td>
                 <td>{{partner.fullname}}</td>
