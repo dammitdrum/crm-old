@@ -2,6 +2,7 @@
 
 var myApp = angular.module('myApp', [
 	'ngRoute',
+	'ngCookies',
 	'myApp.services',
     'myApp.main_ctrl',
     'myApp.head_ctrl',
@@ -119,12 +120,22 @@ myApp.config(function($routeProvider) {
 		controller: 'LoginCtrl'
 	});
     $routeProvider.otherwise({
-    	redirectTo: '/stock'
+    	redirectTo: '/user'
     });
 });
 
-myApp.run(function($rootScope) {
+myApp.run(function($rootScope,$location,$http) {
+	$rootScope.auth = false;
 	$rootScope.$on('$routeChangeStart', function(e, curr, prev) {
+		if (!$rootScope.auth) {
+			$location.path('/user');
+			$http.post('/auth').then(function(res) {
+		    	if (res.data !== 'noAuth') {
+		    		$rootScope.auth = true;
+		    	} 
+		    });
+			
+		}
 	    if (curr.$$route && curr.$$route.resolve) {
 			// Show a loading message until promises aren't resolved
 			$rootScope.loadingView = true;

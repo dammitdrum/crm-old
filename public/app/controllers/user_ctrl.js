@@ -2,12 +2,14 @@
 
 angular.module('myApp.user_ctrl', [])
 
-.controller('LoginCtrl', function ($rootScope, $scope, $http){
+.controller('LoginCtrl', function ($rootScope, $scope, $http, $location){
+
+	$scope.user = {};
 
 	$scope.enterUser = function(user) {
-        $http.post('/user/create',user).then(function(res) {
+        $http.post('/login',user).then(function(res) {
         	console.log(res.data);
-            //$location.path('/stock');
+        	$location.path('/stock');
         });
     };
 

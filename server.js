@@ -11,7 +11,7 @@ app.use(bodyParser.json());
 app.use(express.static(__dirname + '/public'));
 
 app.use(session({
-    secret: 'i need more beers',
+    secret: 'dammitdrum',
     resave: false,
     saveUninitialized: false,
     store: new MongoStore({ 
@@ -34,102 +34,18 @@ db.once('open', function callback () {
       console.log( "Listening on port " + port )
     });
     console.log('Server is running');
-    console.log(hash('matrix'));
 });
-
-function hash(text) {
-    return crypto.createHash('sha1')
-    .update(text).digest('base64')
-}
-var User = new mongoose.Schema({
-    username: { type: String, unique: true, required: true},
-    password: { type: String, required: true},
-    access: { type: String, required: true}
-})
-var UserModel = mongoose.model('User', User);
-//---------------------------
-
-function createUser(userData){
-    var user = {
-        name: userData.name,
-        password: hash(userData.password)
-    }
-    return new UserModel(user).save()
-}
- 
-function getUser(id) {
-    return UserModel.findOne(id)
-}
- 
-function checkUser(userData) {
-    return UserModel.findOne({username: userData.name})
-        .then(function(user){
-            if ( user.password === hash(userData.password) ){
-                console.log("User password is ok");
-                return Promise.resolve(user)
-            } else {
-                return Promise.reject("Error wrong")
-            }
-        })
-}
-
-app.post('/login', function(req, res, next) {
-    //if (req.session.user) return res.redirect('/')
- 
-    checkUser(req.body)
-        .then(function(user){
-            if(user){
-                req.session.user = {id: user._id, name: user.name}
-                res.send(req.session.user);
-            } else {
-                return next(error)
-            }
-        })
-        .catch(function(error){
-            return next(error)
-        })
- 
-});
- 
-app.post('/user/create', function(req, res, next) {
-    createUser(req.body)
-        .then(function(result){
-            console.log("User created");
-            res.send({ status: 'OK', user:result });
-        })
-        .catch(function(err){
-            if (err.toJSON().code == 11000){
-                res.status(500).send("This user already exist")
-            }
-        })
-});
- 
-app.post('/logout', function(req, res, next) {
-    if (req.session.user) {
-        delete req.session.user;
-    }
-});
-
-/*app.get('/', function(req, res, next) {
-    if(req.session.user){
-        var data = {
-            title: 'Express',
-            user : req.session.user
-        }
-        res.render('index', data);
-    } else {
-        var data = {
-            title: 'Express',
-        }
-        res.render('index', data);
-    }
-});*/
-
-//---------------------------
 
 // Schemas
 
 var Schema = mongoose.Schema;
+
+var User = new Schema({
+    login: { type: String, unique: true, required: true},
+    name: { type: String},
+    password: { type: String, required: true},
+    access: { type: String, required: true}
+})
 
 var Item = new Schema({
     art: { type: String, required: true},
@@ -168,6 +84,8 @@ var Order = new Schema({
     state: { type: String, default: 'new'}
 });
 
+var UserModel = mongoose.model('User', User);
+
 var ItemModel = mongoose.model('Item', Item);
 
 var SaleModel = mongoose.model('Sale', Sale);
@@ -175,6 +93,64 @@ var SaleModel = mongoose.model('Sale', Sale);
 var OrderModel = mongoose.model('Order', Order);
 
 var PartnerModel = mongoose.model('Partner', Partner);
+
+function hash(text) {
+    return crypto.createHash('sha1')
+    .update(text).digest('base64')
+}
+
+app.post('/auth', function(req, res, next) {
+    if (req.session.user) {
+        console.log(req.session)
+        return res.send(req.session.user);
+    } else {
+        return res.send('noAuth');
+    }
+})
+
+app.post('/login', function(req, res, next) {
+    UserModel.findOne({login:req.body.login}).then(function(user) {
+         if (user.password === hash(req.body.password)) {
+            console.log("User password is ok");
+            req.session.user = {
+                id: user._id, 
+                login: user.login,
+                name: user.name,
+                access: user.access
+            }
+            return res.send({ status: 'OK', session:req.session.user });
+        } else {
+            console.log("Error auth");
+            res.send("Error auth");
+        }
+    })
+ 
+});
+ 
+app.post('/user/create', function(req, res) {
+    var user = new UserModel({
+        login: req.body.login,
+        name: req.body.name,
+        password: hash(req.body.password),
+        access: req.body.access
+    });
+    user.save(function(err) {
+        if (!err) {
+            console.log("User created");
+            return res.send({ status: 'OK', user:user });
+        } else {
+            if (err.code == 11000){
+                res.status(500).send("This user already exist")
+            };
+        }
+    });
+});
+ 
+app.post('/logout', function(req, res, next) {
+    if (req.session.user) {
+        delete req.session.user;
+    }
+});
 
 // READ
 
