@@ -129,8 +129,12 @@ myApp.run(function($rootScope,$location,$http) {
 		if (!$rootScope.auth) {
 			e.preventDefault();
 			$http.post('/login').then(function(res) {
-	        	$rootScope.auth = res.data === 'noAuth' ? false : true;
-	        	if ($rootScope.auth) $location.path('/');
+	        	if (res.data === 'noAuth') {
+	        		$rootScope.auth = false;
+	        	} else {
+	        		$rootScope.auth = true;
+	        		$location.path('/');
+	        	}
 	        });
 		}
 	    if (curr.$$route && curr.$$route.resolve) {
