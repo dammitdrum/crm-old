@@ -100,7 +100,7 @@ app.post('/login', function(req, res, next) {
         console.log(req.session)
         return res.send(req.session.user);
     }
-    UserModel.findOne({login:req.body.login}).then(function(err, user) {
+    UserModel.findOne({login:req.body.login}).then(function(user) {
         if (!user) return res.send("noAuth");
         if (user.password === hash(req.body.password)) {
             console.log("User password is ok");
