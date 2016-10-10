@@ -23,7 +23,7 @@ var port = process.env.PORT || process.env.OPENSHIFT_NODEJS_PORT || 8080,
     ip   = process.env.IP   || process.env.OPENSHIFT_NODEJS_IP || '127.0.0.1';
 
 mongoose.Promise = global.Promise;
-mongoose.connect('mongodb://dbuser:password@ds053216.mlab.com:53216/crmtest');
+mongoose.connect('mongodb://dbuser:password@ds035766.mlab.com:35766/crmdb');
 var db = mongoose.connection;
 db.on('error', function (err) {
     console.log('connection error:', err.message);
