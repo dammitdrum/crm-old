@@ -135,7 +135,7 @@ myApp.run(function ($rootScope, $http, $location) {
 	            } else {
 	                $rootScope.auth = true;
 	                $rootScope.user = res.data.user;
-	                $location.path('/stock');
+	                $location.path('/');
 	            }
 	        });
 		}
