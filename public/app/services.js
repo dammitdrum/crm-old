@@ -129,4 +129,8 @@ angular.module('myApp.services', [])
             }
         };
     };
+}).factory('Auth',function ($rootscope,$http,$location) {
+    return function(user) {
+        
+    };
 })

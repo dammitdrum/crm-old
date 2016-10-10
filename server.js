@@ -95,13 +95,18 @@ function hash(text) {
     .update(text).digest('base64')
 }
 
-app.post('/login', function(req, res, next) {
+app.post('/auth', function(req, res, next) {
     if (req.session.user) {
-        console.log(req.session)
-        return res.send(req.session.user);
+        console.log(req.session);
+        return res.send({ status: 'OK', user:req.session.user });
+    } else {
+        return res.send('noAuth');
     }
+})
+
+app.post('/login', function(req, res, next) {
     UserModel.findOne({login:req.body.login}).then(function(user) {
-        if (!user) return res.send("noAuth");
+        if(!user) res.send({errType:'login'});
         if (user.password === hash(req.body.password)) {
             console.log("User password is ok");
             req.session.user = {
@@ -110,10 +115,10 @@ app.post('/login', function(req, res, next) {
                 name: user.name,
                 access: user.access
             }
-            return res.send({ status: 'OK', session:req.session.user });
+            return res.send({ status: 'OK', user:req.session.user });
         } else {
             console.log("Error auth");
-            res.send("noAuth");
+            res.send({errType:'pass'});
         }
     })
  
@@ -141,6 +146,7 @@ app.post('/user/create', function(req, res) {
 app.post('/logout', function(req, res, next) {
     if (req.session.user) {
         delete req.session.user;
+        res.send('noAuth');
     }
 });
 

@@ -116,25 +116,27 @@ myApp.config(function($routeProvider) {
 		}
 	});
 	$routeProvider.when('/user', {
-		templateUrl: 'app/views/user/login.html', 
-		controller: 'LoginCtrl',
+		templateUrl: 'app/views/user/user.html', 
+		controller: 'UserCtrl',
 	});
     $routeProvider.otherwise({
     	redirectTo: '/stock'
     });
 });
 
-myApp.run(function($rootScope,$location,$http) {
+myApp.run(function ($rootScope, $http, $location) {
 	$rootScope.$on('$routeChangeStart', function(e, curr, prev) {
 		if (!$rootScope.auth) {
 			e.preventDefault();
-			$http.post('/login').then(function(res) {
-	        	if (res.data === 'noAuth') {
-	        		$rootScope.auth = false;
-	        	} else {
-	        		$rootScope.auth = true;
-	        		$location.path('/');
-	        	}
+			$http.post('/auth').then(function(res) {
+	            if (res.data === 'noAuth') {
+	                $rootScope.auth = false;
+	                $rootScope.user = {};
+	            } else {
+	                $rootScope.auth = true;
+	                $rootScope.user = res.data.user;
+	                $location.path('/stock');
+	            }
 	        });
 		}
 	    if (curr.$$route && curr.$$route.resolve) {

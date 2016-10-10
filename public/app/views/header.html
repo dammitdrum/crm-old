@@ -5,5 +5,8 @@
 	    		<a ng-click="menu.setActive(item)" href="#{{item.url}}">{{item.name}}</a>
 	    	</li> 
 	    </ul>
+	    <ul class="nav navbar-nav navbar-right">
+	    	<li ng-class="{active: userClass}"><a href="#/user">{{user.name?user.name:'Вход'}}</a></li>
+	    <ul>
  	</div>
 </nav>
