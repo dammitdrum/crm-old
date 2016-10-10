@@ -124,19 +124,23 @@ myApp.config(function($routeProvider) {
     });
 });
 
-myApp.run(function ($rootScope, $http, $location) {
+myApp.run(function ($rootScope, $http, $location, $route) {
 	$rootScope.$on('$routeChangeStart', function(e, curr, prev) {
+		
 		if (!$rootScope.auth) {
+			if ($location.path()) $rootScope.startRoute = $location.path();
+			$rootScope.loadingAuthView = true;
 			e.preventDefault();
 			$http.post('/auth').then(function(res) {
 	            if (res.data === 'noAuth') {
-	                $rootScope.auth = false;
 	                $rootScope.user = {};
 	            } else {
 	                $rootScope.auth = true;
 	                $rootScope.user = res.data.user;
-	                $location.path('/');
+	                $location.path($rootScope.startRoute);
+	                $route.reload();
 	            }
+	            $rootScope.loadingAuthView = false;
 	        });
 		}
 	    if (curr.$$route && curr.$$route.resolve) {
