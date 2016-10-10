@@ -1,5 +1,5 @@
 <nav class="navbar navbar-default navbar-static-top">
- 	<div class="container">
+ 	<div class="container" ng-if="user.name">
 	    <ul class="nav navbar-nav" > 
 	    	<li ng-repeat="item in menu.items" ng-class="item.className">
 	    		<a ng-click="menu.setActive(item)" href="#{{item.url}}">{{item.name}}</a>
