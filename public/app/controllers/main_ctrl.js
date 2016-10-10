@@ -61,7 +61,7 @@ angular.module('myApp.main_ctrl', [])
         });
     };
     $rootScope.savePartner = function(partner,hideModal) {
-        $http.put('/partners/update/'+partner._id,partner).then(function() {
+        $http.put('/partners/update/'+partner._id,partner).then(function(res) {
             for (var key in res.data.item) {
                 partner[key] = res.data.item[key];
             }
