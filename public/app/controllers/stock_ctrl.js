@@ -77,3 +77,27 @@ angular.module('myApp.stock_ctrl', [])
         $uibModalInstance.dismiss('cancel');
     };
 })
+
+.controller('DetailModalCtrl', function ($scope, $uibModalInstance, item){
+    $scope.item = item;
+    $scope.closeModal = function() {
+        $uibModalInstance.dismiss('cancel');
+    };
+})
+
+.controller('StockModalCtrl', function ($rootScope, $scope, $uibModalInstance, stock){
+    $scope.sortProperty = 'name';
+    $scope.reverseSort = false;
+
+    $scope.sortBy = function(name) {
+        $scope.reverseSort = ($scope.sortProperty === name) ? !$scope.reverseSort : false;
+        $scope.sortProperty = name;
+    };
+    $scope.selectItem = function(item) {
+        $rootScope.$broadcast('addItemToList', item);
+        $uibModalInstance.dismiss('cancel');
+    };
+    $scope.closeModal = function() {
+        $uibModalInstance.dismiss('cancel');
+    };
+})
