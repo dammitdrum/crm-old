@@ -115,7 +115,7 @@
 					<span 
             class="btn btn-danger btn-sm pull-right remove_butt" 
             ng-click="removeItem(item)" 
-            ng-if="sale.state==='new'">
+            ng-if="!editMode||sale.state==='new'">
             <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
           </span>
 				</td>
@@ -145,7 +145,7 @@
       Если необходимо внести изменения в продажу, то переведите ее в статус "Новой", сохраните и затем редактируйте.
   </div>
     <button 
-      class="btn btn-danger " 
+      class="btn btn-danger btn-lg pull-right" 
       ng-click="removeSale(sale)" 
       ng-if="editMode&&sale.state==='canceled'">
         Удалить <span class="glyphicon glyphicon-trash" aria-hidden="true"></span>
@@ -165,5 +165,15 @@
       ng-disabled="form.$invalid">
         Сохранить <span class="glyphicon glyphicon-cloud-upload" aria-hidden="true"></span>
     </button>
+    <a href="#/sales" 
+      class="btn btn-lg btn-default pull-left"
+      ng-if="editMode&&sale.state!=='closed'&&sale.state!=='canceled'" >
+        Отмена
+    </a>
+    <a href="#/sales"
+      class="btn btn-lg btn-default pull-left"
+      ng-if="sale.state==='closed'||sale.state==='canceled'" >
+        <span class="glyphicon glyphicon-arrow-left" aria-hidden="true"></span> Назад
+    </a>
 </form>
 <div class="air"></div>

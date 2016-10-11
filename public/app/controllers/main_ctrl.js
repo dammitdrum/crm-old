@@ -53,7 +53,7 @@ angular.module('myApp.main_ctrl', [])
 
     // Delete API
     $rootScope.removeItem = function(item) {
-        deleteWorker(item,'/items/delete/',$rootScope.items,'updateCategories');
+        deleteWorker(item,'/stock/delete/',$rootScope.stock,'updateCategories');
     };
     $rootScope.removeSale = function(sale) {
         deleteWorker(sale,'/sales/delete/',$rootScope.sales,'updateState','/sales');
@@ -79,14 +79,20 @@ angular.module('myApp.main_ctrl', [])
     };
 
     // common methods
-    $scope.openDetailItemModal = function(item) {
+    $scope.openDetailItemModal = function(inItem) {
+        var res = {};
+        angular.forEach($rootScope.stock, function(item,i) {
+            if (inItem._id === item._id) {
+                res = item;
+            }
+        });
         var modalInstance = $uibModal.open({
             templateUrl: PATH_STOCK+'detail_modal.html',
             controller: 'DetailModalCtrl',
             size: 'lg',
             resolve: {
                 item: function() {
-                    return item;
+                    return res;
                 }
             }
         });
