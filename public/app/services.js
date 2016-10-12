@@ -57,6 +57,7 @@ angular.module('myApp.services', [])
         $http.post('/auth').then(function(res) {
             if (res.data === 'noAuth') {
                 $rootScope.user = {};
+                $rootScope.loadingView = false;
             } else {
                 $rootScope.auth = true;
                 $rootScope.user = res.data.user;

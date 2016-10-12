@@ -7,7 +7,6 @@ angular.module('myApp.user_ctrl', [])
 		 $http.post('/logout').then(function(res) {
 		 	$rootScope.auth = false;
             $rootScope.user = {};
-		 	//$location.path('/user');
 		 })
 	};
 })
