@@ -97,7 +97,6 @@ function hash(text) {
 
 app.post('/auth', function(req, res, next) {
     if (req.session.user) {
-        console.log(req.session);
         return res.send({ status: 'OK', user:req.session.user });
     } else {
         return res.send('noAuth');

@@ -19,93 +19,81 @@ var myApp = angular.module('myApp', [
 
 myApp.config(function($routeProvider) {
 
-	$routeProvider.when('/stock', {
-		templateUrl: 'app/views/stock/stock.html', 
-		controller: 'StockCtrl',
-		resolve: {
+	var routes = [
+		{
+			url: "/stock",
+			config: {
+				templateUrl: "app/views/stock/stock.html",
+				controller: "StockCtrl"
+			}
+		},
+		{
+			url: "/sales",
+			config: {
+				templateUrl: "app/views/sales/sales.html",
+				controller: "SalesCtrl"
+			}
+		},
+		{
+			url: "/sales/create",
+			config: {
+				templateUrl: "app/views/sales/sale_detail.html",
+				controller: "SaleDetailCtrl"
+			}
+		},
+		{
+			url: "/sales/edit/:number",
+			config: {
+				templateUrl: "app/views/sales/sale_detail.html",
+				controller: "SaleDetailCtrl"
+			}
+		},
+		{
+			url: "/orders",
+			config: {
+				templateUrl: "app/views/orders/orders.html",
+				controller: "OrdersCtrl"
+			}
+		},
+		{
+			url: "/orders/create",
+			config: {
+				templateUrl: "app/views/orders/order_detail.html",
+				controller: "OrderDetailCtrl"
+			}
+		},
+		{
+			url: "/orders/edit/:number",
+			config: {
+				templateUrl: "app/views/orders/order_detail.html",
+				controller: "OrderDetailCtrl"
+			}
+		},
+		{
+			url: "/partners",
+			config: {
+				templateUrl: "app/views/partners/partners.html",
+				controller: "PartnersCtrl"
+			}
+		},
+		{
+			url: "/user",
+			config: {
+				templateUrl: "app/views/user/user.html",
+				controller: "UserCtrl"
+			}
+		},
+	];
+	angular.forEach(routes, function (route) {
+		var url = route.url;
+		var routeConfig = route.config;
+
+		routeConfig.resolve = angular.extend(routeConfig.resolve || {}, {
 			Items: function(loadData) {
 				return loadData.getItems();
 			},
-		}
-	});
-	$routeProvider.when('/sales', {
-		templateUrl: 'app/views/sales/sales.html', 
-		controller: 'SalesCtrl',
-		resolve: {
 			Sales: function(loadData) {
 				return loadData.getSales();
-			}
-		}
-	});
-	$routeProvider.when('/sales/create', {
-		templateUrl: 'app/views/sales/sale_detail.html', 
-		controller: 'SaleDetailCtrl',
-		resolve: {
-			Items: function(loadData) {
-				return loadData.getItems();
-			},
-			Sales: function(loadData) {
-				return loadData.getSales();
-			},
-			Partners: function(loadData) {
-				return loadData.getPartners();
-			}
-		}
-	});
-	$routeProvider.when('/sales/edit/:number', {
-		templateUrl: 'app/views/sales/sale_detail.html', 
-		controller: 'SaleDetailCtrl',
-		resolve: {
-			Items: function(loadData) {
-				return loadData.getItems();
-			},
-			Sales: function(loadData) {
-				return loadData.getSales();
-			},
-			Partners: function(loadData) {
-				return loadData.getPartners();
-			}
-		}
-	});
-	$routeProvider.when('/partners', {
-		templateUrl: 'app/views/partners/partners.html', 
-		controller: 'PartnersCtrl',
-		resolve: {
-			Partners: function(loadData) {
-				return loadData.getPartners();
-			}
-		}
-	});
-	$routeProvider.when('/orders', {
-		templateUrl: 'app/views/orders/orders.html', 
-		controller: 'OrdersCtrl',
-		resolve: {
-			Orders: function(loadData) {
-				return loadData.getOrders();
-			}
-		}
-	});
-	$routeProvider.when('/orders/create', {
-		templateUrl: 'app/views/orders/order_detail.html', 
-		controller: 'OrderDetailCtrl',
-		resolve: {
-			Items: function(loadData) {
-				return loadData.getItems();
-			},
-			Orders: function(loadData) {
-				return loadData.getOrders();
-			},
-			Partners: function(loadData) {
-				return loadData.getPartners();
-			}
-		}
-	});
-	$routeProvider.when('/orders/edit/:number', {
-		templateUrl: 'app/views/orders/order_detail.html', 
-		controller: 'OrderDetailCtrl',
-		resolve: {
-			Items: function(loadData) {
-				return loadData.getItems();
 			},
 			Orders: function(loadData) {
 				return loadData.getOrders();
@@ -113,44 +101,25 @@ myApp.config(function($routeProvider) {
 			Partners: function(loadData) {
 				return loadData.getPartners();
 			}
-		}
-	});
-	$routeProvider.when('/user', {
-		templateUrl: 'app/views/user/user.html', 
-		controller: 'UserCtrl',
+		});
+		$routeProvider.when(url, routeConfig);
 	});
     $routeProvider.otherwise({
     	redirectTo: '/stock'
     });
 });
 
-myApp.run(function ($rootScope, $http, $location, $route) {
+myApp.run(function ($rootScope,checkAuth) {
 	$rootScope.$on('$routeChangeStart', function(e, curr, prev) {
-		
 		if (!$rootScope.auth) {
-			if ($location.path()) $rootScope.startRoute = $location.path();
-			$rootScope.loadingAuthView = true;
 			e.preventDefault();
-			$http.post('/auth').then(function(res) {
-	            if (res.data === 'noAuth') {
-	                $rootScope.user = {};
-	            } else {
-	                $rootScope.auth = true;
-	                $rootScope.user = res.data.user;
-	                $location.path($rootScope.startRoute);
-	                $route.reload();
-	            }
-	            $rootScope.loadingAuthView = false;
-	        });
+			checkAuth();
 		}
 	    if (curr.$$route && curr.$$route.resolve) {
-			// Show a loading message until promises aren't resolved
 			$rootScope.loadingView = true;
 		}
 	});
 	$rootScope.$on('$routeChangeSuccess', function(e, curr, prev) {
-		
-		// Hide loading message
 		$rootScope.loadingView = false;
 	});
 });

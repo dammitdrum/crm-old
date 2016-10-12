@@ -50,6 +50,23 @@ angular.module('myApp.services', [])
     }
     return db;
 })
+.factory('checkAuth',function ($rootScope,$http,$location,$route) {
+    return function() {
+        if ($location.path()) $rootScope.startRoute = $location.path();
+        $rootScope.loadingAuthView = true;
+        $http.post('/auth').then(function(res) {
+            if (res.data === 'noAuth') {
+                $rootScope.user = {};
+            } else {
+                $rootScope.auth = true;
+                $rootScope.user = res.data.user;
+                $location.path($rootScope.startRoute);
+                $route.reload();
+            }
+            $rootScope.loadingAuthView = false;
+        });
+    };
+})
 .factory('stockCore',function ($rootScope) {
     return function (data,type,oldState,state) {
         angular.forEach(data,function(j) {
@@ -128,9 +145,5 @@ angular.module('myApp.services', [])
                 }
             }
         };
-    };
-}).factory('Auth',function ($rootscope,$http,$location) {
-    return function(user) {
-        
     };
 })
