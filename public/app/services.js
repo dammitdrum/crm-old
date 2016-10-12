@@ -1,70 +1,61 @@
 'use strict';
 
 angular.module('myApp.services', [])
-.factory('loadData', function ($rootScope, $http) {
-    var db = {
-        getItems: function() {
-            if ($rootScope.stock) return;
-            var promise = $http({
-                method: 'GET',
-                url: '/stock/read'
-            });
-            promise.success(function(data) {
-                return data;
-            });
-            return promise;
-        },
-        getSales: function() {
-            if ($rootScope.sales) return;
-            var promise = $http({
-                method: 'GET',
-                url: '/sales/read'
-            });
-            promise.success(function(data) {
-                return data;
-            });
-            return promise;
-        },
-        getOrders: function() {
-            if ($rootScope.orders) return;
-            var promise = $http({
-                method: 'GET',
-                url: '/orders/read'
-            });
-            promise.success(function(data) {
-                return data;
-            });
-            return promise;
-        },
-        getPartners: function() {
-            if ($rootScope.partners) return;
-            var promise = $http({
-                method: 'GET',
-                url: '/partners/read'
-            });
-            promise.success(function(data) {
-                return data;
-            });
-            return promise;
-        }
-    }
-    return db;
-})
 .factory('checkAuth',function ($rootScope,$http,$location,$route) {
     return function() {
         if ($location.path()) $rootScope.startRoute = $location.path();
         $rootScope.loadingAuthView = true;
         $http.post('/auth').then(function(res) {
             if (res.data === 'noAuth') {
-                $rootScope.user = {};
+                $rootScope.User = {};
                 $rootScope.loadingView = false;
             } else {
                 $rootScope.auth = true;
-                $rootScope.user = res.data.user;
+                $rootScope.User = res.data.user;
                 $location.path($rootScope.startRoute);
                 $route.reload();
             }
             $rootScope.loadingAuthView = false;
+        });
+    };
+})
+.factory('loadData',function ($rootScope,$http,$location,$route) {
+    return function() {
+        if ($location.path()) $rootScope.startRoute = $location.path();
+        $rootScope.loadingView = true;
+        $http({
+            method: 'GET',
+            url: '/stock/read'
+        }).then(function(data) {
+            $rootScope.stock = data.data;
+            $http({
+                method: 'GET',
+                url: '/sales/read'
+            }).then(function(data) {
+                $rootScope.sales = data.data;
+                $http({
+                    method: 'GET',
+                    url: '/orders/read'
+                }).then(function(data) {
+                    $rootScope.orders = data.data;
+                    $http({
+                        method: 'GET',
+                        url: '/partners/read'
+                    }).then(function(data) {
+                        $rootScope.partners = data.data;
+                        $http({
+                            method: 'GET',
+                            url: '/users/read'
+                        }).then(function(data) {
+                            $rootScope.users = data.data;
+                            $rootScope.loadingView = false;
+                            $rootScope.dataLoaded = true;
+                            $location.path($rootScope.startRoute);
+                            $route.reload();
+                        })
+                    })
+                })
+            })
         });
     };
 })

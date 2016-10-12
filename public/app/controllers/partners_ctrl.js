@@ -2,11 +2,8 @@
 
 angular.module('myApp.partners_ctrl', [])
 
-.controller('PartnersCtrl', function ($rootScope, $scope, $uibModal, Partners, PATH_PARTNERS){
+.controller('PartnersCtrl', function ($rootScope, $scope, $uibModal, PATH_PARTNERS){
 
-    if (Partners) {
-        $rootScope.partners = Partners.data;
-    }
     $scope.sortProperty = 'number';
     $scope.reverseSort = false;
     $scope.currType = '';

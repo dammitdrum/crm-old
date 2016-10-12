@@ -1,0 +1,42 @@
+<form name="form" class="modal_form" novalidate>
+<div class="modal-header">
+  <button class="close" ng-click="closeModal()" aria-label="Close"><span aria-hidden="true">×</span></button>
+    <h3 class="modal-title" ng-if="mode==='edit'">Редактирование пользователя</h3>
+    <h3 class="modal-title" ng-if="mode==='create'">Создание нового пользователя</h3>
+</div>
+<div class="modal-body" id="modal-body">
+    <p>Имя пользователя</p>
+    <input type="text" ng-model="newUser.name" name="name" required>
+    <p ng-show="form.name.$invalid && form.name.$touched" class="text-danger">
+        <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span> Необходимо имя пользователя
+    </p>
+    <span ng-show="form.name.$valid && form.name.$touched" class="glyphicon text-success glyphicon-ok-sign" aria-hidden="true"></span>
+    <p>Логин</p>
+    <input type="text" ng-model="newUser.login" name="login" ng-pattern="/^[a-zA-Z]+$/" required>
+    <p ng-show="form.login.$invalid && form.login.$touched" class="text-danger">
+        <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span> Необходим логин(латинскими)
+    </p>
+    <span ng-show="form.login.$valid && form.login.$touched" class="glyphicon text-success glyphicon-ok-sign" aria-hidden="true"></span>
+    <div ng-if="mode==='create'">
+    <p>Пароль для пользователя</p>
+    <input type="text" ng-model="newUser.password" name="password" ng-pattern="/^[a-zA-Z]+$/" required>
+    <p ng-show="form.password.$invalid && form.password.$touched" class="text-danger">
+        <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span> Необходим пароль(латинскими)
+    </p>
+    <span ng-show="form.password.$valid && form.password.$touched" class="glyphicon text-success glyphicon-ok-sign" aria-hidden="true"></span>
+    </div>
+    <p>Уровень доступа</p>
+    <label>
+      <input type="radio" name="access" ng-model="newUser.access" value="manager">
+      Менеджер
+    </label>
+    <label>
+      <input type="radio" name="access" ng-model="newUser.access" value="stock">
+      Склад
+    </label>
+</div>
+<div class="modal-footer">
+    <button class="btn btn-warning" type="button" ng-if="mode==='edit'" ng-click="save(newUser)" ng-disabled="form.$invalid">Сохранить пользователя <span class="glyphicon glyphicon-user" aria-hidden="true"></span></button>
+    <button class="btn btn-success" type="submit" ng-if="mode=='create'" ng-click="create(newUser)" ng-disabled="form.$invalid">Создать пользователя <span class="glyphicon glyphicon-user" aria-hidden="true"></span></button>
+</div>
+</form>

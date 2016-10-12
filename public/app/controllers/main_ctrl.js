@@ -3,6 +3,7 @@
 angular.module('myApp.main_ctrl', [])
 .constant('PATH_STOCK','app/views/stock/')
 .constant('PATH_PARTNERS','app/views/partners/')
+.constant('PATH_USER','app/views/user/')
 
 .controller('MainCtrl', function ($rootScope, $scope, $http, $uibModal, $location, PATH_STOCK, PATH_PARTNERS){
     
@@ -19,11 +20,14 @@ angular.module('myApp.main_ctrl', [])
     $rootScope.createPartner = function(partner,modal) {
         createWorker(partner,'/partners/create',$rootScope.partners,'updateTypes',modal);
     };
+    $rootScope.createUser = function(user,modal) {
+        createWorker(user,'/users/create',$rootScope.users,null,modal);
+    };
     function createWorker(item,url,data,str,modal) {
         $http.post(url,item).then(function(res) {
             if (modal) modal('cancel');
             data.push(res.data.item);
-            $rootScope.$broadcast(str,data);
+            if (str !== null) $rootScope.$broadcast(str,data);
         });
     };
 
@@ -40,6 +44,9 @@ angular.module('myApp.main_ctrl', [])
     $rootScope.savePartner = function(partner,modal) {
         saveWorker(partner,'/partners/update/',$rootScope.partners,'updateTypes',modal);
     };
+    $rootScope.saveUser = function(user,modal) {
+        saveWorker(user,'/users/update/',$rootScope.users,null,modal);
+    };
 
     function saveWorker(item,url,data,str,modal) {
         $http.put(url+item._id,item).then(function(res) {
@@ -47,7 +54,7 @@ angular.module('myApp.main_ctrl', [])
                 item[key] = res.data.item[key];
             }
             if (modal) modal('cancel');
-            $rootScope.$broadcast(str,data);
+            if (str !== null) $rootScope.$broadcast(str,data);
         });
     };
 
@@ -64,6 +71,9 @@ angular.module('myApp.main_ctrl', [])
     $rootScope.removePartner = function(partner) {
         deleteWorker(partner,'/partners/delete/',$rootScope.partners,'updateTypes');
     };
+    $rootScope.removeUser = function(user,modal) {
+        saveWorker(user,'/users/delete/',$rootScope.users,null,modal);
+    };
 
     function deleteWorker(item,url,data,str,redirect) {
         var id = item._id;
@@ -74,7 +84,7 @@ angular.module('myApp.main_ctrl', [])
                 }
             });
             if(redirect) $location.path(redirect);
-            $rootScope.$broadcast(str,data);
+            if (str !== null) $rootScope.$broadcast(str,data);
         });
     };
 

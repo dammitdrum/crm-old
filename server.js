@@ -42,7 +42,7 @@ var Schema = mongoose.Schema;
 
 var User = new Schema({
     login: { type: String, unique: true, required: true},
-    name: { type: String},
+    name: { type: String, required: true},
     password: { type: String, required: true},
     access: { type: String, required: true}
 })
@@ -163,6 +163,9 @@ app.get('/sales/read', function (req, res) {
 app.get('/orders/read', function (req, res) {
     readHandler(OrderModel,req,res);
 });
+app.get('/users/read', function (req, res) {
+    readHandler(UserModel,req,res);
+});
 
 function readHandler(Model,req,res) {
     return Model.find(function (err,items) {
@@ -220,6 +223,16 @@ app.post('/partners/create', function (req, res) {
 
     createHandler(partner,res,'partner');
 });
+app.post('/users/create', function (req, res) {
+    var user = new UserModel({
+        login: req.body.login,
+        name: req.body.name,
+        password: hash(req.body.password),
+        access: req.body.access
+    });
+
+    createHandler(user,res,'user');
+});
 
 function createHandler(item,res,str) {
     item.save(function (err) {
@@ -246,6 +259,9 @@ app.put('/orders/update/:id', function (req, res){
 });
 app.put('/partners/update/:id', function (req, res){
     updateHandler(PartnerModel,req,res,'partner');
+});
+app.put('/users/update/:id', function (req, res){
+    updateHandler(UserModel,req,res,'user');
 });
 
 function updateHandler(Model,req,res,str) {
@@ -282,6 +298,9 @@ app.delete('/orders/delete/:id', function (req, res){
 });
 app.delete('/partners/delete/:id', function (req, res){
     deleteHandler(PartnerModel,req,res,'partner');
+});
+app.delete('/users/delete/:id', function (req, res){
+    deleteHandler(UserModel,req,res,'user');
 });
 
 function deleteHandler(Model,req,res,str) {

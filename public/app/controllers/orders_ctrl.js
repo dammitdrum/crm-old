@@ -2,10 +2,7 @@
 
 angular.module('myApp.orders_ctrl', [])
 
-.controller('OrdersCtrl', function ($rootScope, $scope, $location, Orders){
-    if (Orders) {
-        $rootScope.orders = Orders.data;
-    }
+.controller('OrdersCtrl', function ($rootScope, $scope, $location){
 
     $scope.sortProperty = 'date';
     $scope.reverseSort = false;
@@ -29,21 +26,12 @@ angular.module('myApp.orders_ctrl', [])
     };
 })
 
-.controller('OrderDetailCtrl', function ($rootScope, $scope, $uibModal, $location, $routeParams, Orders, Items, Partners, stockCore, PATH_STOCK){
+.controller('OrderDetailCtrl', function ($rootScope, $scope, $uibModal, $location, $routeParams, stockCore, PATH_STOCK){
 
 	$scope.order = {};
 	$scope.itemsList = [];
     $scope.editMode = false;
 
-    if (Items) {
-        $rootScope.stock = Items.data;
-    }
-    if (Orders) {
-        $rootScope.orders = Orders.data;
-    }
-    if (Partners) {
-        $rootScope.partners = Partners.data;
-    }
     if ($routeParams.number) {
         $scope.editMode = true;
         angular.forEach($rootScope.orders, function(order) {

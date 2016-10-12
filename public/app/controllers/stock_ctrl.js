@@ -2,11 +2,11 @@
 
 angular.module('myApp.stock_ctrl', [])
 
-.controller('StockCtrl', function ($rootScope, $scope, $uibModal, Items, PATH_STOCK){
+.controller('StockCtrl', function ($rootScope, $scope, $uibModal, PATH_STOCK){
 
-    if (Items) {
+    /*if (Items) {
         $rootScope.stock = Items.data;
-    }
+    }*/
     $scope.sortProperty = 'name';
     $scope.reverseSort = false;
     $scope.currCategory = '';

@@ -1,12 +1,12 @@
 <nav class="navbar navbar-default navbar-static-top">
- 	<div class="container" ng-if="user.name">
+ 	<div class="container" ng-if="User.name">
 	    <ul class="nav navbar-nav" > 
 	    	<li ng-repeat="item in menu.items" ng-class="item.className">
 	    		<a ng-click="menu.setActive(item)" href="#{{item.url}}">{{item.name}}</a>
 	    	</li> 
 	    </ul>
 	    <ul class="nav navbar-nav navbar-right">
-	    	<li ng-class="{active: userClass}"><a href="#/user">{{user.name?user.name:'Вход'}}</a></li>
+	    	<li ng-class="{active: userClass}"><a href="#/user">{{User.name?User.name:'Вход'}}</a></li>
 	    <ul>
  	</div>
 </nav>

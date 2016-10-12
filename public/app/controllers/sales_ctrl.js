@@ -2,10 +2,7 @@
 
 angular.module('myApp.sales_ctrl', [])
 
-.controller('SalesCtrl', function ($rootScope, $scope, $location, Sales){
-    if (Sales) {
-        $rootScope.sales = Sales.data;
-    }
+.controller('SalesCtrl', function ($rootScope, $scope, $location){
 
     $scope.sortProperty = 'date';
     $scope.reverseSort = false;
@@ -29,7 +26,7 @@ angular.module('myApp.sales_ctrl', [])
     };
 })
 
-.controller('SaleDetailCtrl', function ($rootScope, $scope, $uibModal, $location, $routeParams, Sales, Items, Partners, stockCore, PATH_STOCK){
+.controller('SaleDetailCtrl', function ($rootScope, $scope, $uibModal, $location, $routeParams, stockCore, PATH_STOCK){
     $scope.managers = [
         {
             "name":"Алексей Пучков"
@@ -46,15 +43,6 @@ angular.module('myApp.sales_ctrl', [])
     $scope.editMode = false;
     $scope.oldPrices = false;
 
-    if (Items) {
-        $rootScope.stock = Items.data;
-    }
-    if (Sales) {
-        $rootScope.sales = Sales.data;
-    }
-    if (Partners) {
-        $rootScope.partners = Partners.data;
-    }
     if ($routeParams.number) {
         $scope.editMode = true;
         angular.forEach($rootScope.sales, function(sale) {

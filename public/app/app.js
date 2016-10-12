@@ -85,35 +85,22 @@ myApp.config(function($routeProvider) {
 		},
 	];
 	angular.forEach(routes, function (route) {
-		var url = route.url;
-		var routeConfig = route.config;
-
-		routeConfig.resolve = angular.extend(routeConfig.resolve || {}, {
-			Items: function(loadData) {
-				return loadData.getItems();
-			},
-			Sales: function(loadData) {
-				return loadData.getSales();
-			},
-			Orders: function(loadData) {
-				return loadData.getOrders();
-			},
-			Partners: function(loadData) {
-				return loadData.getPartners();
-			}
-		});
-		$routeProvider.when(url, routeConfig);
+		$routeProvider.when(route.url, route.config);
 	});
     $routeProvider.otherwise({
     	redirectTo: '/stock'
     });
 });
 
-myApp.run(function ($rootScope,checkAuth) {
+myApp.run(function ($rootScope,checkAuth,loadData) {
 	$rootScope.$on('$routeChangeStart', function(e, curr, prev) {
 		if (!$rootScope.auth) {
 			e.preventDefault();
 			checkAuth();
+		}
+		if (!$rootScope.dataLoaded) {
+			e.preventDefault();
+			loadData();
 		}
 	    if (curr.$$route && curr.$$route.resolve) {
 			$rootScope.loadingView = true;

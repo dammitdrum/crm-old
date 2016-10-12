@@ -114,6 +114,12 @@ td[ng-click],th[ng-click] {
 tr[ng-click] td {
   cursor: pointer;
 }
+.panel_user {
+    width: 300px;
+}
+
+
+
 .loading {
     position: fixed;
     z-index: 1002;
