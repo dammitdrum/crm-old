@@ -93,6 +93,10 @@ myApp.config(function($routeProvider) {
 });
 
 myApp.run(function ($rootScope,checkAuth,loadData) {
+	var deniedRoutes = {
+		'manager': '/orders/create',
+		'stock': '/sales/create'
+	};
 	$rootScope.$on('$routeChangeStart', function(e, curr, prev) {
 		if (!$rootScope.auth) {
 			e.preventDefault();
@@ -102,9 +106,15 @@ myApp.run(function ($rootScope,checkAuth,loadData) {
 			e.preventDefault();
 			loadData();
 		}
-	    if (curr.$$route && curr.$$route.resolve) {
-			$rootScope.loadingView = true;
-		}
+	    if (curr.$$route) {
+	    	for (var key in deniedRoutes) {
+				if (curr.$$route.originalPath === deniedRoutes[key] && $rootScope.auth) {
+					if ($rootScope.User.access == key) {
+						e.preventDefault();
+					}
+				}
+			}
+	    }
 	});
 	$rootScope.$on('$routeChangeSuccess', function(e, curr, prev) {
 		$rootScope.loadingView = false;

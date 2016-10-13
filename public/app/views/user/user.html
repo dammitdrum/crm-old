@@ -1,7 +1,13 @@
 <div class="row" ng-if="auth">
 	<div class="col-sm-8 col-sm-offset-2">
 		<h2><span class="glyphicon glyphicon-user" aria-hidden="true"></span> Пользователь</h2>
-		<strong>{{User.name}} &nbsp;&nbsp;&nbsp;&nbsp;</strong>
+		<p>Имя пользователя:<strong> {{User.name}}</strong></p>
+		<p></p>
+		<p>Логин пользователя:<strong> {{User.login}}</strong></p>
+		
+		<p></p>
+		<p>Уровень доступа: <strong> {{User.access}}</strong> </p>
+		<p></p>
 		<button class="btn btn-info" ng-click="logout()">Выйти</button>
 		<hr>
 		<div ng-if="User.access === 'admin'">

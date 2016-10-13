@@ -34,13 +34,14 @@ angular.module('myApp.sales_ctrl', [])
         }
     })
     $scope.sale = {};
-    $scope.sale.manager = $rootScope.User.name;
+    $scope.sale.manager = $rootScope.User;
     $scope.itemsList = [];
     $scope.editMode = false;
     $scope.oldPrices = false;
 
-    if ($routeParams.number) {
+    if ($routeParams.number) {  //edit mode
         $scope.editMode = true;
+        $scope.accessToEdit = false;
         angular.forEach($rootScope.sales, function(sale) {
             if (sale.number == $routeParams.number) {
                 $scope.sale = angular.copy(sale);
@@ -48,6 +49,10 @@ angular.module('myApp.sales_ctrl', [])
                 return;
             }
         });
+        if ($rootScope.User.access === 'admin' || 
+                $rootScope.User.login === $scope.sale.manager.login) {
+            $scope.accessToEdit = true;
+        }
         angular.forEach($scope.sale.items, function(saleItem) {
             angular.forEach($rootScope.stock, function(item) {
                 if (item._id === saleItem.id) {
@@ -105,9 +110,9 @@ angular.module('myApp.sales_ctrl', [])
         });
         $scope.$emit('calculate');
     };
-    $scope.selectManager = function($event,name) {
+    $scope.selectManager = function($event,manager) {
         $event.preventDefault();
-        $scope.sale.manager = name;
+        $scope.sale.manager = manager;
     };
     $scope.refreshPrices = function() {
         angular.forEach($scope.itemsList, function(saleItem) {

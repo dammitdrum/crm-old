@@ -1,7 +1,7 @@
 
 <h3 ng-if="!editMode">Создание новой продажи</h3>
 <h3 ng-if="editMode&&sale.state!=='closed'&&sale.state!=='canceled'">
-  Редактирование продажи №{{sale.number}} 
+  {{accessToEdit?'Редактирование продажи':'Продажа'}} №{{sale.number}} 
 </h3>
 <h3 ng-if="sale.state==='closed'">
   <span class="glyphicon glyphicon-lock" aria-hidden="true"></span>
@@ -61,7 +61,7 @@
           Выберите менеджера <span class="caret"></span>
       </button>
       <ul class="dropdown-menu" uib-dropdown-menu role="menu" aria-labelledby="single-button">
-        <li role="menuitem" ng-repeat="manager in managers" ng-click="selectManager($event,manager.name)">
+        <li role="menuitem" ng-repeat="manager in managers" ng-click="selectManager($event,manager)">
           <a href="#">{{manager.name}}</a>
         </li>
       </ul>

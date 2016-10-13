@@ -33,8 +33,8 @@
 			<th ng-class="{dropup: reverseSort}" ng-click="sortBy('sum')">
 				Сумма<span class="caret" ng-class="{visible: sortProperty === 'sum'}"></span>
 			</th>
-			<th ng-class="{dropup: reverseSort}" ng-click="sortBy('manager')">
-				Менеджер<span class="caret" ng-class="{visible: sortProperty === 'manager'}"></span>
+			<th ng-class="{dropup: reverseSort}" ng-click="sortBy('manager.name')">
+				Менеджер<span class="caret" ng-class="{visible: sortProperty === 'manager.name'}"></span>
 			</th>
 		</tr>
 	</thead>
@@ -58,7 +58,7 @@
 			<td>{{sale.customer.name}}</td>
 			<td>{{sale.items.length}} позиции</td>
 			<td>{{sale.sum | currency}}</td>
-			<td>{{sale.manager}}</td>
+			<td>{{sale.manager.name}}</td>
 		</tr>
 		<tr ng-if="results.length === 0"><td colspan="7" class="text-center"><strong>Нет продаж</strong></td></tr>
 	</tbody>
