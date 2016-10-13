@@ -23,6 +23,7 @@ angular.module('myApp.services', [])
     return function() {
         if ($location.path()) $rootScope.startRoute = $location.path();
         $rootScope.loadingView = true;
+
         $http({
             method: 'GET',
             url: '/stock/read'

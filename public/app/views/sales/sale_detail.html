@@ -38,7 +38,7 @@
 	</p>
 	<span ng-show="form.number.$valid && form.number.$touched" class="glyphicon text-success glyphicon-ok-sign" aria-hidden="true"></span>
 	<div class="air"></div>
-  <div class="pull-left">
+  <div class="pull-left clearfix">
     <button 
       class="btn btn-default" 
       ng-click="openPartnerModal(sale)" 
@@ -49,10 +49,9 @@
     <input type="hidden" name="customer" ng-model="sale.customer.fullname" required>
     <strong>&nbsp;&nbsp; {{sale.customer?sale.customer.fullname:'Не выбран покупатель'}}</strong>
   </div>
-	<div class="pull-right clearfix">
-   <input type="hidden" name="customer" ng-model="sale.manager" required>
+	<div ng-if="User.access==='admin'" class="pull-right clearfix">
   
-    <strong>{{sale.manager?sale.manager:'Не выбран менеджер'}} &nbsp;&nbsp;</strong> 
+    <strong>{{sale.manager?sale.manager:'Администратор'}} &nbsp;&nbsp;</strong> 
     <div class="btn-group" uib-dropdown>
       <button 
         id="single-button" 
@@ -146,8 +145,8 @@
   </div>
     <button 
       class="btn btn-danger btn-lg pull-right" 
-      ng-click="removeSale(sale)" 
-      ng-if="editMode&&sale.state==='canceled'">
+      ng-click="removeSale(sale)"
+      ng-if="User.access==='admin'&&sale.state==='canceled'">
         Удалить <span class="glyphicon glyphicon-trash" aria-hidden="true"></span>
       </button>
 

@@ -98,7 +98,7 @@ myApp.run(function ($rootScope,checkAuth,loadData) {
 			e.preventDefault();
 			checkAuth();
 		}
-		if (!$rootScope.dataLoaded) {
+		if (!$rootScope.dataLoaded&&$rootScope.auth) {
 			e.preventDefault();
 			loadData();
 		}

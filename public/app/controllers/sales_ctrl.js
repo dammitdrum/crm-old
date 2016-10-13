@@ -27,18 +27,14 @@ angular.module('myApp.sales_ctrl', [])
 })
 
 .controller('SaleDetailCtrl', function ($rootScope, $scope, $uibModal, $location, $routeParams, stockCore, PATH_STOCK){
-    $scope.managers = [
-        {
-            "name":"Алексей Пучков"
-        },
-        {
-            "name":"Валентина Кольцова"
-        },
-        {
-            "name":"Гриша Матюшкин"
+    $scope.managers = [];
+    angular.forEach($rootScope.users,function(user) {
+        if (user.access === 'manager') {
+            $scope.managers.push(user);
         }
-    ];
+    })
     $scope.sale = {};
+    $scope.sale.manager = $rootScope.User.name;
     $scope.itemsList = [];
     $scope.editMode = false;
     $scope.oldPrices = false;

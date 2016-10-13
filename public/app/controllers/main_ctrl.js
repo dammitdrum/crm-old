@@ -72,7 +72,7 @@ angular.module('myApp.main_ctrl', [])
         deleteWorker(partner,'/partners/delete/',$rootScope.partners,'updateTypes');
     };
     $rootScope.removeUser = function(user,modal) {
-        saveWorker(user,'/users/delete/',$rootScope.users,null,modal);
+        deleteWorker(user,'/users/delete/',$rootScope.users,null,modal);
     };
 
     function deleteWorker(item,url,data,str,redirect) {

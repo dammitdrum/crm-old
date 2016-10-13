@@ -123,25 +123,6 @@ app.post('/login', function(req, res, next) {
  
 });
  
-app.post('/user/create', function(req, res) {
-    var user = new UserModel({
-        login: req.body.login,
-        name: req.body.name,
-        password: hash(req.body.password),
-        access: req.body.access
-    });
-    user.save(function(err) {
-        if (!err) {
-            console.log("User created");
-            return res.send({ status: 'OK', user:user });
-        } else {
-            if (err.code == 11000){
-                res.status(500).send("This user already exist")
-            };
-        }
-    });
-});
- 
 app.post('/logout', function(req, res, next) {
     if (req.session.user) {
         delete req.session.user;

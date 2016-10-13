@@ -10,7 +10,7 @@
 </ul>
 <div class="stock_controls">
 	<input type="text" placeholder="Искать по номеру" class="search_field" ng-model="search.number">
-	<a href="#orders/create" class="btn btn-success add_butt pull-right" >
+	<a href="#orders/create" class="btn btn-success add_butt pull-right" ng-if="User.access!=='manager'">
 		<span class="glyphicon glyphicon-plus" aria-hidden="true"></span> Создать закупку
 	</a>
 </div>
