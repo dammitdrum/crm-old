@@ -11,6 +11,10 @@ angular.module('myApp.stock_ctrl', [])
     $scope.reverseSort = false;
     $scope.currCategory = '';
 
+    if ($rootScope.User.access === 'admin' || $rootScope.User.access === 'stock') {
+        $scope.accessToEdit = true;
+    }
+
     $scope.updateFilter($rootScope.stock,'category');
 
     $scope.$on('updateCategories',function(event,data) {

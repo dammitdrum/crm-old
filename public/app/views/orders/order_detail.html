@@ -1,7 +1,7 @@
 
 <h3 ng-if="!editMode">Создание новой закупки</h3>
 <h3 ng-if="editMode&&order.state!=='closed'&&order.state!=='canceled'">
-  Редактирование закупки №{{order.number}} 
+  {{accessToEdit?'Редактирование закупки':'Закупка'}} №{{order.number}} 
 </h3>
 <h3 ng-if="order.state==='closed'">
   <span class="glyphicon glyphicon-lock" aria-hidden="true"></span>
@@ -13,7 +13,7 @@
 </h3>
 <hr>
 <form name="form" class="modal_form clearfix" novalidate>
-  <div ng-if="editMode&&order.state!=='closed'&&order.state!=='canceled'">
+  <div ng-if="accessToEdit&&order.state!=='closed'&&order.state!=='canceled'">
     <p><strong>Изменить статус закупки</strong></p>
     <div class="btn-group" role="group">
       <button type="button" class="btn btn-sm btn-default" ng-click="setState('new')" ng-class="{active: state === 'new',}">Новая <span class="glyphicon glyphicon-leaf" aria-hidden="true"></span></button>
@@ -23,25 +23,27 @@
     </div>
   </div>
   <div class="air"></div>
-	<p>Номер закупки</p>
-	<input 
-    type="text" 
-    ng-model="order.number" 
-    ng-pattern="/^\d+$/" 
-    name="number" 
-    class="search_field" 
-    required 
-    ng-if="!editMode||order.state==='new'">
-  <h4 ng-if="editMode&&order.state!=='new'"><strong >№{{order.number}}</strong></h4>
-	<p ng-show="form.number.$invalid && form.number.$touched" class="text-danger">
-	    <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span> Необходим номер закупки(только цифры)
-	</p>
-	<span ng-show="form.number.$valid && form.number.$touched" class="glyphicon text-success glyphicon-ok-sign" aria-hidden="true"></span>
+  <div ng-if="!editMode||order.state==='new'&&accessToEdit">
+  	<h4>Номер закупки <strong >№{{order.number}}</strong></h4>
+  	<input 
+      type="text" 
+      ng-model="order.number" 
+      ng-pattern="/^\d+$/" 
+      name="number" 
+      class="search_field" 
+      required>
+  	<p ng-show="form.number.$invalid && form.number.$touched" class="text-danger">
+  	    <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span> Необходим номер закупки(только цифры)
+  	</p>
+  	<span ng-show="form.number.$valid && form.number.$touched" class="glyphicon text-success glyphicon-ok-sign" aria-hidden="true"></span>
+  </div>
 	<div class="air"></div>
-  <div class="pull-left clearfix">
+	<div class="pull-left clearfix">
+    <span ng-if="!accessToEdit&&editMode">Поставщик: </span>
     <button 
       class="btn btn-default" 
       ng-click="openPartnerModal(order)" 
+      ng-if="accessToEdit||!editMode"
       ng-disabled="editMode&&order.state!=='new'">
         Выбрать поставщика 
         <span class="glyphicon glyphicon-menu-hamburger" aria-hidden="true"></span>
@@ -49,8 +51,7 @@
     <input type="hidden" name="supplier" ng-model="order.supplier.fullname" required>
     <strong>&nbsp;&nbsp; {{order.supplier?order.supplier.fullname:'Не выбран поставщик'}}</strong>
   </div>
-	
-    <div class="air"></div>
+  <div class="air"></div>
 	<table class="stock_table table table-hover table-striped table-bordered">
         <thead>
             <tr>
@@ -77,8 +78,8 @@
             ng-pattern="/^[1-9]\d*$/" 
             ng-blur="$emit('calculate')" 
             required 
-            ng-if="!editMode||order.state==='new'">
-            <strong ng-if="editMode&&order.state!=='new'">{{item.price | currency}}</strong>
+            ng-if="!editMode||order.state==='new'&&accessToEdit">
+            <strong ng-if="(editMode&&!accessToEdit)||(accessToEdit&&order.state!=='new')">{{item.price | currency}}</strong>
         </td>
 				<td ng-click="openDetailItemModal(item)">{{item.quantity}}</td>
 				<td ng-click="openDetailItemModal(item)">{{item.debt}}</td>
@@ -91,12 +92,12 @@
             ng-pattern="/^[1-9]\d*$/" 
             ng-blur="$emit('calculate')" 
             required 
-            ng-if="!editMode||order.state==='new'">
-          <strong ng-if="editMode&&order.state!=='new'">{{item.number}}</strong>
+            ng-if="!editMode||order.state==='new'&&accessToEdit">
+          <strong ng-if="(editMode&&!accessToEdit)||(accessToEdit&&order.state!=='new')">{{item.number}}</strong>
 					<span 
             class="btn btn-danger btn-sm pull-right remove_butt" 
             ng-click="removeItem(item)" 
-            ng-if="!editMode||order.state==='new'">
+            ng-if="!editMode||order.state==='new'&&accessToEdit">
             <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
           </span>
 				</td>
@@ -105,7 +106,7 @@
               <td colspan="7" class="tar"><strong>Общая сумма:</strong></td>
               <td><strong>{{order.sum | currency}}</strong></td>
             </tr>
-            <tr class="not_hover" ng-if="!editMode||order.state==='new'">
+            <tr class="not_hover" ng-if="!editMode||order.state==='new'&&accessToEdit">
             	<td colspan="8" class="text-center">
             	<button class="btn btn-default" ng-click="openStockModal(order)">
     						Добавить товар <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
@@ -115,14 +116,14 @@
         </tbody>
     </table>
 	<div class="air"></div>
-  <div class="alert alert-info" ng-if="order.state==='approved'" role="alert"> 
+  <div class="alert alert-info" ng-if="accessToEdit&&order.state==='approved'" role="alert"> 
       <strong>Информация! </strong>
       Если необходимо внести изменения в закупку, то переведите ее в статус "Новой", сохраните и затем редактируйте.
   </div>
     <button 
       class="btn btn-danger btn-lg pull-right" 
       ng-click="removeOrder(order)" 
-      ng-if="editMode&&order.state==='canceled'">
+      ng-if="User.access==='admin'&&order.state==='canceled'">
         Удалить <span class="glyphicon glyphicon-trash" aria-hidden="true"></span>
       </button>
 
@@ -136,19 +137,12 @@
       class="btn btn-lg btn-warning pull-right" 
       type="submit" 
       ng-click="saveOrder(order)" 
-      ng-if="editMode&&order.state!=='closed'&&order.state!=='canceled'" 
+      ng-if="accessToEdit&&(order.state==='new'||order.state==='approved')" 
       ng-disabled="form.$invalid">
         Сохранить <span class="glyphicon glyphicon-cloud-upload" aria-hidden="true"></span>
     </button>
-     <a href="#/orders" 
-      class="btn btn-lg btn-default pull-left"
-      ng-if="editMode&&order.state!=='closed'&&order.state!=='canceled'" >
-        Отмена
-    </a>
-    <a href="#/orders"
-      class="btn btn-lg btn-default pull-left"
-      ng-if="order.state==='closed'||order.state==='canceled'" >
-        <span class="glyphicon glyphicon-arrow-left" aria-hidden="true"></span> Назад
+    <a href="#/orders" class="btn btn-lg btn-default pull-left">
+        <span class="glyphicon glyphicon-arrow-left" aria-hidden="true"></span> Отмена
     </a>
 </form>
 <div class="air"></div>

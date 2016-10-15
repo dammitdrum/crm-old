@@ -36,12 +36,10 @@ angular.module('myApp.sales_ctrl', [])
     $scope.sale = {};
     $scope.sale.manager = $rootScope.User;
     $scope.itemsList = [];
-    $scope.editMode = false;
     $scope.oldPrices = false;
 
     if ($routeParams.number) {  //edit mode
         $scope.editMode = true;
-        $scope.accessToEdit = false;
         angular.forEach($rootScope.sales, function(sale) {
             if (sale.number == $routeParams.number) {
                 $scope.sale = angular.copy(sale);

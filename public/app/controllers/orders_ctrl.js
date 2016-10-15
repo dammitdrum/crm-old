@@ -30,7 +30,6 @@ angular.module('myApp.orders_ctrl', [])
 
 	$scope.order = {};
 	$scope.itemsList = [];
-    $scope.editMode = false;
 
     if ($routeParams.number) {
         $scope.editMode = true;
@@ -41,6 +40,9 @@ angular.module('myApp.orders_ctrl', [])
                 return;
             }
         });
+        if ($rootScope.User.access === 'admin' || $rootScope.User.access === 'stock') {
+            $scope.accessToEdit = true;
+        }
         angular.forEach($scope.order.items, function(orderItem) {
             angular.forEach($rootScope.stock, function(item) {
                 if (item._id === orderItem.id) {
