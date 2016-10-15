@@ -2,13 +2,9 @@
 
 angular.module('myApp.stock_ctrl', [])
 
-.controller('StockCtrl', function ($rootScope, $scope, $uibModal, PATH_STOCK){
-
-    /*if (Items) {
-        $rootScope.stock = Items.data;
-    }*/
+.controller('StockCtrl', function ($rootScope, $scope, $uibModal, PATH_STOCK, $http){
+    console.log('startRender');
     $scope.sortProperty = 'name';
-    $scope.reverseSort = false;
     $scope.currCategory = '';
 
     if ($rootScope.User.access === 'admin' || $rootScope.User.access === 'stock') {
@@ -19,6 +15,9 @@ angular.module('myApp.stock_ctrl', [])
 
     $scope.$on('updateCategories',function(event,data) {
         $scope.updateFilter(data,'category');
+    })
+    $scope.$on('rendered',function(event,data) {
+        console.log('renderedList');
     })
     
     $scope.filterBy = function(name) {
@@ -44,6 +43,33 @@ angular.module('myApp.stock_ctrl', [])
                 }
             }
         });
+        /*var COUNT = 100;
+        function createItems() {
+            COUNT--;
+            var art = Math.floor((Math.random() * 10000) + 1);
+            var name = makeName();
+            var price = Math.floor((Math.random() * 100000) + 1);
+            var item = {
+                "art": art,
+                "name": name,
+                "price": price,
+                "category": "Фрукты",
+            }
+            $http.post('/stock/create',item).then(function(res) {
+                $rootScope.stock.push(res.data.item);
+                if (COUNT > 0) createItems();
+            });
+        };
+        function makeName() {
+            var text = "";
+            var possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+
+            for( var i=0; i < 6; i++ )
+                text += possible.charAt(Math.floor(Math.random() * possible.length));
+
+            return text;
+        }
+        createItems();*/
     };
 })
 

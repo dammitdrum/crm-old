@@ -3,9 +3,7 @@
 angular.module('myApp.orders_ctrl', [])
 
 .controller('OrdersCtrl', function ($rootScope, $scope, $location){
-
     $scope.sortProperty = 'date';
-    $scope.reverseSort = false;
     $scope.currState = '';
 
     $scope.updateFilter($rootScope.orders,'state');

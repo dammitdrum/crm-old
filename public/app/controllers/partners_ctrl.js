@@ -3,9 +3,7 @@
 angular.module('myApp.partners_ctrl', [])
 
 .controller('PartnersCtrl', function ($rootScope, $scope, $uibModal, PATH_PARTNERS){
-
     $scope.sortProperty = 'number';
-    $scope.reverseSort = false;
     $scope.currType = '';
 
     $scope.updateFilter($rootScope.partners,'type');

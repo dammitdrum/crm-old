@@ -2,12 +2,15 @@
 
 angular.module('myApp.directives', [])
 
-.directive('example', function() {
+.directive('onFinishRender', function ($timeout) {
     return {
-		restrict: 'E',
-		//templateUrl: 'example.html',
-		link: function(scope, element, attr) {
-		 	
-		}
-	};
+        restrict: 'A',
+        link: function (scope, element, attr) {
+            if (scope.$last === true) {
+                $timeout(function () {
+                    scope.$emit(attr.onFinishRender);
+                });
+            }
+        }
+    }
 });

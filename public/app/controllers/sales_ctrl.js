@@ -3,9 +3,7 @@
 angular.module('myApp.sales_ctrl', [])
 
 .controller('SalesCtrl', function ($rootScope, $scope, $location){
-
     $scope.sortProperty = 'date';
-    $scope.reverseSort = false;
     $scope.currState = '';
 
     $scope.updateFilter($rootScope.sales,'state');
@@ -36,7 +34,6 @@ angular.module('myApp.sales_ctrl', [])
     $scope.sale = {};
     $scope.sale.manager = $rootScope.User;
     $scope.itemsList = [];
-    $scope.oldPrices = false;
 
     if ($routeParams.number) {  //edit mode
         $scope.editMode = true;
